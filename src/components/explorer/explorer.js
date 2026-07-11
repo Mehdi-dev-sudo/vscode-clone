@@ -40,7 +40,7 @@ const DEFAULT_TREE = {
 };
 
 /** @type {FileNode} */
-let fileTree = { ...DEFAULT_TREE };
+let fileTree = JSON.parse(JSON.stringify(DEFAULT_TREE));
 
 /** @type {HTMLElement|null} */
 let treeEl = null;
@@ -254,7 +254,24 @@ function onDragOver(e, id) {
   dragState.targetId = id;
   dragState.position = position;
 
-  // Visual feedback removed in production for cleanliness; classes remain available.
+  // Visual feedback: remove all drag-over classes first
+  treeEl?.querySelectorAll('.file-tree__item--drag-over, .file-tree__item--drag-over-bottom, .file-tree__item--drag-over-inside')
+    .forEach((el) => el.classList.remove('file-tree__item--drag-over', 'file-tree__item--drag-over-bottom', 'file-tree__item--drag-over-inside'));
+
+  // Apply class to the specific target
+  const targetEl = treeEl?.querySelector(`[data-id="${id}"]`);
+  if (targetEl && sourceId !== id) {
+    const cls = position === 'inside' ? 'file-tree__item--drag-over-inside'
+      : position === 'before' ? 'file-tree__item--drag-over'
+      : 'file-tree__item--drag-over-bottom';
+    targetEl.classList.add(cls);
+  }
+}
+
+/** Clear all drag-over visual indicators. */
+function clearDragOver() {
+  treeEl?.querySelectorAll('.file-tree__item--drag-over, .file-tree__item--drag-over-bottom, .file-tree__item--drag-over-inside')
+    .forEach((el) => el.classList.remove('file-tree__item--drag-over', 'file-tree__item--drag-over-bottom', 'file-tree__item--drag-over-inside'));
 }
 
 /**
@@ -291,6 +308,7 @@ function onDrop(e, targetId) {
   }
 
   dragState.sourceId = null;
+  clearDragOver();
   persistTree();
   renderTree();
   eventBus.emit(EVENTS.COMMAND_EXECUTED, { type: 'drag-drop', sourceId, targetId });
@@ -359,7 +377,7 @@ function renderNode(node, depth = 0) {
       dragstart: (e) => onDragStart(e, node.id),
       dragover: (e) => onDragOver(e, node.id),
       drop: (e) => onDrop(e, node.id),
-      dragend: () => { dragState.sourceId = null; },
+      dragend: () => { dragState.sourceId = null; clearDragOver(); },
     },
   });
 

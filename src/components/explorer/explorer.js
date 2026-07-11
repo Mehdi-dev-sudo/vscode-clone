@@ -22,25 +22,32 @@ import { ContextMenu } from '../../core/context-menu.js';
  * @property {Array<FileNode>} [children]
  */
 
-/** @type {FileNode} */
-const DEFAULT_TREE = {
-  id: 'root',
-  name: 'workspace',
-  type: 'folder',
-  collapsed: false,
-  children: [
-    { id: uid(), name: 'src', type: 'folder', collapsed: false, children: [
-      { id: uid(), name: 'index.js', type: 'file' },
-      { id: uid(), name: 'styles.css', type: 'file' },
-    ]},
-    { id: uid(), name: 'index.html', type: 'file' },
-    { id: uid(), name: 'README.md', type: 'file' },
-    { id: uid(), name: '.gitignore', type: 'file' },
-  ],
-};
+/**
+ * Create the default file tree with fresh UIDs.
+ * Using a function ensures uid() is called at invocation time,
+ * not at module evaluation — avoiding stale/mutated defaults.
+ * @returns {FileNode}
+ */
+function createDefaultTree() {
+  return {
+    id: 'root',
+    name: 'workspace',
+    type: 'folder',
+    collapsed: false,
+    children: [
+      { id: uid(), name: 'src', type: 'folder', collapsed: false, children: [
+        { id: uid(), name: 'index.js', type: 'file' },
+        { id: uid(), name: 'styles.css', type: 'file' },
+      ]},
+      { id: uid(), name: 'index.html', type: 'file' },
+      { id: uid(), name: 'README.md', type: 'file' },
+      { id: uid(), name: '.gitignore', type: 'file' },
+    ],
+  };
+}
 
 /** @type {FileNode} */
-let fileTree = JSON.parse(JSON.stringify(DEFAULT_TREE));
+let fileTree = createDefaultTree();
 
 /** @type {HTMLElement|null} */
 let treeEl = null;

@@ -191,24 +191,19 @@ function updatePanelTabUI() {
  * @namespace
  */
 export const PanelManager = {
-  /** Initialize panel tab switching. */
+  /** Initialize panel tab switching using event delegation. */
   init() {
     panelBodyEl = document.getElementById('panel-body');
 
-    document.querySelectorAll('.panel__tab').forEach((tab) => {
-      tab.addEventListener('click', () => {
+    const panelTabs = document.getElementById('panel-tabs');
+    if (panelTabs) {
+      panelTabs.addEventListener('click', (e) => {
+        const tab = e.target.closest('.panel__tab');
+        if (!tab) return;
         const panel = tab.dataset.panel;
         if (panel) switchPanelTab(panel);
       });
-    });
-
-    // Listen for terminal show events
-    eventBus.on('terminal:show', () => {
-      // Trigger terminal component to re-render
-      import('../terminal/terminal.js').then(({ Terminal }) => {
-        // Terminal will re-render on next interaction
-      });
-    });
+    }
   },
 
   /**

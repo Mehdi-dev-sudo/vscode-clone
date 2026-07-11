@@ -51,6 +51,15 @@ function showView(viewId) {
     case VIEWS.EXTENSIONS:
       renderExtensionsView();
       break;
+    case 'settings':
+      renderSettingsView();
+      break;
+    case 'keyboard-shortcuts':
+      renderKeyboardShortcutsView();
+      break;
+    case 'git-history':
+      renderGitHistoryView();
+      break;
     default:
       break;
   }
@@ -60,7 +69,9 @@ function showView(viewId) {
  * Render the Search view.
  */
 function renderSearchView() {
-  import('../sidebar/search-view.js').then((m) => m.SearchView.render(contentEl));
+  import('../sidebar/search-replace-view.js').then((m) => m.SearchReplaceView.render(contentEl)).catch(() => {
+    import('../sidebar/search-view.js').then((m) => m.SearchView.render(contentEl));
+  });
 }
 
 /**
@@ -82,6 +93,27 @@ function renderRunDebugView() {
  */
 function renderExtensionsView() {
   import('../sidebar/extensions-view.js').then((m) => m.ExtensionsView.render(contentEl));
+}
+
+/**
+ * Render the Settings view.
+ */
+function renderSettingsView() {
+  import('../sidebar/settings-view.js').then((m) => m.SettingsView.render(contentEl));
+}
+
+/**
+ * Render the Keyboard Shortcuts view.
+ */
+function renderKeyboardShortcutsView() {
+  import('../sidebar/keyboard-shortcuts-view.js').then((m) => m.KeyboardShortcutsView.render(contentEl));
+}
+
+/**
+ * Render the Git History view.
+ */
+function renderGitHistoryView() {
+  import('../sidebar/git-view.js').then((m) => m.GitView.render(contentEl));
 }
 
 /**
@@ -112,9 +144,18 @@ export const Sidebar = {
         return;
       }
 
-      const validViews = Object.values(VIEWS);
+      const validViews = [...Object.values(VIEWS), 'settings', 'keyboard-shortcuts', 'git-history'];
       if (validViews.includes(view)) {
         showView(view);
+      }
+    });
+
+    // Handle special commands from command palette
+    eventBus.on(EVENTS.COMMAND_EXECUTED, (cmd) => {
+      if (cmd === 'settings') {
+        showView('settings');
+      } else if (cmd === 'keyboard-shortcuts') {
+        showView('keyboard-shortcuts');
       }
     });
 

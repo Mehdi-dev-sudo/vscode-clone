@@ -32,9 +32,6 @@ let terminalCounter = 1;
 let panelBodyEl = null;
 
 /** @type {HTMLElement|null} */
-let panelTabsEl = null;
-
-/** @type {HTMLElement|null} */
 let currentDisplayEl = null;
 
 /** ANSI color codes mapped to CSS classes. */
@@ -477,7 +474,6 @@ export const Terminal = {
   /** Initialize the Terminal component. */
   init() {
     panelBodyEl = document.getElementById('panel-body');
-    panelTabsEl = document.getElementById('panel-tabs');
 
     if (!panelBodyEl) return;
 

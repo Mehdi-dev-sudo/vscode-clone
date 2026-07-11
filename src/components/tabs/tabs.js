@@ -272,6 +272,11 @@ export const Tabs = {
       if (cmd === 'close-all-tabs') {
         [...openTabs].forEach((t) => closeTab(t.id));
       }
+      if (cmd === 'previous-tab' && openTabs.length > 1) {
+        const idx = openTabs.findIndex((t) => t.id === activeTabId);
+        const prevIdx = (idx - 1 + openTabs.length) % openTabs.length;
+        switchTab(openTabs[prevIdx].id);
+      }
     });
   },
 

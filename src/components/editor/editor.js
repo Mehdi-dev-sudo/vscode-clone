@@ -354,7 +354,9 @@ export const Editor = {
         return;
       }
       const name = file.name || file.id;
-      const content = MOCK_FILES[name] || `// ${name}\n// No content available.\n`;
+      // Strip directory prefix for MOCK_FILES lookup (e.g. 'src/index.js' -> 'index.js')
+      const baseName = name.split('/').pop();
+      const content = MOCK_FILES[baseName] || MOCK_FILES[name] || `// ${name}\n// No content available.\n`;
       renderEditorContent(name, content);
     });
 

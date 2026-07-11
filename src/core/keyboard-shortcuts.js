@@ -32,8 +32,13 @@ const shortcuts = [
   { keys: 'Ctrl+Shift+G',  event: EVENTS.VIEW_CHANGED,     payload: 'source-control',  description: 'Show Source Control' },
   { keys: 'Ctrl+Shift+D',  event: EVENTS.VIEW_CHANGED,     payload: 'run-debug',       description: 'Show Run & Debug' },
   { keys: 'Ctrl+Shift+X',  event: EVENTS.VIEW_CHANGED,     payload: 'extensions',      description: 'Show Extensions' },
-  { keys: 'Ctrl+W',        event: EVENTS.TAB_CLOSED,       description: 'Close Tab' },
+  { keys: 'Ctrl+W',        event: EVENTS.TAB_CLOSED,       payload: 'close-active',   description: 'Close Tab' },
+  { keys: 'Ctrl+K W',      event: EVENTS.COMMAND_EXECUTED, payload: 'close-all-tabs', description: 'Close All Tabs' },
+  { keys: 'Ctrl+Shift+Tab',event: EVENTS.COMMAND_EXECUTED, payload: 'previous-tab',    description: 'Previous Tab' },
+  { keys: 'Ctrl+N',        event: EVENTS.COMMAND_EXECUTED, payload: 'new-file',        description: 'New File' },
   { keys: 'Ctrl+K Z',      event: EVENTS.ZEN_MODE_TOGGLED, payload: 'zen',             description: 'Toggle Zen Mode' },
+  { keys: 'Ctrl+J',        event: EVENTS.PANEL_RESIZED,    payload: 'toggle-panel',    description: 'Toggle Panel' },
+  { keys: 'Ctrl+\\',       event: EVENTS.COMMAND_EXECUTED, payload: 'split-editor',    description: 'Split Editor' },
   { keys: 'F11',           event: EVENTS.FULLSCREEN_TOGGLED, description: 'Toggle Fullscreen' },
 ];
 

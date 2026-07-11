@@ -52,20 +52,12 @@ function render() {
   leftEl.appendChild(infoItem);
 
   // Right items
-  const feedbackItem = createElement('div', {
+  const cursorItem = createElement('div', {
     className: 'status-bar__item',
-    html: `<span class="icon" aria-hidden="true">${ICONS.feedback}</span> Feedback`,
-    attrs: { title: 'Provide feedback', 'aria-label': 'Provide feedback' },
-    events: { click: () => window.open('https://github.com', '_blank') },
+    text: 'Ln 1, Col 1',
+    attrs: { title: 'Cursor position', 'aria-label': 'Line 1, Column 1' },
   });
-  rightEl.appendChild(feedbackItem);
-
-  const encodingItem = createElement('div', {
-    className: 'status-bar__item',
-    text: 'UTF-8',
-    attrs: { title: 'File encoding', 'aria-label': 'UTF-8 Encoding' },
-  });
-  rightEl.appendChild(encodingItem);
+  rightEl.appendChild(cursorItem);
 
   const indentItem = createElement('div', {
     className: 'status-bar__item',
@@ -80,6 +72,13 @@ function render() {
     attrs: { title: 'Line ending', 'aria-label': 'Line Feed' },
   });
   rightEl.appendChild(eolItem);
+
+  const encodingItem = createElement('div', {
+    className: 'status-bar__item',
+    text: 'UTF-8',
+    attrs: { title: 'File encoding', 'aria-label': 'UTF-8 Encoding' },
+  });
+  rightEl.appendChild(encodingItem);
 
   const langItem = createElement('div', {
     className: 'status-bar__item',
@@ -97,6 +96,21 @@ function render() {
     },
   });
   rightEl.appendChild(themeItem);
+
+  const zoomItem = createElement('div', {
+    className: 'status-bar__item',
+    text: '100%',
+    attrs: { title: 'Zoom level', 'aria-label': 'Zoom: 100%' },
+  });
+  rightEl.appendChild(zoomItem);
+
+  const feedbackItem = createElement('div', {
+    className: 'status-bar__item',
+    html: `<span class="icon" aria-hidden="true">${ICONS.feedback}</span>`,
+    attrs: { title: 'Provide feedback', 'aria-label': 'Provide feedback' },
+    events: { click: () => window.open('https://github.com', '_blank') },
+  });
+  rightEl.appendChild(feedbackItem);
 
   statusBarEl.append(leftEl, rightEl);
 }

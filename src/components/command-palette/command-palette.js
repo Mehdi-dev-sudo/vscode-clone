@@ -25,6 +25,9 @@ const COMMANDS = [
   { id: 'zen-mode', label: 'Toggle Zen Mode', icon: ICONS.unfold, shortcut: 'Ctrl+K Z', action: null },
   { id: 'fullscreen', label: 'Toggle Fullscreen', icon: ICONS.bracket, shortcut: 'F11', action: null },
   { id: 'settings', label: 'Open Settings', icon: ICONS.settings, action: null },
+  { id: 'theme-creator', label: 'Theme Creator: Customize Colors', icon: ICONS.lightBulb, action: null },
+  { id: 'workspace-snapshots', label: 'Workspace Snapshots', icon: ICONS.files, action: null },
+  { id: 'layout-presets', label: 'Layout Presets', icon: ICONS.files, action: null },
   { id: 'about', label: 'About VS Code Clone', icon: ICONS.info, action: null },
 ];
 

@@ -26,6 +26,7 @@ import { PanelManager } from './components/panel/panel-manager.js';
 import { Tour } from './utils/tour.js';
 import { initFocusManager } from './core/focus-manager.js';
 import { AboutDialog } from './components/core/about-dialog.js';
+import { ThemeCreator } from './components/themes/theme-creator.js';
 
 /**
  * Bootstrap the application.
@@ -62,6 +63,7 @@ function boot() {
     SplitEditor,
     PanelManager,
     AboutDialog,
+    ThemeCreator,
   ];
 
   // Initialize tour

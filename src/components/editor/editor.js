@@ -400,6 +400,11 @@ export const Editor = {
       const baseName = name.split('/').pop();
       const content = MOCK_FILES[baseName] || MOCK_FILES[name] || `// ${name}\n// No content available.\n`;
       renderEditorContent(name, content);
+      // Auto-focus the editor content
+      setTimeout(() => {
+        const editorLines = document.querySelector('.editor__lines');
+        if (editorLines) editorLines.focus();
+      }, 50);
     });
 
     // Listen for focus-editor command

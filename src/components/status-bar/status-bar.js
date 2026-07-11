@@ -51,6 +51,13 @@ function render() {
   });
   leftEl.appendChild(infoItem);
 
+  const notifCountItem = createElement('div', {
+    className: 'status-bar__item status-bar__item--notif-count',
+    text: '0 notifications',
+    attrs: { title: 'Notifications', 'aria-label': '0 notifications' },
+  });
+  leftEl.appendChild(notifCountItem);
+
   // Right items
   const cursorItem = createElement('div', {
     className: 'status-bar__item',
@@ -88,7 +95,7 @@ function render() {
   rightEl.appendChild(langItem);
 
   const themeItem = createElement('div', {
-    className: 'status-bar__item',
+    className: 'status-bar__item status-bar__item--theme',
     text: 'Dark+',
     attrs: { title: 'Select theme', 'aria-label': 'Theme: Dark+' },
     events: {
@@ -126,5 +133,14 @@ export const StatusBar = {
     if (!statusBarEl) return;
     statusBarEl.classList.add('status-bar');
     render();
+
+    // Update theme name dynamically
+    eventBus.on(EVENTS.THEME_CHANGED, (theme) => {
+      const themeEl = statusBarEl?.querySelector('.status-bar__item--theme');
+      if (themeEl) {
+        const name = theme.replace('theme-', '');
+        themeEl.textContent = name.charAt(0).toUpperCase() + name.slice(1);
+      }
+    });
   },
 };

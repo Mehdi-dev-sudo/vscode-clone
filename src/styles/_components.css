@@ -19,7 +19,8 @@
 
 .activity-bar__btn:hover {
   color: var(--activity-bar-active);
-  background-color: var(--activity-bar-hover);
+  cursor: pointer;
+  transform: scale(1.05);
 }
 
 .activity-bar__btn--active {
@@ -655,6 +656,11 @@
   user-select: none;
 }
 
+.editor__gutter div:hover {
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
 .editor__content {
   flex: 1;
   min-width: 0;
@@ -973,6 +979,11 @@
   caret-color: var(--editor-cursor);
 }
 
+.terminal__input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
 .terminal__cursor {
   display: inline-block;
   width: 8px;
@@ -1018,6 +1029,7 @@
   height: 100%;
   cursor: pointer;
   white-space: nowrap;
+  transition: background-color var(--transition-fast);
 }
 
 .status-bar__item:hover {

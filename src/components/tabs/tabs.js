@@ -266,6 +266,13 @@ export const Tabs = {
         if (activeTabId) closeTab(activeTabId);
       }
     });
+
+    // Listen for close-all-tabs command
+    eventBus.on(EVENTS.COMMAND_EXECUTED, (cmd) => {
+      if (cmd === 'close-all-tabs') {
+        [...openTabs].forEach((t) => closeTab(t.id));
+      }
+    });
   },
 
   /**

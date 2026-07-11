@@ -1,0 +1,253 @@
+/**
+ * @fileoverview
+ * Theme definitions. Each theme overrides CSS custom properties.
+ * Inspired by VS Code's default Dark+, Light+, and popular themes.
+ */
+
+/* --- Dark+ Theme (Default) --- */
+.theme-dark {
+  --bg-primary: #1e1e1e;
+  --bg-secondary: #252526;
+  --bg-tertiary: #2d2d2d;
+  --bg-hover: #2a2d2e;
+  --bg-active: #37373d;
+  --bg-selected: #094771;
+  --bg-dropdown: #252526;
+  --bg-input: #3c3c3c;
+  --bg-widget: #2b2b2b;
+  --bg-badge: #4d4d4d;
+
+  --text-primary: #cccccc;
+  --text-secondary: #969696;
+  --text-tertiary: #6e6e6e;
+  --text-link: #3794ff;
+  --text-accent: #75beff;
+
+  --border-primary: #3c3c3c;
+  --border-secondary: #474747;
+  --border-focus: #007fd4;
+  --border-dropdown: #454545;
+
+  --accent-primary: #007acc;
+  --accent-secondary: #1a8ad4;
+  --accent-hover: #1c97ea;
+
+  --scrollbar-bg: transparent;
+  --scrollbar-thumb: #424242;
+  --scrollbar-thumb-hover: #4f4f4f;
+  --scrollbar-thumb-active: #5a5a5a;
+
+  --activity-bar-bg: #333333;
+  --activity-bar-inactive: #666666;
+  --activity-bar-active: #ffffff;
+  --activity-bar-hover: #4a4a4a;
+
+  --sidebar-bg: #252526;
+  --sidebar-header-bg: #252526;
+  --sidebar-group-header: #2d2d2d;
+  --sidebar-item-hover: #2a2d2e;
+  --sidebar-item-active: #37373d;
+
+  --tab-active-bg: #1e1e1e;
+  --tab-active-border: #007acc;
+  --tab-inactive-bg: #2d2d2d;
+  --tab-hover-bg: #2d2d2d;
+
+  --editor-bg: #1e1e1e;
+  --editor-line-number: #858585;
+  --editor-cursor: #aeafad;
+  --editor-selection: #264f78;
+  --editor-selection-highlight: #2b5b84;
+  --editor-bracket-match: #ffff0033;
+  --editor-whitespace: #e3e4e229;
+
+  --status-bar-bg: #007acc;
+  --status-bar-text: #ffffff;
+  --status-bar-hover: #1a8ad4;
+
+  --terminal-bg: #1e1e1e;
+  --terminal-text: #cccccc;
+  --terminal-anchor: #1e1e1e;
+
+  --panel-bg: #1e1e1e;
+  --panel-border: #3c3c3c;
+  --panel-tab-active: #ffffff;
+  --panel-tab-inactive: #969696;
+
+  --minimap-bg: #1e1e1e;
+  --minimap-slider: #3c3c3c;
+  --minimap-slider-hover: #494949;
+
+  --notification-bg: #252526;
+  --notification-info: #007acc;
+  --notification-warning: #cca700;
+  --notification-error: #f14c4c;
+
+  --button-primary-bg: #007acc;
+  --button-primary-text: #ffffff;
+  --button-primary-hover: #1a8ad4;
+  --button-secondary-bg: #3c3c3c;
+  --button-secondary-text: #cccccc;
+  --button-secondary-hover: #4a4a4a;
+}
+
+/* --- Light+ Theme --- */
+.theme-light {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f3f3f3;
+  --bg-tertiary: #ececec;
+  --bg-hover: #e8e8e8;
+  --bg-active: #dcdcdc;
+  --bg-selected: #0060c0;
+  --bg-dropdown: #ffffff;
+  --bg-input: #ffffff;
+  --bg-widget: #f3f3f3;
+  --bg-badge: #c4c4c4;
+
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --text-tertiary: #999999;
+  --text-link: #006ab1;
+  --text-accent: #007acc;
+
+  --border-primary: #e0e0e0;
+  --border-secondary: #cccccc;
+  --border-focus: #007acc;
+  --border-dropdown: #c4c4c4;
+
+  --accent-primary: #007acc;
+  --accent-secondary: #1a8ad4;
+  --accent-hover: #0062a3;
+
+  --scrollbar-bg: transparent;
+  --scrollbar-thumb: #c1c1c1;
+  --scrollbar-thumb-hover: #a0a0a0;
+  --scrollbar-thumb-active: #8a8a8a;
+
+  --activity-bar-bg: #2c2c2c;
+  --activity-bar-inactive: #858585;
+  --activity-bar-active: #ffffff;
+  --activity-bar-hover: #4a4a4a;
+
+  --sidebar-bg: #f3f3f3;
+  --sidebar-header-bg: #f3f3f3;
+  --sidebar-group-header: #e8e8e8;
+  --sidebar-item-hover: #e8e8e8;
+  --sidebar-item-active: #dcdcdc;
+
+  --tab-active-bg: #ffffff;
+  --tab-active-border: #007acc;
+  --tab-inactive-bg: #ececec;
+  --tab-hover-bg: #e8e8e8;
+
+  --editor-bg: #ffffff;
+  --editor-line-number: #999999;
+  --editor-cursor: #333333;
+  --editor-selection: #add6ff;
+  --editor-selection-highlight: #9bc3eb;
+  --editor-bracket-match: #cec4a6;
+  --editor-whitespace: #33333333;
+
+  --status-bar-bg: #007acc;
+  --status-bar-text: #ffffff;
+  --status-bar-hover: #1a8ad4;
+
+  --terminal-bg: #ffffff;
+  --terminal-text: #333333;
+  --terminal-anchor: #ffffff;
+
+  --panel-bg: #ffffff;
+  --panel-border: #e0e0e0;
+  --panel-tab-active: #333333;
+  --panel-tab-inactive: #666666;
+
+  --minimap-bg: #ffffff;
+  --minimap-slider: #dcdcdc;
+  --minimap-slider-hover: #c8c8c8;
+
+  --notification-bg: #f3f3f3;
+  --notification-info: #007acc;
+  --notification-warning: #cca700;
+  --notification-error: #f14c4c;
+
+  --button-primary-bg: #007acc;
+  --button-primary-text: #ffffff;
+  --button-primary-hover: #0062a3;
+  --button-secondary-bg: #e0e0e0;
+  --button-secondary-text: #333333;
+  --button-secondary-hover: #d0d0d0;
+}
+
+/* --- Dracula Theme --- */
+.theme-dracula {
+  --bg-primary: #282a36;
+  --bg-secondary: #21222c;
+  --bg-tertiary: #2b2d3a;
+  --bg-hover: #313346;
+  --bg-active: #3d3f53;
+  --bg-selected: #44475a;
+  --bg-dropdown: #21222c;
+  --bg-input: #1e1f29;
+  --bg-widget: #21222c;
+
+  --text-primary: #f8f8f2;
+  --text-secondary: #9094ad;
+  --text-tertiary: #626680;
+  --text-link: #8be9fd;
+  --text-accent: #bd93f9;
+
+  --border-primary: #44475a;
+  --border-secondary: #535670;
+  --border-focus: #bd93f9;
+
+  --accent-primary: #bd93f9;
+  --accent-secondary: #caa8fa;
+
+  --tab-active-bg: #282a36;
+  --tab-active-border: #bd93f9;
+  --tab-inactive-bg: #21222c;
+
+  --editor-bg: #282a36;
+  --editor-selection: #44475a;
+  --editor-line-number: #6272a4;
+  --editor-cursor: #f8f8f2;
+
+  --status-bar-bg: #191a21;
+  --status-bar-text: #f8f8f2;
+
+  --terminal-bg: #282a36;
+  --terminal-text: #f8f8f2;
+}
+
+/* --- Monokai Theme --- */
+.theme-monokai {
+  --bg-primary: #272822;
+  --bg-secondary: #1e1f1c;
+  --bg-tertiary: #2c2d28;
+  --bg-hover: #31322e;
+  --bg-active: #3a3b36;
+  --bg-selected: #403f3a;
+
+  --text-primary: #f8f8f2;
+  --text-secondary: #a7a79b;
+  --text-tertiary: #75766a;
+
+  --border-primary: #3a3b36;
+
+  --accent-primary: #a6e22e;
+
+  --tab-active-bg: #272822;
+  --tab-active-border: #a6e22e;
+  --tab-inactive-bg: #1e1f1c;
+
+  --editor-bg: #272822;
+  --editor-selection: #403f3a;
+  --editor-line-number: #75766a;
+  --editor-cursor: #f8f8f0;
+
+  --status-bar-bg: #1e1f1c;
+  --status-bar-text: #f8f8f2;
+
+  --terminal-bg: #272822;
+  --terminal-text: #f8f8f2;
+}

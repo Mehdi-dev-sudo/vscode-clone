@@ -1,0 +1,16 @@
+/**
+ * @fileoverview
+ * Main CSS entry point.
+ * Imports all layers following the ITCSS architecture:
+ * 1. Settings (variables, themes)
+ * 2. Reset (base element styles)
+ * 3. Layout (grid, positioning)
+ * 4. Components (individual component styles)
+ * 5. Utilities (helpers)
+ */
+
+@import url('./_variables.css');
+@import url('./_themes.css');
+@import url('./_reset.css');
+@import url('./_layout.css');
+@import url('./_components.css');

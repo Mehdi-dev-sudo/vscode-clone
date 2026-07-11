@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A portfolio-quality Visual Studio Code inspired web application built with vanilla HTML, CSS, and JavaScript.">
+  <meta name="theme-color" content="#1e1e1e">
+  <title>VS Code Clone</title>
+  <link rel="stylesheet" href="src/styles/main.css">
+</head>
+<body>
+  <div class="app" id="app" role="application" aria-label="VS Code Clone">
+
+    <!-- Title Bar -->
+    <header class="app__title-bar" id="title-bar" role="toolbar" aria-label="Title Bar">
+      <div class="app__title" id="window-title">VS Code Clone</div>
+      <div class="app__title-bar-actions" id="title-bar-actions">
+        <button class="title-bar-btn title-bar-btn--zen" id="btn-zen-mode" title="Toggle Zen Mode (Ctrl+K Z)" aria-label="Toggle Zen Mode">
+          <span class="icon" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+              <path d="M2 3h12v10H2V3zm1 1v8h10V4H3zm4 2h2v4H7V6z" fill="currentColor"/>
+            </svg>
+          </span>
+        </button>
+        <button class="title-bar-btn title-bar-btn--fullscreen" id="btn-fullscreen" title="Toggle Fullscreen (F11)" aria-label="Toggle Fullscreen">
+          <span class="icon" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+              <path d="M3 3h4v1H4v3H3V3zm6 0h4v4h-1V4H9V3zM3 13h4v-1H4V9H3v4zm10-4v4H9v-1h3V9h1z" fill="currentColor"/>
+            </svg>
+          </span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="app__main" id="main-content">
+
+      <!-- Activity Bar -->
+      <nav class="app__activity-bar" id="activity-bar" role="tablist" aria-label="Activity Bar">
+      </nav>
+
+      <!-- Sidebar -->
+      <aside class="app__sidebar" id="sidebar" role="complementary" aria-label="Sidebar">
+        <div class="resize-handle resize-handle--sidebar" id="sidebar-resize-handle" role="separator" tabindex="0" aria-label="Resize Sidebar"></div>
+        <div class="sidebar__content" id="sidebar-content"></div>
+      </aside>
+
+      <!-- Editor Area -->
+      <section class="app__editor-area" id="editor-area" aria-label="Editor">
+        <!-- Tabs Bar -->
+        <div class="tabs-bar" id="tabs-bar" role="tablist" aria-label="Editor Tabs"></div>
+
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" id="breadcrumb" aria-label="Breadcrumb"></nav>
+
+        <!-- Editor Content -->
+        <div class="editor" id="editor" role="tabpanel" aria-label="Editor Content">
+          <div class="editor__gutter" id="editor-gutter"></div>
+          <div class="editor__content" id="editor-content">
+            <div class="editor__welcome" id="editor-welcome">
+              <div class="welcome__content">
+                <span class="welcome__logo" aria-hidden="true">
+                  <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
+                    <path d="M17.5 2L21 5.5v15a1.5 1.5 0 01-1.5 1.5h-13A1.5 1.5 0 015 20.5v-17A1.5 1.5 0 016.5 2h11z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M9 13l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                <h1 class="welcome__title">VS Code Clone</h1>
+                <p class="welcome__subtitle">Portfolio-quality editor experience</p>
+                <div class="welcome__actions">
+                  <button class="welcome__btn" data-action="new-file">
+                    <span class="icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M9 1H4v14h9V4l-4-3zm0 1.5L11.5 5H9V2.5zM5 12V4h3v2h3v6H5z" fill="currentColor"/></svg></span>
+                    New File
+                  </button>
+                  <button class="welcome__btn" data-action="open-folder">
+                    <span class="icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 3h5l2 2h5v8H2V3zm1 1v7h11V6H8.5L7 5H3z" fill="currentColor"/></svg></span>
+                    Open Folder
+                  </button>
+                  <button class="welcome__btn" data-action="command-palette">
+                    <span class="icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 2l6 6-6 6 1 1 7-7-7-7-1 1z" fill="currentColor"/></svg></span>
+                    Command Palette
+                  </button>
+                </div>
+                <div class="welcome__shortcuts">
+                  <span class="welcome__shortcut"><kbd>Ctrl+Shift+P</kbd> Command Palette</span>
+                  <span class="welcome__shortcut"><kbd>Ctrl+P</kbd> Quick Open</span>
+                  <span class="welcome__shortcut"><kbd>Ctrl+B</kbd> Toggle Sidebar</span>
+                  <span class="welcome__shortcut"><kbd>Ctrl+\`</kbd> Toggle Terminal</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Minimap -->
+          <div class="editor__minimap" id="minimap" aria-hidden="true"></div>
+        </div>
+      </section>
+
+      <!-- Resize handle for panel -->
+      <div class="resize-handle resize-handle--panel" id="panel-resize-handle" role="separator" tabindex="0" aria-label="Resize Terminal Panel"></div>
+
+      <!-- Panel (terminal) -->
+      <div class="app__panel" id="panel" role="region" aria-label="Terminal Panel">
+        <div class="panel__header" id="panel-header">
+          <div class="panel__tabs" id="panel-tabs" role="tablist" aria-label="Panel Tabs">
+            <button class="panel__tab panel__tab--active" role="tab" aria-selected="true" data-panel="terminal">TERMINAL</button>
+            <button class="panel__tab" role="tab" aria-selected="false" data-panel="output">OUTPUT</button>
+            <button class="panel__tab" role="tab" aria-selected="false" data-panel="problems">PROBLEMS</button>
+            <button class="panel__tab" role="tab" aria-selected="false" data-panel="debug">DEBUG CONSOLE</button>
+          </div>
+          <div class="panel__actions" id="panel-actions">
+            <button class="panel__action-btn" id="panel-close" title="Close Panel" aria-label="Close Panel">
+              <span class="icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8m0-8l-8 8" stroke="currentColor" stroke-width="1.5"/></svg></span>
+            </button>
+          </div>
+        </div>
+        <div class="panel__body" id="panel-body"></div>
+      </div>
+
+    </main>
+
+    <!-- Status Bar -->
+    <footer class="app__status-bar" id="status-bar" role="status" aria-label="Status Bar">
+    </footer>
+
+  </div>
+
+  <!-- Command Palette Overlay -->
+  <div class="command-palette" id="command-palette" role="dialog" aria-label="Command Palette" hidden>
+    <div class="command-palette__overlay" id="command-palette-overlay"></div>
+    <div class="command-palette__dialog" role="document">
+      <div class="command-palette__header">
+        <span class="command-palette__icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 2l6 6-6 6 1 1 7-7-7-7-1 1z" fill="currentColor"/></svg>
+        </span>
+        <input class="command-palette__input" id="command-palette-input" type="text" placeholder="Type a command to search..." autocomplete="off" spellcheck="false" aria-label="Command search">
+      </div>
+      <div class="command-palette__results" id="command-palette-results" role="listbox"></div>
+    </div>
+  </div>
+
+  <!-- Quick Open Overlay -->
+  <div class="quick-open" id="quick-open" role="dialog" aria-label="Quick Open" hidden>
+    <div class="quick-open__overlay" id="quick-open-overlay"></div>
+    <div class="quick-open__dialog">
+      <div class="quick-open__header">
+        <span class="icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M9 1H4v14h9V4l-4-3zm0 1.5L11.5 5H9V2.5zM5 12V4h3v2h3v6H5z" fill="currentColor"/></svg>
+        </span>
+        <input class="quick-open__input" id="quick-open-input" type="text" placeholder="Type to search files..." autocomplete="off" spellcheck="false" aria-label="File search">
+      </div>
+      <div class="quick-open__results" id="quick-open-results" role="listbox"></div>
+    </div>
+  </div>
+
+  <!-- Notification Container -->
+  <div class="notifications" id="notifications" role="alert" aria-live="polite" aria-label="Notifications"></div>
+
+  <!-- Context Menu -->
+  <div class="context-menu" id="context-menu" role="menu" aria-label="Context Menu" hidden>
+    <div class="context-menu__items" id="context-menu-items"></div>
+  </div>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>

@@ -504,5 +504,10 @@ export const Terminal = {
         }
       }
     });
+
+    // Listen for panel tab switch to terminal
+    eventBus.on('terminal:show', () => {
+      renderTerminal();
+    });
   },
 };

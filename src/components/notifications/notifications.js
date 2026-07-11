@@ -18,6 +18,9 @@ const activeNotifications = new Map();
 /** Counter for unique notification IDs. */
 let counter = 0;
 
+/** Maximum concurrent visible notifications. */
+const MAX_VISIBLE = 5;
+
 /**
  * Remove a notification by ID.
  * @param {string} id
@@ -72,6 +75,12 @@ function show(type = 'info', title, message = '', duration = NOTIFICATION_DURATI
     ],
   });
 
+  // Enforce max visible limit
+  if (activeNotifications.size >= MAX_VISIBLE) {
+    const oldest = activeNotifications.keys().next().value;
+    if (oldest) remove(oldest);
+  }
+
   containerEl.appendChild(notif);
   activeNotifications.set(id, notif);
 
@@ -95,10 +104,11 @@ export const Notifications = {
     containerEl = document.getElementById('notifications');
     if (!containerEl) return;
 
-    // Listen for error/success events
-    eventBus.on(EVENTS.NOTIFICATION_ADDED, ({ type, title, message }) => {
-      show(type, title, message);
-    });
+    // No subscription here — show() is the single entry point.
+    // External modules should import Notifications and call
+    // .info() / .warning() / .error() directly.
+    // Re-emitting NOTIFICATION_ADDED inside show() + listening here
+    // would cause infinite recursion.
   },
 
   /**

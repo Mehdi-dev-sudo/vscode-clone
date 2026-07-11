@@ -28,6 +28,7 @@ import { initFocusManager } from './core/focus-manager.js';
 import { AboutDialog } from './components/core/about-dialog.js';
 import { ThemeCreator } from './components/themes/theme-creator.js';
 import { WorkspaceSnapshots } from './features/workspace-snapshots.js';
+import { LayoutPresets } from './features/layout-presets.js';
 
 /**
  * Bootstrap the application.
@@ -66,6 +67,7 @@ function boot() {
     AboutDialog,
     ThemeCreator,
     WorkspaceSnapshots,
+    LayoutPresets,
   ];
 
   // Initialize tour

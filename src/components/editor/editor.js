@@ -8,6 +8,8 @@
 import { eventBus } from '../../events/event-bus.js';
 import { EVENTS } from '../../core/constants.js';
 import { createElement, empty, $ } from '../../utils/dom.js';
+import { highlight, detectLanguage } from '../../utils/syntax.js';
+import { updateMinimap, initMinimap } from './minimap.js';
 
 /** @type {HTMLElement|null} */
 let editorContentEl = null;
@@ -208,12 +210,18 @@ function renderEditorContent(fileName, content) {
     },
   });
 
+  const lang = detectLanguage(fileName);
+
   lines.forEach((line, i) => {
     const lineEl = createElement('div', {
       className: 'editor__line',
-      text: line || ' ',
       attrs: { 'data-line': i + 1 },
     });
+    if (line.trim()) {
+      lineEl.innerHTML = highlight(line, lang) || ' ';
+    } else {
+      lineEl.innerHTML = '&nbsp;';
+    }
     linesContainer.appendChild(lineEl);
   });
 
@@ -227,6 +235,17 @@ function renderEditorContent(fileName, content) {
 
   // Focus editor
   linesContainer.focus();
+
+  // Update minimap
+  requestAnimationFrame(() => {
+    const editorScroll = editorContentEl;
+    updateMinimap(
+      content,
+      editorScroll.scrollTop,
+      editorScroll.clientHeight,
+      editorScroll.scrollHeight
+    );
+  });
 }
 
 /**
@@ -324,6 +343,9 @@ export const Editor = {
     breadcrumbEl = document.getElementById('breadcrumb');
     gutterEl = document.getElementById('editor-gutter');
     minimapEl = document.getElementById('minimap');
+
+    // Initialize minimap
+    initMinimap();
 
     // Subscribe to file selection events
     eventBus.on(EVENTS.FILE_SELECTED, (file) => {

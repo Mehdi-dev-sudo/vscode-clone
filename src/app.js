@@ -21,6 +21,7 @@ import { ThemeManager } from './components/themes/theme-manager.js';
 import { LayoutManager } from './components/layout/layout-manager.js';
 import { KeyboardShortcuts } from './core/keyboard-shortcuts.js';
 import { ContextMenu } from './core/context-menu.js';
+import { SplitEditor } from './components/editor/split-editor.js';
 
 /**
  * Bootstrap the application.
@@ -50,6 +51,8 @@ function boot() {
     StatusBar,
     CommandPalette,
     Notifications,
+    ThemeManager,
+    SplitEditor,
   ];
 
   components.forEach((Component) => {

@@ -6,7 +6,6 @@ Thumbs.db
 *~
 
 # IDE
-.vscode/
 .idea/
 *.iml
 

@@ -4,7 +4,7 @@
  * on the right side of the editor. Clicking/dragging scrolls the editor.
  */
 
-import { createElement, empty, clamp } from '../../utils/dom.js';
+import { createElement, clamp } from '../../utils/dom.js';
 
 /** @type {HTMLElement|null} */
 let minimapEl = null;
@@ -15,14 +15,44 @@ let canvasEl = null;
 /** @type {HTMLElement|null} */
 let sliderEl = null;
 
-/** @type {number} */
-let scale = 0.2;
-
-/** @type {number} */
+/** @type {boolean} */
 let isDragging = false;
 
 /**
- * Initialize the minimap.
+ * Scroll editor to a ratio (0-1) of its content.
+ * @param {number} ratio
+ */
+function scrollEditorTo(ratio) {
+  const editor = document.querySelector('.editor__content');
+  if (!editor) return;
+  const maxScroll = Math.max(0, editor.scrollHeight - editor.clientHeight);
+  editor.scrollTop = clamp(ratio, 0, 1) * maxScroll;
+}
+
+/**
+ * Handle pointer down on minimap.
+ * @param {number} clientY
+ */
+function handlePointerDown(clientY) {
+  if (!minimapEl) return;
+  const rect = minimapEl.getBoundingClientRect();
+  const ratio = (clientY - rect.top) / rect.height;
+  scrollEditorTo(ratio);
+}
+
+/**
+ * Handle pointer move during drag.
+ * @param {number} clientY
+ */
+function handlePointerMove(clientY) {
+  if (!isDragging || !minimapEl) return;
+  const rect = minimapEl.getBoundingClientRect();
+  const ratio = (clientY - rect.top) / rect.height;
+  scrollEditorTo(ratio);
+}
+
+/**
+ * Initialize the minimap with mouse and touch support.
  */
 export function initMinimap() {
   minimapEl = document.getElementById('minimap');
@@ -36,32 +66,34 @@ export function initMinimap() {
   sliderEl = createElement('div', { className: 'minimap__slider' });
   minimapEl.appendChild(sliderEl);
 
-  // Click to scroll
+  // Mouse events
   minimapEl.addEventListener('mousedown', (e) => {
     if (e.target === sliderEl) {
       isDragging = true;
     } else {
-      // Click on minimap to jump
-      const rect = minimapEl.getBoundingClientRect();
-      const y = (e.clientY - rect.top) / rect.height;
-      const editor = document.querySelector('.editor__content');
-      if (editor) {
-        editor.scrollTop = y * (editor.scrollHeight - editor.clientHeight);
-      }
+      handlePointerDown(e.clientY);
     }
   });
 
   document.addEventListener('mousemove', (e) => {
-    if (!isDragging || !sliderEl || !minimapEl) return;
-    const rect = minimapEl.getBoundingClientRect();
-    const y = clamp((e.clientY - rect.top) / rect.height, 0, 1);
-    const editor = document.querySelector('.editor__content');
-    if (editor) {
-      editor.scrollTop = y * (editor.scrollHeight - editor.clientHeight);
-    }
+    if (!isDragging) return;
+    handlePointerMove(e.clientY);
   });
 
   document.addEventListener('mouseup', () => { isDragging = false; });
+
+  // Touch events
+  minimapEl.addEventListener('touchstart', (e) => {
+    const touch = e.touches[0];
+    handlePointerDown(touch.clientY);
+  }, { passive: true });
+
+  minimapEl.addEventListener('touchmove', (e) => {
+    const touch = e.touches[0];
+    handlePointerMove(touch.clientY);
+  }, { passive: true });
+
+  document.addEventListener('touchend', () => { isDragging = false; }, { passive: true });
 }
 
 /**
@@ -76,35 +108,45 @@ export function updateMinimap(content, editorScrollTop, editorHeight, editorScro
 
   const lines = content.split('\n');
   const minimapHeight = minimapEl.clientHeight;
+
+  // Guard against empty content or zero-height container
+  if (!lines.length || !minimapHeight) return;
+
   const lineHeight = Math.max(1, Math.floor((minimapHeight / lines.length) * 2) / 2);
+  const dpr = window.devicePixelRatio || 1;
+  const logicalWidth = minimapEl.clientWidth;
 
   canvasEl.height = Math.max(minimapHeight, lines.length * lineHeight);
-  canvasEl.width = minimapEl.clientWidth * 2; // Retina
+  canvasEl.width = logicalWidth * dpr;
 
   const ctx = canvasEl.getContext('2d');
-  ctx.scale(1, 1);
+  ctx.scale(dpr, dpr);
 
   // Background
-  ctx.fillStyle = getComputedStyle(canvasEl).backgroundColor || '#1e1e1e';
-  ctx.fillRect(0, 0, canvasEl.width, canvasEl.height);
+  const bgColor = getComputedStyle(minimapEl).backgroundColor || '#1e1e1e';
+  ctx.fillStyle = bgColor;
+  ctx.fillRect(0, 0, logicalWidth, Math.max(minimapHeight, lines.length * lineHeight));
 
   // Draw lines as tiny blocks
-  const maxWidth = canvasEl.width - 4;
+  const maxWidth = logicalWidth - 4;
   ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim() || '#cccccc';
 
-  lines.forEach((line, i) => {
+  for (let i = 0; i < lines.length; i++) {
     const y = i * lineHeight;
-    const width = Math.min(line.length * 2, maxWidth);
-    if (line.trim()) {
+    const width = Math.min(lines[i].length * 2, maxWidth);
+    if (lines[i].trim()) {
       ctx.fillRect(1, y, width, Math.max(1, lineHeight - 1));
     }
-  });
+  }
 
   // Update slider position
-  const visibleRatio = editorHeight / editorScrollHeight;
+  const scrollRange = editorScrollHeight - editorHeight;
+  const visibleRatio = scrollRange > 0 ? editorHeight / editorScrollHeight : 1;
   const sliderHeight = Math.max(10, Math.round(minimapHeight * visibleRatio));
-  const sliderTop = (editorScrollTop / (editorScrollHeight - editorHeight)) * (minimapHeight - sliderHeight);
+  const sliderTop = scrollRange > 0
+    ? (editorScrollTop / scrollRange) * (minimapHeight - sliderHeight)
+    : 0;
 
   sliderEl.style.height = `${sliderHeight}px`;
-  sliderEl.style.top = `${isNaN(sliderTop) ? 0 : sliderTop}px`;
+  sliderEl.style.top = `${sliderTop}px`;
 }

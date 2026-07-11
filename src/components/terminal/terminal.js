@@ -44,15 +44,26 @@ const ANSI_MAP = {
 
 /**
  * Parse ANSI escape sequences into HTML.
+ * Supports single codes (\x1b[31m) and combined codes (\x1b[1;34m).
  * @param {string} str
  * @returns {string}
  */
 function parseAnsi(str) {
-  return str.replace(/\x1b\[(\d+)m/g, (_, code) => {
-    if (code === '0') return '</span>';
-    const cls = ANSI_MAP[code];
-    return cls ? `<span class="terminal-${cls}">` : '';
-  });
+  return str.replace(/\x1b\[([\d;]+)m/g, (_, codes) => {
+    const codeList = codes.split(';');
+    if (codeList[0] === '0') return '</span>';
+
+    let result = '';
+    let hasSpan = false;
+    for (const code of codeList) {
+      const cls = ANSI_MAP[code];
+      if (cls) {
+        result += `<span class="terminal-${cls}">`;
+        hasSpan = true;
+      }
+    }
+    return hasSpan ? result : '';
+  }).replace(/<\/span><span class="[^"]+">/g, '');
 }
 
 /**
@@ -211,6 +222,7 @@ const INTERNAL_COMMANDS = {
 
 /**
  * Process a terminal command.
+ * References INTERNAL_COMMANDS (the block above).
  * @param {string} input
  * @returns {string|Array<string>|null}
  */
@@ -233,27 +245,6 @@ function processCommand(input) {
     return '';
   }
   return `\x1b[1;31mzsh: command not found: ${cmd}\x1b[0m`;
-}
-
-/**
- * Process a terminal command.
- * @param {string} input
- * @returns {string|Array<string>|null}
- */
-function processCommand(input) {
-  const trimmed = input.trim();
-  if (!trimmed) return null;
-
-  const parts = trimmed.split(/\s+/);
-  const cmd = parts[0].toLowerCase();
-  const args = parts.slice(1);
-
-  if (cmd === 'clear') return 'CLEAR';
-  if (cmd === 'exit') return 'EXIT';
-
-  const handler = COMMANDS[cmd] || COMMANDS[parts.join(' ')];
-  if (handler) return handler(args);
-  return `zsh: command not found: ${cmd}`;
 }
 
 /**

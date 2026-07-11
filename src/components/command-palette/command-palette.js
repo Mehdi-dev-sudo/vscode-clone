@@ -14,20 +14,39 @@ import { ICONS } from '../../assets/icons/codicons.js';
 const COMMANDS = [
   { id: 'command-palette', label: 'Show All Commands', icon: ICONS.search, shortcut: 'Ctrl+Shift+P', action: null },
   { id: 'quick-open', label: 'Quick Open File', icon: ICONS.file, shortcut: 'Ctrl+P', action: null },
-  { id: 'toggle-sidebar', label: 'Toggle Sidebar', icon: ICONS.files, shortcut: 'Ctrl+B', action: null },
-  { id: 'toggle-panel', label: 'Toggle Terminal', icon: ICONS.terminal, shortcut: 'Ctrl+`', action: null },
+  { id: 'toggle-sidebar', label: 'Toggle Sidebar Visibility', icon: ICONS.files, shortcut: 'Ctrl+B', action: null },
+  { id: 'toggle-panel', label: 'Toggle Panel Visibility', icon: ICONS.terminal, shortcut: 'Ctrl+`', action: null },
+  { id: 'view-explorer', label: 'Focus: Explorer', icon: ICONS.files, shortcut: 'Ctrl+Shift+E', action: null },
+  { id: 'view-search', label: 'Focus: Search', icon: ICONS.search, shortcut: 'Ctrl+Shift+F', action: null },
+  { id: 'view-source-control', label: 'Focus: Source Control', icon: ICONS.git, shortcut: 'Ctrl+Shift+G', action: null },
+  { id: 'view-debug', label: 'Focus: Run and Debug', icon: ICONS.debug, shortcut: 'Ctrl+Shift+D', action: null },
+  { id: 'view-extensions', label: 'Focus: Extensions', icon: ICONS.extensions, shortcut: 'Ctrl+Shift+X', action: null },
   { id: 'new-file', label: 'New File', icon: ICONS.newFile, shortcut: 'Ctrl+N', action: null },
   { id: 'new-folder', label: 'New Folder', icon: ICONS.newFolder, action: null },
+  { id: 'rename-file', label: 'Rename Current File', icon: ICONS.edit, action: null },
+  { id: 'delete-file', label: 'Delete Current File', icon: ICONS.close, action: null },
   { id: 'theme-dark', label: 'Theme: Dark+', icon: ICONS.lightBulb, action: null },
   { id: 'theme-light', label: 'Theme: Light+', icon: ICONS.lightBulb, action: null },
   { id: 'theme-dracula', label: 'Theme: Dracula', icon: ICONS.lightBulb, action: null },
   { id: 'theme-monokai', label: 'Theme: Monokai', icon: ICONS.lightBulb, action: null },
+  { id: 'theme-creator', label: 'Theme Creator: Customize Colors', icon: ICONS.lightBulb, action: null },
+  { id: 'export-theme', label: 'Export Theme as JSON', icon: ICONS.download, action: null },
+  { id: 'import-theme', label: 'Import Theme from JSON', icon: ICONS.upload, action: null },
   { id: 'zen-mode', label: 'Toggle Zen Mode', icon: ICONS.unfold, shortcut: 'Ctrl+K Z', action: null },
   { id: 'fullscreen', label: 'Toggle Fullscreen', icon: ICONS.bracket, shortcut: 'F11', action: null },
   { id: 'settings', label: 'Open Settings', icon: ICONS.settings, action: null },
-  { id: 'theme-creator', label: 'Theme Creator: Customize Colors', icon: ICONS.lightBulb, action: null },
-  { id: 'workspace-snapshots', label: 'Workspace Snapshots', icon: ICONS.files, action: null },
-  { id: 'layout-presets', label: 'Layout Presets', icon: ICONS.files, action: null },
+  { id: 'workspace-snapshots', label: 'Workspace Snapshots: Save/Restore', icon: ICONS.files, action: null },
+  { id: 'snapshot-take', label: 'Snapshot: Save Current State', icon: ICONS.save, action: null },
+  { id: 'snapshot-restore', label: 'Snapshot: Restore Last', icon: ICONS.restore, action: null },
+  { id: 'layout-presets', label: 'Layout Presets: Switch Layout', icon: ICONS.files, action: null },
+  { id: 'layout-editor-focus', label: 'Layout: Editor Focus (Minimal)', icon: ICONS.unfold, action: null },
+  { id: 'layout-terminal-max', label: 'Layout: Terminal Max', icon: ICONS.terminal, action: null },
+  { id: 'layout-minimal', label: 'Layout: Minimal (Clean Slate)', icon: ICONS.bracket, action: null },
+  { id: 'focus-explorer', label: 'Focus: Explorer Panel', icon: ICONS.files, action: null },
+  { id: 'focus-terminal', label: 'Focus: Terminal', icon: ICONS.terminal, action: null },
+  { id: 'focus-editor', label: 'Focus: Editor Area', icon: ICONS.edit, action: null },
+  { id: 'close-all-tabs', label: 'Close All Tabs', icon: ICONS.close, action: null },
+  { id: 'clear-notifications', label: 'Clear All Notifications', icon: ICONS.clear, action: null },
   { id: 'about', label: 'About VS Code Clone', icon: ICONS.info, action: null },
 ];
 
@@ -86,6 +105,21 @@ function executeCommand(id) {
     case 'toggle-panel':
       eventBus.emit(EVENTS.PANEL_RESIZED, 'toggle-panel');
       break;
+    case 'view-explorer':
+      eventBus.emit(EVENTS.VIEW_CHANGED, 'explorer');
+      break;
+    case 'view-search':
+      eventBus.emit(EVENTS.VIEW_CHANGED, 'search');
+      break;
+    case 'view-source-control':
+      eventBus.emit(EVENTS.VIEW_CHANGED, 'source-control');
+      break;
+    case 'view-debug':
+      eventBus.emit(EVENTS.VIEW_CHANGED, 'debug');
+      break;
+    case 'view-extensions':
+      eventBus.emit(EVENTS.VIEW_CHANGED, 'extensions');
+      break;
     case 'zen-mode':
       eventBus.emit(EVENTS.ZEN_MODE_TOGGLED, 'zen');
       break;
@@ -100,8 +134,50 @@ function executeCommand(id) {
       eventBus.emit(EVENTS.COMMAND_EXECUTED, 'new-folder');
       eventBus.emit(EVENTS.VIEW_CHANGED, 'explorer');
       break;
+    case 'rename-file':
+      eventBus.emit(EVENTS.COMMAND_EXECUTED, 'rename-file');
+      break;
+    case 'delete-file':
+      eventBus.emit(EVENTS.COMMAND_EXECUTED, 'delete-file');
+      break;
+    case 'export-theme':
+      eventBus.emit(EVENTS.COMMAND_EXECUTED, 'export-theme');
+      break;
+    case 'import-theme':
+      eventBus.emit(EVENTS.COMMAND_EXECUTED, 'import-theme');
+      break;
+    case 'snapshot-take':
+      eventBus.emit(EVENTS.COMMAND_EXECUTED, 'take-snapshot');
+      break;
+    case 'snapshot-restore':
+      eventBus.emit(EVENTS.COMMAND_EXECUTED, 'restore-snapshot');
+      break;
+    case 'layout-editor-focus':
+      eventBus.emit(EVENTS.COMMAND_EXECUTED, 'layout-editor-focus');
+      break;
+    case 'layout-terminal-max':
+      eventBus.emit(EVENTS.COMMAND_EXECUTED, 'layout-terminal-max');
+      break;
+    case 'layout-minimal':
+      eventBus.emit(EVENTS.COMMAND_EXECUTED, 'layout-minimal');
+      break;
+    case 'focus-explorer':
+      eventBus.emit(EVENTS.VIEW_CHANGED, 'explorer');
+      break;
+    case 'focus-terminal':
+      eventBus.emit(EVENTS.COMMAND_EXECUTED, 'focus-terminal');
+      break;
+    case 'focus-editor':
+      eventBus.emit(EVENTS.COMMAND_EXECUTED, 'focus-editor');
+      break;
+    case 'close-all-tabs':
+      eventBus.emit(EVENTS.COMMAND_EXECUTED, 'close-all-tabs');
+      break;
+    case 'clear-notifications':
+      eventBus.emit(EVENTS.COMMAND_EXECUTED, 'clear-notifications');
+      break;
     case 'about':
-      alert('VS Code Clone v1.0.0\nA portfolio-quality editor clone built with Vanilla JS.');
+      alert('VS Code Clone v1.0.0\nBuilt with zero frameworks by Mehdi Khorshidi far.\nRepo: https://github.com/Mehdi-dev-sudo');
       break;
     default:
       eventBus.emit(EVENTS.COMMAND_EXECUTED, id);

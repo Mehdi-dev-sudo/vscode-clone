@@ -6,7 +6,8 @@
 
 import { createElement, empty, debounce } from '../../utils/dom.js';
 import { ICONS } from '../../assets/icons/codicons.js';
-import { DEBOUNCE_DELAY } from '../../core/constants.js';
+import { DEBOUNCE_DELAY, EVENTS } from '../../core/constants.js';
+import { eventBus } from '../../events/event-bus.js';
 import { Notifications } from '../notifications/notifications.js';
 
 const MOCK_FILES = [
@@ -232,9 +233,8 @@ function renderResults(container, results) {
       style: { padding: '4px 12px', cursor: 'pointer', fontSize: '13px' },
       events: {
         click: () => {
-          import('../../events/event-bus.js').then(({ eventBus }) => {
-            eventBus.emit('tab:opened', { name: r.file });
-          });
+          eventBus.emit(EVENTS.FILE_SELECTED, { name: r.file });
+          eventBus.emit(EVENTS.TAB_OPENED, { name: r.file });
         },
         mouseenter: (e) => { e.currentTarget.style.backgroundColor = 'var(--sidebar-item-hover)'; },
         mouseleave: (e) => { e.currentTarget.style.backgroundColor = ''; },

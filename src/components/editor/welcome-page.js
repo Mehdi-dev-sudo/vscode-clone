@@ -113,7 +113,10 @@ export function renderWelcomePage(container) {
         events: {
           mouseenter: (e) => { e.currentTarget.style.backgroundColor = 'var(--bg-hover)'; },
           mouseleave: (e) => { e.currentTarget.style.backgroundColor = ''; },
-          click: () => eventBus.emit(EVENTS.TAB_OPENED, { name: file.name }),
+          click: () => {
+            eventBus.emit(EVENTS.FILE_SELECTED, { name: file.name });
+            eventBus.emit(EVENTS.TAB_OPENED, { name: file.name });
+          },
         },
         children: [
           createElement('span', { className: 'icon', html: ICONS.file, style: { color: 'var(--text-secondary)', display: 'flex' } }),

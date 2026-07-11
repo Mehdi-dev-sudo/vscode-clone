@@ -73,7 +73,10 @@ function renderResults(results) {
 
     const item = createElement('div', {
       className: 'search__result-item',
-      events: { click: () => eventBus.emit(EVENTS.FILE_SELECTED, { name: r.file }) },
+      events: { click: () => {
+        eventBus.emit(EVENTS.FILE_SELECTED, { name: r.file });
+        eventBus.emit(EVENTS.TAB_OPENED, { name: r.file });
+      } },
       children: [
         createElement('div', {
           className: 'search__result-file',

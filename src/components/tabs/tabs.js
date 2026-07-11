@@ -199,7 +199,7 @@ function togglePin(id) {
  * @param {string} keepId
  */
 function closeOthers(keepId) {
-  tabs = tabs.filter((t) => t.id === keepId);
+  tabs = tabs.filter((t) => t.id === keepId || t.pinned);
   activeTabId = keepId;
   persistTabs();
   renderTabs();
@@ -209,11 +209,14 @@ function closeOthers(keepId) {
  * Close all tabs.
  */
 function closeAll() {
-  tabs = [];
-  activeTabId = null;
+  const pinned = tabs.filter((t) => t.pinned);
+  tabs = pinned;
+  activeTabId = pinned.length > 0 ? pinned[0].id : null;
   persistTabs();
   renderTabs();
-  eventBus.emit(EVENTS.FILE_SELECTED, null);
+  if (tabs.length === 0) {
+    eventBus.emit(EVENTS.FILE_SELECTED, null);
+  }
 }
 
 /**

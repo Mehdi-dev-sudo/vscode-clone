@@ -30,6 +30,7 @@ import { ThemeCreator } from './components/themes/theme-creator.js';
 import { WorkspaceSnapshots } from './features/workspace-snapshots.js';
 import { LayoutPresets } from './features/layout-presets.js';
 import { PluginAPI } from './features/plugin-api.js';
+import { SettingsEditor } from './features/settings-editor.js';
 
 /**
  * Bootstrap the application.
@@ -70,6 +71,7 @@ function boot() {
     WorkspaceSnapshots,
     LayoutPresets,
     PluginAPI,
+    SettingsEditor,
   ];
 
   // Initialize tour

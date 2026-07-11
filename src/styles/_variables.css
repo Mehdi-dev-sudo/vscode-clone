@@ -15,6 +15,11 @@
   --font-size-lg: 13px;
   --font-size-xl: 14px;
   --font-size-xxl: 18px;
+
+  /* --- Editor (dynamic, adjusted by Settings) --- */
+  --editor-word-wrap: normal;
+  --editor-tab-size: 2;
+  --terminal-font-size: 13px;
   --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-bold: 600;

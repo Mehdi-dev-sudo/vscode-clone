@@ -8,6 +8,7 @@
 import { createElement } from '../utils/dom.js';
 import { eventBus } from '../events/event-bus.js';
 import { EVENTS } from '../core/constants.js';
+import { Notifications } from '../components/notifications/notifications.js';
 
 const PRESETS = {
   'Editor Focus': {
@@ -55,23 +56,33 @@ function applyPreset(name) {
   const sidebar = document.getElementById('sidebar');
   const panel = document.getElementById('panel');
 
-  if (sidebar) {
-    sidebar.style.width = preset.sidebarWidth;
-    sidebar.classList.toggle('app__sidebar--hidden', !preset.sidebarVisible);
-  }
+  // Use rAF to ensure CSS transitions fire
+  requestAnimationFrame(() => {
+    if (sidebar) {
+      sidebar.style.width = preset.sidebarVisible ? preset.sidebarWidth : '0px';
+      sidebar.classList.toggle('app__sidebar--hidden', !preset.sidebarVisible);
+    }
 
-  if (panel) {
-    panel.style.height = preset.panelHeight;
-    panel.classList.toggle('app__panel--hidden', !preset.panelVisible);
-  }
+    if (panel) {
+      panel.style.height = preset.panelVisible ? preset.panelHeight : '0px';
+      panel.classList.toggle('app__panel--hidden', !preset.panelVisible);
+    }
 
-  // Dispatch resize event
-  window.dispatchEvent(new CustomEvent('layout:changed'));
-
-  import('../components/notifications/notifications.js').then(({ Notifications }) => {
-    Notifications.info(`Layout: ${name}`);
+    // Notify layout change after transition
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('layout:changed'));
+    }, 350);
   });
+
+  Notifications.info(`Layout: ${name}`);
 }
+
+// Direct layout command handler
+const LAYOUT_COMMANDS = {
+  'layout-editor-focus': 'Editor Focus',
+  'layout-terminal-max': 'Terminal Max',
+  'layout-minimal': 'Minimal',
+};
 
 function showDialog() {
   document.querySelector('.layout-presets')?.remove();
@@ -148,6 +159,7 @@ export const LayoutPresets = {
   init() {
     eventBus.on(EVENTS.COMMAND_EXECUTED, (cmd) => {
       if (cmd === 'layout-presets') showDialog();
+      if (LAYOUT_COMMANDS[cmd]) applyPreset(LAYOUT_COMMANDS[cmd]);
     });
   },
 };

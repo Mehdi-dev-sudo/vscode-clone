@@ -10,6 +10,7 @@ import { eventBus } from '../../events/event-bus.js';
 import { EVENTS } from '../../core/constants.js';
 import { createElement, empty, $ } from '../../utils/dom.js';
 import { getItem, setItem } from '../../storage/local-storage.js';
+import { Notifications } from '../notifications/notifications.js';
 
 const CUSTOM_THEMES_KEY = 'vscode-clone:custom-themes';
 const CSS_VARIABLES = [
@@ -198,17 +199,35 @@ function render() {
 
   // Footer with actions
   const footer = createElement('div', {
-    style: { padding: '12px 20px', borderTop: '1px solid var(--border-primary)', display: 'flex', gap: '8px', justifyContent: 'flex-end' },
+    style: { padding: '12px 20px', borderTop: '1px solid var(--border-primary)', display: 'flex', gap: '8px', justifyContent: 'space-between' },
     children: [
-      createElement('button', {
-        style: { backgroundColor: 'var(--button-secondary-bg)', color: 'var(--text-primary)', padding: '6px 16px', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' },
-        text: 'Reset',
-        events: { click: () => { currentColors = {}; resetColors(); render(); } },
+      createElement('div', { style: { display: 'flex', gap: '8px' },
+        children: [
+          createElement('button', {
+            style: { backgroundColor: 'var(--button-secondary-bg)', color: 'var(--text-primary)', padding: '6px 12px', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px' },
+            text: 'Export JSON',
+            events: { click: () => exportThemeJSON() },
+          }),
+          createElement('button', {
+            style: { backgroundColor: 'var(--button-secondary-bg)', color: 'var(--text-primary)', padding: '6px 12px', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '11px' },
+            text: 'Import JSON',
+            events: { click: () => importThemeJSON() },
+          }),
+        ],
       }),
-      createElement('button', {
-        style: { backgroundColor: 'var(--accent-primary)', color: '#fff', padding: '6px 16px', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' },
-        text: 'Apply & Close',
-        events: { click: close },
+      createElement('div', { style: { display: 'flex', gap: '8px' },
+        children: [
+          createElement('button', {
+            style: { backgroundColor: 'var(--button-secondary-bg)', color: 'var(--text-primary)', padding: '6px 16px', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' },
+            text: 'Reset',
+            events: { click: () => { currentColors = {}; resetColors(); render(); } },
+          }),
+          createElement('button', {
+            style: { backgroundColor: 'var(--accent-primary)', color: '#fff', padding: '6px 16px', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' },
+            text: 'Apply & Close',
+            events: { click: close },
+          }),
+        ],
       }),
     ],
   });
@@ -225,9 +244,64 @@ function saveCurrentTheme() {
     if (input) input.value = currentThemeName;
   }
   saveTheme(currentThemeName, currentColors);
-  import('../notifications/notifications.js').then(({ Notifications }) => {
-    Notifications.info(`Theme "${currentThemeName}" saved`);
+  Notifications.info(`Theme "${currentThemeName}" saved`);
+}
+
+function exportThemeJSON() {
+  const name = currentThemeName || 'custom-theme';
+  const colors = { ...currentColors };
+  // Add any CSS variables not yet customized (use computed values)
+  CSS_VARIABLES.forEach((v) => {
+    if (!colors[v.key]) {
+      colors[v.key] = getComputedStyle(document.documentElement).getPropertyValue(v.key).trim() || '#000000';
+    }
   });
+  const json = JSON.stringify({ name, colors }, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${name.replace(/[^a-zA-Z0-9_-]/g, '')}-theme.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  Notifications.info(`Theme "${name}" exported`);
+}
+
+function importThemeJSON() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        if (data.colors) {
+          currentColors = { ...data.colors };
+          if (data.name) currentThemeName = data.name;
+          applyColors(currentColors);
+          const nameInput = document.getElementById('theme-creator-name');
+          if (nameInput && data.name) nameInput.value = data.name;
+          // Update color inputs in the UI
+          document.querySelectorAll('.theme-creator input[type="color"]').forEach((el) => {
+            const key = el.dataset.key;
+            if (currentColors[key]) el.value = currentColors[key];
+          });
+          document.querySelectorAll('.theme-creator input[type="text"]').forEach((el) => {
+            const key = el.dataset.key;
+            if (currentColors[key]) el.value = currentColors[key];
+          });
+          Notifications.info(`Theme "${data.name || 'imported'}" loaded`);
+        }
+      } catch (err) {
+        Notifications.error('Invalid theme file');
+      }
+    };
+    reader.readAsText(file);
+  });
+  input.click();
 }
 
 function close() {

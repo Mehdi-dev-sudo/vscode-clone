@@ -71,10 +71,16 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease, border-color 0.3s ease;
 }
 
 .app__sidebar--hidden {
-  display: none;
+  width: 0 !important;
+  min-width: 0 !important;
+  padding: 0;
+  opacity: 0;
+  border-right-color: transparent;
+  pointer-events: none;
 }
 
 /* --- Editor Area --- */
@@ -97,10 +103,17 @@
   flex-direction: column;
   min-height: var(--panel-min-height);
   max-height: var(--panel-max-height);
+  transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease, border-color 0.3s ease, padding 0.3s ease;
 }
 
 .app__panel--hidden {
-  display: none;
+  height: 0 !important;
+  min-height: 0 !important;
+  padding: 0;
+  opacity: 0;
+  border-top-color: transparent;
+  overflow: hidden;
+  pointer-events: none;
 }
 
 /* --- Resize Handles --- */

@@ -358,6 +358,14 @@ export const Editor = {
       renderEditorContent(name, content);
     });
 
+    // Listen for focus-editor command
+    eventBus.on(EVENTS.COMMAND_EXECUTED, (cmd) => {
+      if (cmd === 'focus-editor') {
+        const editorBody = document.getElementById('editor');
+        if (editorBody) editorBody.focus();
+      }
+    });
+
     // Welcome page buttons
     if (welcomeEl) {
       welcomeEl.addEventListener('click', (e) => {

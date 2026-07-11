@@ -493,5 +493,22 @@ export const Terminal = {
     eventBus.on('terminal:show', () => {
       renderTerminal();
     });
+
+    // Listen for focus-terminal command
+    eventBus.on(EVENTS.COMMAND_EXECUTED, (cmd) => {
+      if (cmd === 'focus-terminal') {
+        const panel = document.getElementById('panel');
+        if (panel) {
+          panel.classList.remove('app__panel--hidden');
+          // Switch panel to terminal tab
+          import('../panel/panel-manager.js').then(({ PanelManager }) => {
+            PanelManager.switchTo('terminal');
+          });
+        }
+        // Focus the terminal input
+        const input = document.querySelector('.terminal__input');
+        if (input) setTimeout(() => input.focus(), 100);
+      }
+    });
   },
 };

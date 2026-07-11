@@ -29,6 +29,7 @@ import { AboutDialog } from './components/core/about-dialog.js';
 import { ThemeCreator } from './components/themes/theme-creator.js';
 import { WorkspaceSnapshots } from './features/workspace-snapshots.js';
 import { LayoutPresets } from './features/layout-presets.js';
+import { PluginAPI } from './features/plugin-api.js';
 
 /**
  * Bootstrap the application.
@@ -68,6 +69,7 @@ function boot() {
     ThemeCreator,
     WorkspaceSnapshots,
     LayoutPresets,
+    PluginAPI,
   ];
 
   // Initialize tour

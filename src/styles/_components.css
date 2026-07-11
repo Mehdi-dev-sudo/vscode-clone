@@ -1393,6 +1393,18 @@
   color: var(--text-primary);
 }
 
+/* ==================== Terminal ANSI Colors ==================== */
+.terminal-color-gray { color: #8a8a8a; }
+.terminal-color-red { color: #f44747; }
+.terminal-color-green { color: #6a9955; }
+.terminal-color-yellow { color: #d7ba7d; }
+.terminal-color-blue { color: #569cd6; }
+.terminal-color-magenta { color: #c586c0; }
+.terminal-color-cyan { color: #4ec9b0; }
+.terminal-color-white { color: #d4d4d4; }
+.terminal-bold { font-weight: bold; }
+.terminal-underline { text-decoration: underline; }
+
 /* ==================== Syntax Highlighting ==================== */
 .syntax-keyword { color: #569cd6; }
 .syntax-string { color: #ce9178; }

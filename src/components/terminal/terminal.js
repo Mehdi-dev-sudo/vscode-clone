@@ -15,6 +15,8 @@ import { ICONS } from '../../assets/icons/codicons.js';
  * @property {string} name
  * @property {Array<string>} history
  * @property {string} currentInput
+ * @property {Array<string>} [commandHistory]
+ * @property {number} [historyIndex]
  */
 
 /** @type {Array<TerminalTab>} */
@@ -35,6 +37,27 @@ let panelTabsEl = null;
 /** @type {HTMLElement|null} */
 let currentDisplayEl = null;
 
+/** ANSI color codes mapped to CSS classes. */
+const ANSI_MAP = {
+  '30': 'color-gray', '31': 'color-red', '32': 'color-green',
+  '33': 'color-yellow', '34': 'color-blue', '35': 'color-magenta',
+  '36': 'color-cyan', '37': 'color-white',
+  '1': 'bold', '4': 'underline',
+};
+
+/**
+ * Parse ANSI escape sequences into HTML.
+ * @param {string} str
+ * @returns {string}
+ */
+function parseAnsi(str) {
+  return str.replace(/\x1b\[(\d+)m/g, (_, code) => {
+    if (code === '0') return '</span>';
+    const cls = ANSI_MAP[code];
+    return cls ? `<span class="terminal-${cls}">` : '';
+  });
+}
+
 /**
  * Mock file system paths.
  * @type {Object<string, string>}
@@ -44,48 +67,176 @@ const FS = {
   '/': 'root',
 };
 
+/** Virtual file system. */
+const VFS = {
+  '/': { type: 'dir', children: ['home', 'usr', 'etc', 'var', 'tmp'] },
+  '/home': { type: 'dir', children: ['user'] },
+  '/home/user': { type: 'dir', children: ['src', 'index.html', 'README.md', '.gitignore', 'package.json', 'node_modules'] },
+  '/home/user/src': { type: 'dir', children: ['index.js', 'app.js', 'styles.css', 'components'] },
+  '/home/user/src/components': { type: 'dir', children: ['app.js', 'header.js'] },
+};
+
 let currentDir = '~';
+
+/**
+ * Resolve a path relative to current directory.
+ * @param {string} p
+ * @returns {string}
+ */
+function resolvePath(p) {
+  const base = FS[currentDir];
+  if (!p || p === '~') return '/home/user';
+  if (p === '/') return '/';
+  if (p.startsWith('/')) return p;
+  if (p.startsWith('~')) return '/home/user' + p.slice(1);
+  if (base === '/home/user') return `/home/user/${p}`;
+  if (base === '/') return `/${p}`;
+  return `${base}/${p}`;
+}
+
+/**
+ * Get path display string.
+ * @param {string} dir
+ * @returns {string}
+ */
+function getPathDisplay(dir) {
+  return dir === '/home/user' ? '~' : dir;
+}
 
 /**
  * Commands that the terminal can process.
  */
-const COMMANDS = {
+const INTERNAL_COMMANDS = {
   help() {
     return [
-      'Available commands:',
-      '  help      - Show this help message',
-      '  clear     - Clear the terminal',
-      '  echo      - Print text',
-      '  ls        - List directory contents',
-      '  pwd       - Print working directory',
-      '  cd        - Change directory',
-      '  date      - Show current date',
-      '  whoami    - Show current user',
-      '  node -v   - Show node version',
-      '  npm -v    - Show npm version',
-      `  exit      - Close terminal tab`,
+      '\x1b[1mAvailable commands:\x1b[0m',
+      '  \x1b[32mhelp\x1b[0m      - Show this help message',
+      '  \x1b[32mclear\x1b[0m     - Clear the terminal',
+      '  \x1b[32mecho\x1b[0m      - Print text',
+      '  \x1b[32mls\x1b[0m        - List directory contents',
+      '  \x1b[32mpwd\x1b[0m       - Print working directory',
+      '  \x1b[32mcd\x1b[0m        - Change directory',
+      '  \x1b[32mmkdir\x1b[0m     - Create directory',
+      '  \x1b[32mtouch\x1b[0m     - Create file',
+      '  \x1b[32mcat\x1b[0m       - Display file contents',
+      '  \x1b[32mdate\x1b[0m      - Show current date',
+      '  \x1b[32mwhoami\x1b[0m    - Show current user',
+      '  \x1b[32mnode -v\x1b[0m   - Show node version',
+      '  \x1b[32mnpm -v\x1b[0m    - Show npm version',
+      '  \x1b[32mexit\x1b[0m      - Close terminal tab',
+      '  \x1b[32mneofetch\x1b[0m  - Show system info',
     ];
   },
   clear() { return 'CLEAR'; },
   echo(args) { return args.join(' '); },
-  ls() {
-    return ['src/', 'index.html', 'README.md', '.gitignore', 'package.json'];
+  ls(args) {
+    const target = args[0] ? resolvePath(args[0]) : resolvePath('.');
+    const dir = VFS[target];
+    if (!dir || dir.type !== 'dir') return `\x1b[31mls: ${args[0] || '.'}: No such directory\x1b[0m`;
+    return dir.children.map((c) => {
+      const fullPath = target === '/' ? `/${c}` : `${target}/${c}`;
+      const entry = VFS[fullPath];
+      return entry?.type === 'dir' ? `\x1b[1;34m${c}/\x1b[0m` : c;
+    });
   },
-  pwd() { return FS[currentDir] || currentDir; },
+  pwd() { return getPathDisplay(currentDir); },
   cd(args) {
-    if (!args[0] || args[0] === '~') currentDir = '~';
-    else if (args[0] === '/') currentDir = '/';
-    else if (args[0] === '..') currentDir = '~';
-    else if (args[0] === 'src') currentDir = '~/src';
-    else return `cd: ${args[0]}: No such directory`;
+    if (!args[0] || args[0] === '~' || args[0] === '') {
+      currentDir = '~';
+      return '';
+    }
+    if (args[0] === '/') { currentDir = '/'; return ''; }
+    if (args[0] === '..') {
+      const parts = currentDir.split('/').filter(Boolean);
+      parts.pop();
+      currentDir = parts.length === 0 ? '/' : `/${parts.join('/')}`;
+      if (currentDir === '/home/user') currentDir = '~';
+      return '';
+    }
+    const target = resolvePath(args[0]);
+    const dir = VFS[target];
+    if (!dir || dir.type !== 'dir') return `\x1b[31mcd: ${args[0]}: No such directory\x1b[0m`;
+    currentDir = target === '/home/user' ? '~' : target;
     return '';
+  },
+  mkdir(args) {
+    if (!args[0]) return '\x1b[31mmkdir: missing operand\x1b[0m';
+    const parent = resolvePath('.');
+    const dir = VFS[parent];
+    if (dir && dir.type === 'dir') {
+      const newPath = parent === '/' ? `/${args[0]}` : `${parent}/${args[0]}`;
+      if (!VFS[newPath]) {
+        VFS[newPath] = { type: 'dir', children: [] };
+        dir.children.push(args[0]);
+      }
+    }
+    return '';
+  },
+  touch(args) {
+    if (!args[0]) return '\x1b[31mtouch: missing operand\x1b[0m';
+    const parent = resolvePath('.');
+    const dir = VFS[parent];
+    if (dir && dir.type === 'dir' && !dir.children.includes(args[0])) {
+      const newPath = parent === '/' ? `/${args[0]}` : `${parent}/${args[0]}`;
+      VFS[newPath] = { type: 'file', content: '' };
+      dir.children.push(args[0]);
+    }
+    return '';
+  },
+  cat(args) {
+    if (!args[0]) return '\x1b[31mcat: missing operand\x1b[0m';
+    const target = resolvePath(args[0]);
+    const file = VFS[target];
+    if (!file) return `\x1b[31mcat: ${args[0]}: No such file\x1b[0m`;
+    if (file.type === 'dir') return `\x1b[31mcat: ${args[0]}: Is a directory\x1b[0m`;
+    return file.content || '';
   },
   date() { return new Date().toString(); },
   whoami() { return 'user'; },
   'node -v'() { return 'v20.11.0'; },
   'npm -v'() { return 'v10.2.4'; },
+  neofetch() {
+    return [
+      '\x1b[1;34m       _.สมติ\x1b[0m',
+      '\x1b[1;34m   _.สมติ\x1b[0m    \x1b[1muser@dev\x1b[0m',
+      '\x1b[1;34m สมติ\x1b[0m        \x1b[1mOS:\x1b[0m VS Code Clone OS',
+      '\x1b[1;34m สมติ\x1b[0m        \x1b[1mHost:\x1b[0m Browser',
+      '\x1b[1;34m   _.สมติ\x1b[0m    \x1b[1mKernel:\x1b[0m Vanilla JS',
+      '\x1b[1;34m       _.สมติ\x1b[0m \x1b[1mShell:\x1b[0m bash 5.2',
+      `                   \x1b[1mUptime:\x1b[0m ${Math.floor((Date.now() - performance.now()) / 1000)}s`,
+      '                   \x1b[1mPackages:\x1b[0m 0 (no deps)',
+      '                   \x1b[1mResolution:\x1b[0m 1920x1080',
+      '                   \x1b[1mTerminal:\x1b[0m xterm-256color',
+    ];
+  },
   exit() { return 'EXIT'; },
 };
+
+/**
+ * Process a terminal command.
+ * @param {string} input
+ * @returns {string|Array<string>|null}
+ */
+function processCommand(input) {
+  const trimmed = input.trim();
+  if (!trimmed) return null;
+
+  const parts = trimmed.split(/\s+/);
+  const cmd = parts[0].toLowerCase();
+  const args = parts.slice(1);
+
+  if (cmd === 'clear') return 'CLEAR';
+  if (cmd === 'exit') return 'EXIT';
+
+  const handler = INTERNAL_COMMANDS[cmd] || INTERNAL_COMMANDS[parts.join(' ')];
+  if (handler) {
+    const result = handler(args);
+    if (typeof result === 'string') return result;
+    if (Array.isArray(result)) return result;
+    return '';
+  }
+  return `\x1b[1;31mzsh: command not found: ${cmd}\x1b[0m`;
+}
 
 /**
  * Process a terminal command.
@@ -135,11 +286,11 @@ function renderTerminal() {
     },
   });
 
-  // Render history
+  // Render history with ANSI support
   terminal.history.forEach((line) => {
     const lineEl = createElement('div', {
       className: 'terminal__line',
-      text: line,
+      html: parseAnsi(line),
     });
     body.appendChild(lineEl);
   });
@@ -148,7 +299,7 @@ function renderTerminal() {
   const inputLine = createElement('div', { className: 'terminal__input-line' });
   const prompt = createElement('span', {
     className: 'terminal__prompt',
-    text: `user@dev:${FS[currentDir] || currentDir}$ `,
+    text: `user@dev:${getPathDisplay(currentDir)}$ `,
   });
   const input = createElement('input', {
     className: 'terminal__input',
@@ -162,8 +313,33 @@ function renderTerminal() {
       keydown: (e) => {
         if (e.key === 'Enter') {
           const value = input.value;
+          // Save to command history
+          terminal.commandHistory = terminal.commandHistory || [];
+          if (value.trim()) {
+            terminal.commandHistory.push(value);
+            terminal.historyIndex = terminal.commandHistory.length;
+          }
           input.value = '';
           executeCommand(value, terminal);
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          terminal.commandHistory = terminal.commandHistory || [];
+          terminal.historyIndex = terminal.historyIndex ?? terminal.commandHistory.length;
+          if (terminal.historyIndex > 0) {
+            terminal.historyIndex--;
+            input.value = terminal.commandHistory[terminal.historyIndex] || '';
+          }
+        } else if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          terminal.commandHistory = terminal.commandHistory || [];
+          terminal.historyIndex = terminal.historyIndex ?? terminal.commandHistory.length;
+          if (terminal.historyIndex < terminal.commandHistory.length - 1) {
+            terminal.historyIndex++;
+            input.value = terminal.commandHistory[terminal.historyIndex] || '';
+          } else {
+            terminal.historyIndex = terminal.commandHistory.length;
+            input.value = '';
+          }
         }
       },
     },
@@ -189,7 +365,7 @@ function renderTerminal() {
 function executeCommand(cmd, terminal) {
   if (!cmd.trim()) return;
 
-  terminal.history.push(`user@dev:${FS[currentDir] || currentDir}$ ${cmd}`);
+  terminal.history.push(`\x1b[32muser@dev\x1b[0m:\x1b[34m${getPathDisplay(currentDir)}\x1b[0m$ ${cmd}`);
   const result = processCommand(cmd);
 
   if (result === 'CLEAR') {

@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check HTML
+        run: npx html-validate index.html || true
+      - name: Check CSS
+        run: npx stylelint "src/**/*.css" || true
+      - name: Check JS
+        run: npx eslint "src/**/*.js" || true

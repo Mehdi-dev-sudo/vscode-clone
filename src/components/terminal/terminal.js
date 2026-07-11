@@ -275,6 +275,10 @@ function renderTerminal() {
     attrs: { role: 'region', 'aria-label': `Terminal - ${terminal.name}` },
   });
 
+  // Terminal sub-tabs (bash, bash (2), etc.)
+  const subTabs = renderTerminalSubTabs();
+  currentDisplayEl.appendChild(subTabs);
+
   const body = createElement('div', {
     className: 'terminal__body',
     attrs: { tabindex: '0', 'aria-label': 'Terminal output' },
@@ -358,6 +362,51 @@ function renderTerminal() {
 }
 
 /**
+ * Render terminal sub-tabs inside the terminal component.
+ * @returns {HTMLElement}
+ */
+function renderTerminalSubTabs() {
+  const tabBar = createElement('div', {
+    className: 'terminal__tabs',
+    attrs: { role: 'tablist', 'aria-label': 'Terminal tabs' },
+  });
+
+  terminals.forEach((t) => {
+    const isActive = t.id === activeTerminalId;
+    const tabEl = createElement('div', {
+      className: `terminal__tab${isActive ? ' terminal__tab--active' : ''}`,
+      attrs: { 'data-id': t.id, role: 'tab', 'aria-selected': isActive.toString() },
+      events: {
+        click: () => {
+          activeTerminalId = t.id;
+          renderTerminal();
+        },
+      },
+      children: [
+        createElement('span', { text: t.name }),
+        createElement('button', {
+          className: 'tab__close-btn',
+          html: ICONS.close,
+          attrs: { 'aria-label': `Close ${t.name}` },
+          events: { click: (e) => { e.stopPropagation(); removeTerminal(t.id); } },
+        }),
+      ],
+    });
+    tabBar.appendChild(tabEl);
+  });
+
+  const addBtn = createElement('button', {
+    className: 'terminal__tab-add',
+    html: ICONS.plus,
+    attrs: { 'aria-label': 'New terminal', title: 'New Terminal' },
+    events: { click: () => addTerminal() },
+  });
+  tabBar.appendChild(addBtn);
+
+  return tabBar;
+}
+
+/**
  * Execute a command in a terminal.
  * @param {string} cmd
  * @param {TerminalTab} terminal
@@ -394,7 +443,6 @@ function addTerminal() {
   terminals.push(tab);
   activeTerminalId = id;
 
-  renderTerminalTabs();
   renderTerminal();
   eventBus.emit(EVENTS.TERMINAL_ADDED, { id, name });
 }
@@ -411,56 +459,15 @@ function removeTerminal(id) {
   if (terminals.length === 0) {
     activeTerminalId = null;
     if (panelBodyEl) empty(panelBodyEl);
-    renderTerminalTabs();
     return;
   }
 
-  activeTerminalId = terminals[Math.min(idx, terminals.length - 1)].id;
-  renderTerminalTabs();
+    activeTerminalId = terminals[Math.min(idx, terminals.length - 1)].id;
   renderTerminal();
   eventBus.emit(EVENTS.TERMINAL_REMOVED, { id });
 }
 
-/**
- * Render the terminal tab bar.
- */
-function renderTerminalTabs() {
-  if (!panelTabsEl) return;
-  empty(panelTabsEl);
 
-  terminals.forEach((t) => {
-    const isActive = t.id === activeTerminalId;
-    const tabEl = createElement('div', {
-      className: `terminal__tab${isActive ? ' terminal__tab--active' : ''}`,
-      attrs: { 'data-id': t.id, role: 'tab', 'aria-selected': isActive.toString() },
-      events: {
-        click: () => {
-          activeTerminalId = t.id;
-          renderTerminalTabs();
-          renderTerminal();
-        },
-      },
-      children: [
-        createElement('span', { text: t.name }),
-        createElement('button', {
-          className: 'tab__close-btn',
-          html: ICONS.close,
-          attrs: { 'aria-label': `Close ${t.name}` },
-          events: { click: (e) => { e.stopPropagation(); removeTerminal(t.id); } },
-        }),
-      ],
-    });
-    panelTabsEl.appendChild(tabEl);
-  });
-
-  const addBtn = createElement('button', {
-    className: 'terminal__tab-add',
-    html: ICONS.plus,
-    attrs: { 'aria-label': 'New terminal', title: 'New Terminal' },
-    events: { click: () => addTerminal() },
-  });
-  panelTabsEl.appendChild(addBtn);
-}
 
 /**
  * Terminal component module.
@@ -472,24 +479,14 @@ export const Terminal = {
     panelBodyEl = document.getElementById('panel-body');
     panelTabsEl = document.getElementById('panel-tabs');
 
-    if (!panelTabsEl) return;
+    if (!panelBodyEl) return;
 
-    // Override panel tabs with our terminal tab system
-    // Keep the original panel tab buttons for switching panel views
-    const panelTabContainer = panelTabsEl;
-    empty(panelTabContainer);
-
-    // Create terminal-specific tabs container inside the panel body header
-    const terminalTabsContainer = createElement('div', {
-      className: 'terminal__tabs',
-      attrs: { role: 'tablist', 'aria-label': 'Terminal tabs' },
-    });
-    panelTabsEl = terminalTabsContainer;
-
-    // Insert before panel actions
-    const panelActions = document.getElementById('panel-actions');
-    if (panelActions && panelActions.parentNode) {
-      panelActions.parentNode.insertBefore(terminalTabsContainer, panelActions);
+    // Create a terminal tab container inside the panel body header
+    // (alongside the existing panel tab buttons)
+    const panelHeader = document.getElementById('panel-header');
+    if (panelHeader) {
+      // The terminal tabs go inside the panel body, not the header
+      // We'll render them inline with the terminal content
     }
 
     // Create initial terminal

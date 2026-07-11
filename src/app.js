@@ -24,6 +24,7 @@ import { ContextMenu } from './core/context-menu.js';
 import { SplitEditor } from './components/editor/split-editor.js';
 import { PanelManager } from './components/panel/panel-manager.js';
 import { Tour } from './utils/tour.js';
+import { initFocusManager } from './core/focus-manager.js';
 
 /**
  * Bootstrap the application.
@@ -41,6 +42,9 @@ function boot() {
 
   // Initialize context menu system
   ContextMenu.init();
+
+  // Initialize focus manager for keyboard navigation
+  initFocusManager();
 
   // Bootstrap all UI components
   const components = [

@@ -92,7 +92,7 @@ function render() {
     text: 'Dark+',
     attrs: { title: 'Select theme', 'aria-label': 'Theme: Dark+' },
     events: {
-      click: () => eventBus.emit(EVENTS.COMMAND_EXECUTED, 'themes'),
+      click: () => eventBus.emit(EVENTS.COMMAND_EXECUTED, 'theme-creator'),
     },
   });
   rightEl.appendChild(themeItem);

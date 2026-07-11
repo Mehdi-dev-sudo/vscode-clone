@@ -37,6 +37,48 @@ let currentFileName = '';
  * @type {Object<string, string>}
  */
 const MOCK_FILES = {
+  'package.json': `{
+  "name": "vscode-clone",
+  "version": "1.0.0",
+  "description": "A portfolio-quality VS Code clone built with vanilla HTML/CSS/JS",
+  "private": true,
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx live-server --port=3000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mehdi-dev-sudo/vscode-clone.git"
+  },
+  "keywords": ["vscode", "editor", "portfolio", "vanilla-js"],
+  "author": "Mehdi Khorshidi far",
+  "license": "MIT"
+}`,
+
+  'index.html': `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VS Code Clone</title>
+  <link rel="stylesheet" href="src/styles/main.css">
+</head>
+<body>
+  <div id="root">
+    <div class="app__layout">
+      <nav id="activity-bar" class="app__activity-bar"></nav>
+      <aside id="sidebar" class="app__sidebar"></aside>
+      <main class="app__editor-area">
+        <div id="tabs-bar" class="app__tabs-bar"></div>
+        <div id="editor" class="app__editor"></div>
+      </main>
+      <div id="panel" class="app__panel"></div>
+      <footer id="status-bar" class="app__status-bar"></footer>
+    </div>
+  </div>
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>`,
   'index.js': `import { createApp } from './app.js';
 import { defineComponent } from './component.js';
 

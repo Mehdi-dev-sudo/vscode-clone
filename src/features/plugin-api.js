@@ -119,6 +119,7 @@ export function getStatusPlugins() { return statusPlugins; }
 async function loadKnownPlugins() {
   const pluginPaths = [
     '/plugins/hello-world.js',
+    '/plugins/date-preview.js',
   ];
 
   for (const path of pluginPaths) {

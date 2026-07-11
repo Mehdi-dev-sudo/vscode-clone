@@ -56,6 +56,7 @@
   --editor-bg: #1e1e1e;
   --editor-line-number: #858585;
   --editor-cursor: #aeafad;
+  --editor-line-hover: rgba(255, 255, 255, 0.04);
   --editor-selection: #264f78;
   --editor-selection-highlight: #2b5b84;
   --editor-bracket-match: #ffff0033;
@@ -143,6 +144,7 @@
   --editor-bg: #ffffff;
   --editor-line-number: #999999;
   --editor-cursor: #333333;
+  --editor-line-hover: rgba(0, 0, 0, 0.04);
   --editor-selection: #add6ff;
   --editor-selection-highlight: #9bc3eb;
   --editor-bracket-match: #cec4a6;
@@ -208,6 +210,7 @@
   --tab-inactive-bg: #21222c;
 
   --editor-bg: #282a36;
+  --editor-line-hover: rgba(248, 248, 242, 0.04);
   --editor-selection: #44475a;
   --editor-line-number: #6272a4;
   --editor-cursor: #f8f8f2;
@@ -241,6 +244,7 @@
   --tab-inactive-bg: #1e1f1c;
 
   --editor-bg: #272822;
+  --editor-line-hover: rgba(248, 248, 240, 0.04);
   --editor-selection: #403f3a;
   --editor-line-number: #75766a;
   --editor-cursor: #f8f8f0;

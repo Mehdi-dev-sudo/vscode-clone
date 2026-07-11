@@ -44,39 +44,63 @@ export function detectLanguage(fileName) {
 
 /**
  * Simple JavaScript/TypeScript tokenizer.
+ * Operates on raw code, collects all token positions first,
+ * then builds highlighted HTML by interleaving escaped text and spans.
  * @param {string} code
  * @returns {string} HTML with syntax spans.
  */
 export function highlightJavaScript(code) {
-  // Order matters — longer patterns first
+  const CLASS_MAP = {
+    comment: 'syntax-comment',
+    string: 'syntax-string',
+    keyword: 'syntax-keyword',
+    number: 'syntax-number',
+    class: 'syntax-class',
+  };
+
   const patterns = [
-    { regex: /\/\/.*$/gm, className: 'comment' },
-    { regex: /\/\*[\s\S]*?\*\//g, className: 'comment' },
-    { regex: /("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`)/g, className: 'string' },
-    { regex: /\b(import|export|from|const|let|var|function|return|if|else|for|while|do|switch|case|break|continue|new|delete|typeof|instanceof|class|extends|super|async|await|yield|try|catch|finally|throw|this|true|false|null|undefined|NaN|Infinity)\b/g, className: 'keyword' },
-    { regex: /\b(\d+\.?\d*|0x[0-9a-fA-F]+)\b/g, className: 'number' },
-    { regex: /\b([A-Z][a-zA-Z0-9]+)\b/g, className: 'class' },
-    { regex: /(\/\*[\s\S]*?\*\/)/g, className: 'comment' },
+    { regex: /\/\/.*$/gm, cls: 'comment' },
+    { regex: /\/\*[\s\S]*?\*\//g, cls: 'comment' },
+    { regex: /("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`)/g, cls: 'string' },
+    { regex: /\b(import|export|from|const|let|var|function|return|if|else|for|while|do|switch|case|break|continue|new|delete|typeof|instanceof|class|extends|super|async|await|yield|try|catch|finally|throw|this|true|false|null|undefined|NaN|Infinity)\b/g, cls: 'keyword' },
+    { regex: /\b(\d+\.?\d*|0x[0-9a-fA-F]+)\b/g, cls: 'number' },
+    { regex: /\b([A-Z][a-zA-Z0-9]+)\b/g, cls: 'class' },
   ];
 
-  let result = escapeHtml(code);
-
-  for (const { regex, className } of patterns) {
-    result = result.replace(regex, (match) => {
-      if (match.startsWith('"') || match.startsWith("'") || match.startsWith('`')) {
-        return `<span class="syntax-string">${match}</span>`;
-      }
-      if (match.startsWith('//') || match.startsWith('/*')) {
-        return `<span class="syntax-comment">${match}</span>`;
-      }
-      if (/^\d/.test(match)) {
-        return `<span class="syntax-number">${match}</span>`;
-      }
-      return `<span class="syntax-${className}">${match}</span>`;
-    });
+  // Collect all tokens with their positions
+  const tokens = [];
+  for (const { regex, cls } of patterns) {
+    let m;
+    while ((m = regex.exec(code)) !== null) {
+      tokens.push({ start: m.index, end: m.index + m[0].length, cls, text: m[0] });
+    }
   }
 
-  return result;
+  // Sort by position, remove overlaps (earlier and longer wins)
+  tokens.sort((a, b) => a.start - b.start || b.end - a.end);
+  const clean = [];
+  let cursor = 0;
+  for (const t of tokens) {
+    if (t.start < cursor) continue;
+    clean.push(t);
+    cursor = t.end;
+  }
+
+  // Build output: escaped text interleaved with token spans
+  const parts = [];
+  let pos = 0;
+  for (const t of clean) {
+    if (t.start > pos) {
+      parts.push(escapeHtml(code.slice(pos, t.start)));
+    }
+    parts.push(`<span class="${CLASS_MAP[t.cls] || t.cls}">${t.text}</span>`);
+    pos = t.end;
+  }
+  if (pos < code.length) {
+    parts.push(escapeHtml(code.slice(pos)));
+  }
+
+  return parts.join('');
 }
 
 /**

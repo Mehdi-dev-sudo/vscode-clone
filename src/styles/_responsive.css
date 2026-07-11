@@ -1,0 +1,88 @@
+/**
+ * @fileoverview
+ * Responsive styles — adapts the layout for smaller screens.
+ * Hides sidebar, minimap, and other less-critical elements at narrow widths.
+ */
+
+@media (max-width: 1024px) {
+  .editor__minimap {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .app__sidebar {
+    width: 220px !important;
+    min-width: 150px !important;
+  }
+
+  .app__title-bar {
+    padding: 0 var(--space-md);
+  }
+
+  .app__title {
+    font-size: var(--font-size-sm);
+  }
+
+  .status-bar__right .status-bar__item:nth-child(n+3) {
+    display: none;
+  }
+
+  .editor__gutter {
+    width: 35px;
+  }
+
+  .command-palette__dialog,
+  .quick-open__dialog {
+    width: 90vw;
+  }
+}
+
+@media (max-width: 600px) {
+  .app__sidebar {
+    display: none !important;
+  }
+
+  .app__activity-bar {
+    width: 40px;
+  }
+
+  .activity-bar__btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .app__main {
+    grid-template-columns: 40px 1fr;
+  }
+
+  .tab {
+    padding: 0 var(--space-md);
+    font-size: var(--font-size-sm);
+  }
+
+  .tab__label {
+    max-width: 80px;
+  }
+
+  .status-bar__right .status-bar__item:nth-child(n+2) {
+    display: none;
+  }
+
+  .status-bar__left .status-bar__item:nth-child(n+3) {
+    display: none;
+  }
+
+  .panel__tab {
+    padding: 0 var(--space-sm);
+    font-size: var(--font-size-xs);
+  }
+
+  .panel__actions {
+    display: none;
+  }
+
+  .welcome__shortcuts {
+    display: none;
+  }
+}

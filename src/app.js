@@ -22,6 +22,8 @@ import { LayoutManager } from './components/layout/layout-manager.js';
 import { KeyboardShortcuts } from './core/keyboard-shortcuts.js';
 import { ContextMenu } from './core/context-menu.js';
 import { SplitEditor } from './components/editor/split-editor.js';
+import { PanelManager } from './components/panel/panel-manager.js';
+import { Tour } from './utils/tour.js';
 
 /**
  * Bootstrap the application.
@@ -53,7 +55,11 @@ function boot() {
     Notifications,
     ThemeManager,
     SplitEditor,
+    PanelManager,
   ];
+
+  // Initialize tour
+  Tour.init();
 
   components.forEach((Component) => {
     try {

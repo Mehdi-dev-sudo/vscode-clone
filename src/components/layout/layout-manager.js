@@ -94,12 +94,14 @@ function onMouseUp() {
   document.querySelectorAll('.resize-handle--active').forEach((el) => {
     el.classList.remove('resize-handle--active');
   });
+
+  const completedDragType = dragType;
   dragType = null;
 
-  if (dragType === 'sidebar') {
-    eventBus.emit(EVENTS.SIDEBAR_RESIZED);
-  } else if (dragType === 'panel') {
-    eventBus.emit(EVENTS.PANEL_RESIZED);
+  if (completedDragType === 'sidebar') {
+    eventBus.emit(EVENTS.SIDEBAR_RESIZED, {});
+  } else if (completedDragType === 'panel') {
+    eventBus.emit(EVENTS.PANEL_RESIZED, {});
   }
 }
 

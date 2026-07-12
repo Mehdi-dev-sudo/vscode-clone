@@ -30,12 +30,49 @@ export function initMultiCursor(editorElement) {
   editorEl.style.position = 'relative';
   editorEl.appendChild(cursorContainer);
 
+  // Alt+Click to add cursor at mouse position
+  editorEl.addEventListener('mousedown', (e) => {
+    if (!e.altKey) return;
+    e.preventDefault();
+    const lineEl = e.target.closest('[data-line]');
+    if (!lineEl) return;
+    const line = parseInt(lineEl.dataset.line, 10);
+    const textBefore = getTextBeforeOffset(lineEl, e.target, e.offsetX);
+    addCursorAt(line, textBefore.length);
+  });
+
   eventBus.on(EVENTS.COMMAND_EXECUTED, (payload) => {
     if (payload === 'multicursor-add-above') addCursorAbove();
     if (payload === 'multicursor-add-below') addCursorBelow();
     if (payload === 'multicursor-select-all') selectAllOccurrences();
     if (payload === 'multicursor-collapse') collapseCursors();
   });
+}
+
+/**
+ * Get the text before the clicked offset within a line element.
+ * @param {HTMLElement} lineEl
+ * @param {Node} targetNode
+ * @param {number} offsetX
+ * @returns {string}
+ */
+function getTextBeforeOffset(lineEl, targetNode, offsetX) {
+  const walker = document.createTreeWalker(lineEl, NodeFilter.SHOW_TEXT);
+  let currentOffset = 0;
+  let node;
+  while ((node = walker.nextNode())) {
+    const rect = node.parentElement?.getBoundingClientRect();
+    if (rect) {
+      const charWidth = rect.width / (node.textContent?.length || 1);
+      const nodeStart = rect.left;
+      if (offsetX < nodeStart + node.textContent.length * charWidth) {
+        const charIndex = Math.floor((offsetX - nodeStart) / charWidth);
+        return lineEl.textContent?.substring(0, currentOffset + Math.max(0, charIndex)) || '';
+      }
+      currentOffset += node.textContent?.length || 0;
+    }
+  }
+  return lineEl.textContent || '';
 }
 
 /**

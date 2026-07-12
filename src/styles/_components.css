@@ -4,6 +4,10 @@
  * Each component's styles are scoped under its block class.
  */
 
+/* Shared button defaults */
+button { cursor: pointer; }
+button:disabled { cursor: default; }
+
 /* ==================== Activity Bar ==================== */
 .activity-bar__btn {
   width: 48px;

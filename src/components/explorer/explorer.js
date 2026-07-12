@@ -172,6 +172,7 @@ function startRename(id) {
  * Commit rename.
  * @param {string} id
  * @param {string} newName
+ * @returns {void}
  */
 function commitRename(id, newName) {
   const node = findNode(fileTree, id);

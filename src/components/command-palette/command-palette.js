@@ -260,6 +260,7 @@ function showQuickOpen() {
 /**
  * Render quick open results.
  * @param {Array} files
+ * @returns {void}
  */
 function renderQuickOpenResults(files) {
   if (!quickOpenResultsEl) return;

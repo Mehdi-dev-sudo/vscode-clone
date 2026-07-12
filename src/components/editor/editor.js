@@ -342,6 +342,7 @@ function updateBreadcrumb(fileName) {
 /**
  * Render the minimap (simplified thumbnail of code).
  * @param {string} content
+ * @returns {void}
  */
 function renderMinimap(content) {
   if (!minimapEl) return;

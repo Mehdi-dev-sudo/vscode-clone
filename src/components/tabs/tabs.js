@@ -280,6 +280,12 @@ export const Tabs = {
         const prevIdx = (idx - 1 + tabs.length) % tabs.length;
         activateTab(tabs[prevIdx].id);
       }
+      if (cmd === 'next-tab') {
+        if (!activeTabId || tabs.length < 2) return;
+        const idx = tabs.findIndex((t) => t.id === activeTabId);
+        const nextIdx = (idx + 1) % tabs.length;
+        activateTab(tabs[nextIdx].id);
+      }
     });
   },
 

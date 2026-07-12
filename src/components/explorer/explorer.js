@@ -250,6 +250,7 @@ function onDragStart(e, id) {
  * Handle drag over.
  * @param {DragEvent} e
  * @param {string} id
+ * @returns {void}
  */
 function onDragOver(e, id) {
   e.preventDefault();

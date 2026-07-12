@@ -24,7 +24,7 @@ const MOCK_FILES = [
 /**
  * Perform a search across mock files.
  * @param {string} query
- * @returns {Array<{file: string, line: number, text: string, matchStart: number, matchEnd: number}>}
+ * @returns {Array}
  */
 function performSearch(query) {
   if (!query.trim()) return [];

@@ -189,6 +189,7 @@ function executeCommand(id) {
 /**
  * Render command results.
  * @param {Array} items
+ * @returns {void}
  */
 function renderResults(items) {
   if (!resultsEl) return;

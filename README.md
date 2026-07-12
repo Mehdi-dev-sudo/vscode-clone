@@ -3,7 +3,7 @@
   <img src="https://img.shields.io/badge/status-active-success" alt="Status" />
   <img src="https://img.shields.io/badge/license-MIT-blue" alt="License" />
   <img src="https://img.shields.io/badge/stack-vanilla-orange" alt="Stack" />
-  <img src="https://img.shields.io/badge/commits-100+-brightgreen" alt="Commits" />
+  <img src="https://img.shields.io/badge/commits-200+-brightgreen" alt="Commits" />
   <img src="https://img.shields.io/badge/lines-~12K-ff69b4" alt="Lines of Code" />
   <img src="https://img.shields.io/badge/JS%20files-102-blue" alt="JavaScript Files" />
   <br />
@@ -31,7 +31,7 @@
 **VS Code Clone** is a fully functional web-based code editor that replicates the core experience of Visual Studio Code. Built with **pure HTML, CSS, and Vanilla JavaScript (ES Modules)** — no frameworks, no build tools, no dependencies. Just open `index.html` and it works.
 
 - **~12,000 lines of code** across **102 JavaScript modules**
-- **100+ commits** with ITCSS + BEM architecture
+- **200+ commits** with ITCSS + BEM architecture
 - **Zero runtime dependencies** — not even a bundler
 - **Persistent state** via localStorage
 

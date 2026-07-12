@@ -15,6 +15,7 @@ let breadcrumbEl = null;
 /**
  * Update the breadcrumb with a file path.
  * @param {string} filePath - Full file path (e.g. "src/components/app.js")
+ * @returns {void}
  */
 export function updateBreadcrumb(filePath) {
   if (!breadcrumbEl) return;

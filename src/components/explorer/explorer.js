@@ -293,6 +293,7 @@ function clearDragOver() {
  * Handle drop.
  * @param {DragEvent} e
  * @param {string} targetId
+ * @returns {void}
  */
 function onDrop(e, targetId) {
   e.preventDefault();

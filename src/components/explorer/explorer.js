@@ -153,6 +153,7 @@ function toggleCollapse(id) {
 /**
  * Start renaming a node.
  * @param {string} id
+ * @returns {void}
  */
 function startRename(id) {
   renamingId = id;

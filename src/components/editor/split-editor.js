@@ -159,6 +159,7 @@ export const SplitEditor = {
   /**
    * Close split by index.
    * @param {number} index
+   * @returns {void}
    */
   close(index) {
     removeSplit(index);

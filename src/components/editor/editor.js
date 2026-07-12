@@ -213,6 +213,7 @@ Thumbs.db`,
  * Render the editor with file content.
  * @param {string} fileName
  * @param {string} content
+ * @returns {void}
  */
 function renderEditorContent(fileName, content) {
   if (!editorContentEl) return;

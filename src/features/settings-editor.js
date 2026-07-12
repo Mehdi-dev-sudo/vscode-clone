@@ -114,7 +114,7 @@ function renderSettingRow(key) {
   if (field.type === 'boolean') {
     const checkbox = createElement('input', {
       style: { width: '16px', height: '16px', cursor: 'pointer', accentColor: 'var(--accent-primary)' },
-      attrs: { type: 'checkbox', checked: value },
+      attrs: { type: 'checkbox' },
       events: {
         change: (e) => {
           currentSettings[key] = e.target.checked;
@@ -123,6 +123,7 @@ function renderSettingRow(key) {
         },
       },
     });
+    checkbox.checked = value;
     row.appendChild(checkbox);
   } else if (field.type === 'range') {
     const rangeRow = createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '8px' } });

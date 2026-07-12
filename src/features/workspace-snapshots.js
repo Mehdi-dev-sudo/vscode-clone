@@ -76,7 +76,6 @@ function restoreState(state) {
   }
 
   // Reload UI to match restored state
-  window.location.reload();
 }
 
 /**

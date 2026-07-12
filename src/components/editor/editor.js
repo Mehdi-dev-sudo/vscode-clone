@@ -310,6 +310,7 @@ function showWelcome() {
 /**
  * Update the breadcrumb navigation.
  * @param {string} fileName
+ * @returns {void}
  */
 function updateBreadcrumb(fileName) {
   if (!breadcrumbEl) return;

@@ -21,6 +21,7 @@ let isDragging = false;
 /**
  * Scroll editor to a ratio (0-1) of its content.
  * @param {number} ratio
+ * @returns {void}
  */
 function scrollEditorTo(ratio) {
   const editor = document.querySelector('.editor__content');

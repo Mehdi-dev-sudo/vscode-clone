@@ -81,6 +81,7 @@ function addSplit(fileName, content) {
 /**
  * Remove a split by index.
  * @param {number} index
+ * @returns {void}
  */
 function removeSplit(index) {
   if (splits.length <= 1) return;

@@ -327,7 +327,7 @@ function onDrop(e, targetId) {
   clearDragOver();
   persistTree();
   renderTree();
-  eventBus.emit(EVENTS.COMMAND_EXECUTED, { type: 'drag-drop', sourceId, targetId });
+  eventBus.emit(EVENTS.COMMAND_EXECUTED, 'drag-drop');
 }
 
 /**

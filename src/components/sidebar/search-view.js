@@ -12,6 +12,9 @@ import { EVENTS, DEBOUNCE_DELAY } from '../../core/constants.js';
 /** @type {HTMLElement|null} */
 let resultsEl = null;
 
+/** @type {{ matchCase: boolean, wholeWord: boolean, useRegex: boolean }} */
+let searchOptions = { matchCase: false, wholeWord: false, useRegex: false };
+
 /** Mock file data for search. */
 const MOCK_FILES = [
   { path: 'src/index.js', content: 'import { createApp } from "./app.js";\nconst app = createApp();\napp.mount("#root");' },
@@ -29,21 +32,32 @@ const MOCK_FILES = [
 function performSearch(query) {
   if (!query.trim()) return [];
   const results = [];
-  const lowerQuery = query.toLowerCase();
+
+  let searchQuery = query;
+  let flags = 'g';
+  if (!searchOptions.matchCase) flags += 'i';
+  if (searchOptions.useRegex) {
+    try { new RegExp(searchQuery, flags); } catch { return []; }
+  } else {
+    searchQuery = searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    if (searchOptions.wholeWord) searchQuery = `\\b${searchQuery}\\b`;
+  }
+
+  const regex = new RegExp(searchQuery, flags);
 
   for (const file of MOCK_FILES) {
     const lines = file.content.split('\n');
     lines.forEach((line, idx) => {
-      const lowerLine = line.toLowerCase();
-      const pos = lowerLine.indexOf(lowerQuery);
-      if (pos !== -1) {
+      let match;
+      while ((match = regex.exec(line)) !== null) {
         results.push({
           file: file.path,
           line: idx + 1,
           text: line,
-          matchStart: pos,
-          matchEnd: pos + query.length,
+          matchStart: match.index,
+          matchEnd: match.index + match[0].length,
         });
+        if (!flags.includes('g')) break;
       }
     });
   }
@@ -138,11 +152,27 @@ export const SearchView = {
 
     // Toggle buttons
     const toggleOptions = createElement('div', { className: 'search__toggle-options' });
-    ['Aa', 'Ab', '.*'].forEach((label) => {
+    const toggleConfig = [
+      { label: 'Aa', prop: 'matchCase', title: 'Match Case' },
+      { label: 'Ab', prop: 'wholeWord', title: 'Whole Word' },
+      { label: '.*', prop: 'useRegex', title: 'Use Regex' },
+    ];
+    toggleConfig.forEach(({ label, prop, title }) => {
       const btn = createElement('button', {
         className: 'search__toggle-btn',
         text: label,
-        attrs: { title: label === 'Aa' ? 'Match Case' : label === 'Ab' ? 'Whole Word' : 'Use Regex' },
+        attrs: { title },
+        events: {
+          click: () => {
+            searchOptions[prop] = !searchOptions[prop];
+            btn.classList.toggle('search__toggle-btn--active');
+            const input = container.querySelector('.search__input');
+            if (input) {
+              const results = performSearch(input.value);
+              renderResults(results);
+            }
+          },
+        },
       });
       toggleOptions.appendChild(btn);
     });

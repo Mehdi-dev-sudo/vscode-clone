@@ -150,6 +150,7 @@ export const SplitEditor = {
    * Open a file in a split pane.
    * @param {string} fileName
    * @param {string} content
+   * @returns {void}
    */
   open(fileName, content) {
     addSplit(fileName, content);

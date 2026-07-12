@@ -38,6 +38,7 @@ const shortcuts = [
   { keys: 'Escape',        event: EVENTS.COMMAND_EXECUTED, payload: 'multicursor-collapse',  description: 'Collapse Cursors' },
   { keys: 'Ctrl+W',        event: EVENTS.TAB_CLOSED,       payload: 'close-active',   description: 'Close Tab' },
   { keys: 'Ctrl+K W',      event: EVENTS.COMMAND_EXECUTED, payload: 'close-all-tabs', description: 'Close All Tabs' },
+  { keys: 'Ctrl+Tab',      event: EVENTS.COMMAND_EXECUTED, payload: 'next-tab',        description: 'Next Tab' },
   { keys: 'Ctrl+Shift+Tab',event: EVENTS.COMMAND_EXECUTED, payload: 'previous-tab',    description: 'Previous Tab' },
   { keys: 'Ctrl+N',        event: EVENTS.COMMAND_EXECUTED, payload: 'new-file',        description: 'New File' },
   { keys: 'Ctrl+K Z',      event: EVENTS.ZEN_MODE_TOGGLED, payload: 'zen',             description: 'Toggle Zen Mode' },

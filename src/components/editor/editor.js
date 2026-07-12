@@ -414,6 +414,15 @@ export const Editor = {
       }, 50);
     });
 
+    // Listen for save-file command
+    eventBus.on(EVENTS.COMMAND_EXECUTED, (cmd) => {
+      if (cmd === 'save-file') {
+        if (currentFileName) {
+          eventBus.emit(EVENTS.NOTIFICATION_ADDED, { type: 'info', message: `File "${currentFileName}" saved.` });
+        }
+      }
+    });
+
     // Listen for focus-editor command
     eventBus.on(EVENTS.COMMAND_EXECUTED, (cmd) => {
       if (cmd === 'focus-editor') {

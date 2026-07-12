@@ -219,6 +219,7 @@ function createNode(parentId, type) {
 /**
  * Delete a node with confirmation.
  * @param {string} id
+ * @returns {void}
  */
 function deleteNode(id) {
   if (id === 'root') return;

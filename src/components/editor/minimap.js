@@ -33,6 +33,7 @@ function scrollEditorTo(ratio) {
 /**
  * Handle pointer down on minimap.
  * @param {number} clientY
+ * @returns {void}
  */
 function handlePointerDown(clientY) {
   if (!minimapEl) return;

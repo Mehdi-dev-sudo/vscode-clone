@@ -439,6 +439,7 @@ export const Editor = {
    * Set editor content programmatically.
    * @param {string} fileName
    * @param {string} content
+   * @returns {void}
    */
   setContent(fileName, content) {
     if (content) {

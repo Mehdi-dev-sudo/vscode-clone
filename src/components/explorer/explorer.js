@@ -275,7 +275,7 @@ function onDragOver(e, id) {
 
   // Apply class to the specific target
   const targetEl = treeEl?.querySelector(`[data-id="${id}"]`);
-  if (targetEl && sourceId !== id) {
+  if (targetEl && dragState.sourceId !== id) {
     const cls = position === 'inside' ? 'file-tree__item--drag-over-inside'
       : position === 'before' ? 'file-tree__item--drag-over'
       : 'file-tree__item--drag-over-bottom';

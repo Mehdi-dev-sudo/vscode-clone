@@ -68,6 +68,7 @@ function createSplitPane(index) {
  * Add a new split with the given file content.
  * @param {string} fileName
  * @param {string} content
+ * @returns {void}
  */
 function addSplit(fileName, content) {
   const id = `split-${Date.now()}`;

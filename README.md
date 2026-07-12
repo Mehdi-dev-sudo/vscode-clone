@@ -2,259 +2,249 @@
   <br />
   <img src="https://img.shields.io/badge/status-active-success" alt="Status" />
   <img src="https://img.shields.io/badge/license-MIT-blue" alt="License" />
-  <img src="https://img.shields.io/badge/build-vanilla-orange" alt="Build" />
-  <img src="https://img.shields.io/badge/commits-30+-brightgreen" alt="Commits" />
-  <img src="https://img.shields.io/badge/lines-~10K-ff69b4" alt="Lines of Code" />
+  <img src="https://img.shields.io/badge/stack-vanilla-orange" alt="Stack" />
+  <img src="https://img.shields.io/badge/commits-100+-brightgreen" alt="Commits" />
+  <img src="https://img.shields.io/badge/lines-~12K-ff69b4" alt="Lines of Code" />
+  <img src="https://img.shields.io/badge/JS%20files-102-blue" alt="JavaScript Files" />
   <br />
   <br />
 
   # VS Code Clone
 
-  ### A portfolio-quality Visual Studio Code inspired web application
+  ### A portfolio-quality Visual Studio Code clone — built from scratch with zero frameworks
 
   <p align="center">
-    Built with <strong>zero frameworks</strong> — pure HTML, CSS, and Vanilla JavaScript (ES Modules) <br />
-    <a href="https://github.com/Mehdi-dev-sudo"><strong>By Mehdi Khorshidi far</strong></a>
+    <a href="https://github.com/Mehdi-dev-sudo"><strong>Mehdi Khorshidi far</strong></a>
+    &nbsp;·&nbsp;
+    <a href="https://t.me/Mehdi-dev-sudo">Telegram</a>
+    &nbsp;·&nbsp;
+    <a href="mailto:mehdi.khorshidi9339@gmail.com">Email</a>
   </p>
-
-  <br />
-
-  ![VS Code Clone Preview](https://via.placeholder.com/800x450/1e1e1e/007acc?text=VS+Code+Clone)
 
   <br />
 </div>
 
 ---
 
-```javascript
-const developer = {
-  name: "Mehdi Khorshidi far",
-  github: "Mehdi-dev-sudo",
-  email: "mehdi.khorshidi9339@gmail.com",
-  telegram: "@Mehdi-dev-sudo",
+## Overview
 
-  skills: {
-    frontend: ["HTML5", "CSS3", "JavaScript ES6+"],
-    scripting: ["Bash"],
-    tools: ["Git", "VS Code", "Kali Linux", "Figma"],
-    learning: ["TypeScript", "React"],
-  },
+**VS Code Clone** is a fully functional web-based code editor that replicates the core experience of Visual Studio Code. Built with **pure HTML, CSS, and Vanilla JavaScript (ES Modules)** — no frameworks, no build tools, no dependencies. Just open `index.html` and it works.
 
-  currentFocus: "Building interactive web experiences",
-
-  sayHi() {
-    return "Always learning. Always building.";
-  },
-};
-
-console.log(developer.sayHi());
-```
+- **~12,000 lines of code** across **102 JavaScript modules**
+- **100+ commits** with ITCSS + BEM architecture
+- **Zero runtime dependencies** — not even a bundler
+- **Persistent state** via localStorage
 
 ---
 
-## 📋 Honest Feature Status
+## Feature Status
 
-| Feature | Status | Details |
-|---------|--------|---------|
-| **Activity Bar** with view switching | ✅ **Real** | 6 views with icons, active state, tooltips |
-| **File Explorer** | ✅ **Real** | CRUD, rename, drag & drop, context menu, collapse/expand |
-| **Editor Tabs** | ✅ **Real** | Open, close, pin, reorder, close others, close all |
-| **Editor** | ✅ **Real** | Line numbers, minimap, breadcrumb, welcome screen |
-| **Minimap** | ✅ **Real** | Retina support, touch, slider, scroll sync |
-| **Syntax Highlighting** | ✅ **Real** | Two-pass tokenizer — JS, HTML, CSS keywords, strings, comments |
-| **Terminal Emulator** | ✅ **Real** | Multi-tab, ANSI colors, command history, VFS (cd/ls/mkdir/cat/echo/clear) |
-| **Panel Manager** | ✅ **Real** | TERMINAL / OUTPUT / PROBLEMS / DEBUG CONSOLE switching |
-| **Command Palette** | ✅ **Real** | Ctrl+Shift+P, fuzzy filter, multi-action |
-| **Status Bar** | ✅ **Real** | Branch, problems count, encoding, theme, live info |
-| **Theme Switching** | ✅ **Real** | Dark+, Light+, Dracula, Monokai — CSS custom properties |
-| **Context Menus** | ✅ **Real** | Right-click on files, folders, editor, tabs |
-| **Toast Notifications** | ✅ **Real** | Stacked, auto-dismiss, info/warn/error |
-| **Keyboard Shortcuts** | ✅ **Real** | 15+ shortcuts with event-bus integration |
-| **Persistence** | ✅ **Real** | localStorage — tabs, themes, explorer state, layout |
-| **Layout Management** | ✅ **Real** | Resizable sidebar + panel, show/hide toggles |
-| **Search View** | 🟡 **Partial** | UI renders, filtering is basic |
-| **Source Control** | 🟡 **Partial** | Mock UI with fake commit history |
-| **Run & Debug** | 🟡 **Partial** | Mock sidebar view with debug controls |
-| **Extensions View** | 🟡 **Partial** | Mock marketplace cards |
-| **Quick Open** | 🟡 **Partial** | Ctrl+P, basic file search |
-| **Zen Mode** | 🟡 **Partial** | Hides sidebar/panel, no animation |
-| **Split Editor** | 🔵 **Mock** | Visual shell — no independent panes yet |
-| **Theme Creator** | ✅ **Real** | Real-time color editor, 17 CSS variables, save/load |
-| **Workspace Snapshots** | ✅ **Real** | Save/restore full IDE state (tabs, layout, theme) |
-| **Layout Presets** | ✅ **Real** | 6 preset layouts (Editor Focus, Terminal Max, Minimal, etc.) |
-| **Multi Cursor** | 🟡 **Partial** | Single key binding, no visual feedback |
-| **Settings Editor** | 🔵 **Mock** | Not started |
-| **Drag & Drop from OS** | 🔵 **Mock** | Not started |
+| Category | Feature | Status |
+|----------|---------|--------|
+| **Core** | Activity Bar (6 views, icons, tooltips) | ✅ Real |
+| | File Explorer (CRUD, rename, drag & drop, context menu) | ✅ Real |
+| | Editor Tabs (open, close, pin, reorder) | ✅ Real |
+| | Code Editor (line numbers, syntax highlighting, minimap, breadcrumb) | ✅ Real |
+| | Minimap (retina, touch, slider, scroll sync, NaN guard) | ✅ Real |
+| | Panel Manager (TERMINAL / OUTPUT / PROBLEMS / DEBUG CONSOLE) | ✅ Real |
+| | Status Bar (branch, problems, encoding, theme, live info) | ✅ Real |
+| **Terminal** | Multi-tab terminal with ANSI colors, command history, VFS | ✅ Real |
+| **Productivity** | Command Palette (37 commands, fuzzy filter) | ✅ Real |
+| | Quick Open (Ctrl+P, file search) | ✅ Real |
+| | Keyboard Shortcuts (15+ shortcuts, event-bus integration) | ✅ Real |
+| | Context Menus (files, folders, editor, tabs) | ✅ Real |
+| | Toast Notifications (stacked, auto-dismiss, 3 levels) | ✅ Real |
+| **Theming** | Theme Switching (Dark+, Light+, Dracula, Monokai) | ✅ Real |
+| | Theme Creator (17 CSS variables, color picker, export/import) | ✅ Real |
+| **Workspace** | Workspace Snapshots (save/restore full IDE state) | ✅ Real |
+| | Layout Presets (6 presets with CSS transitions) | ✅ Real |
+| | Layout Management (resizable sidebar + panel, toggles) | ✅ Real |
+| **Advanced** | Settings Editor (9 settings, JSON preview, live CSS vars) | ✅ Real |
+| | Plugin API (registerCommand, registerTheme, registerPanel, etc.) | ✅ Real |
+| | Syntax Highlighting (two-pass tokenizer: JS, HTML, CSS) | ✅ Real |
+| **Partial** | Search View (filtering is basic) | 🟡 Partial |
+| | Source Control (mock UI with fake history) | 🟡 Partial |
+| | Run & Debug (mock sidebar view) | 🟡 Partial |
+| | Extensions View (mock marketplace cards) | 🟡 Partial |
+| | Zen Mode (hides sidebar/panel) | 🟡 Partial |
+| | Split Editor (visual shell, independent panes WIP) | 🔵 Mock |
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
-# Clone the repository
 git clone https://github.com/Mehdi-dev-sudo/vscode-clone.git
-
-# Open index.html in your browser
-# That's it — no build tools, no dependencies
+cd vscode-clone
+# Open index.html in your browser — no build step needed
 ```
 
-Or serve with any HTTP server:
+Or serve locally:
 
 ```bash
 npx serve .
 # or
 python -m http.server 8000
+# or
+php -S localhost:8000
 ```
 
 ---
 
-## 🏗 Architecture
+## Architecture
+
+### CSS — ITCSS (Inverted Triangle)
 
 ```
-ITCSS (CSS Architecture)      ES Modules (JS Architecture)
-├── Settings (variables)      ├── Core (constants, event bus)
-├── Themes                    ├── Events (EventBus pub/sub)
-├── Reset                     ├── Storage (localStorage wrapper)
-├── Layout (grid)             ├── Utils (DOM, syntax, animations)
-└── Components (BEM)          └── Components (self-contained modules)
+Settings (variables) → Themes → Reset → Layout (grid) → Components (BEM)
 ```
 
-### Key Design Decisions
+### JS — ES Modules + Event Bus
+
+```
+app.js (boot) → Core (constants, config, shortcuts)
+             → Events (EventBus pub/sub)
+             → Storage (localStorage)
+             → Utils (DOM, syntax, animations)
+             → Features (snapshots, presets, plugin-api, settings)
+             → Components (self-contained, event-driven)
+```
+
+### Key Decisions
 
 | Decision | Rationale |
 |----------|-----------|
-| **Zero frameworks** | Portfolio proof — shows deep understanding of vanilla web APIs |
-| **Event Bus** | All components communicate through `eventBus.on` / `eventBus.emit` — no imports between components |
-| **BEM + ITCSS** | Scalable CSS architecture with predictable specificity |
-| **CSS Custom Properties** | Theme system uses `--var-name` for instant runtime switching |
-| **localStorage** | No backend needed — state persists across sessions |
-| **ES Modules** | Native module system — no bundler required |
+| **Zero frameworks** | Proves deep understanding of vanilla web APIs |
+| **Event Bus** | All components communicate via `eventBus.on/emit` — zero imports between components |
+| **BEM + ITCSS** | Predictable specificity, scalable CSS |
+| **CSS Custom Properties** | Runtime theme switching without re-render |
+| **localStorage** | No backend — state persists across sessions |
+| **ES Modules** | Native modularity — no bundler required |
 
 ### Project Structure
 
 ```
 src/
-├── app.js                      # Entry point — boot order
-├── assets/                     # Icons (SVG), images
-├── core/                       # Constants, config, shortcuts, focus
-├── events/                     # EventBus implementation
-├── storage/                    # localStorage wrapper
-├── utils/                      # DOM helpers, syntax parser, tour, etc.
-├── features/                   # Cross-cutting features
+├── app.js                    # Entry point — init sequence
+├── assets/icons/             # SVG icon system (~120 icons)
+├── core/                     # Constants, config, keyboard, context-menu
+├── events/                   # EventBus implementation
+├── storage/                  # localStorage wrapper
+├── utils/                    # DOM helpers, syntax parser, animations, history
+├── features/                 # Cross-cutting features
 │   ├── workspace-snapshots.js
-│   └── layout-presets.js
-└── components/                 # UI components
+│   ├── layout-presets.js
+│   ├── plugin-api.js
+│   └── settings-editor.js
+└── components/               # UI modules (self-contained, event-driven)
     ├── activity-bar/
-    ├── sidebar/ (search, scm, debug, extensions)
+    ├── sidebar/              # search, scm, debug, extensions
     ├── explorer/
     ├── tabs/
-    ├── editor/ (editor, minimap, split-editor)
+    ├── editor/               # editor, minimap, split-editor, breadcrumb, welcome
     ├── terminal/
     ├── panel/
     ├── status-bar/
     ├── command-palette/
     ├── notifications/
     ├── layout/
-    ├── themes/ (theme-manager, theme-creator)
-    └── core/ (about-dialog)
+    ├── themes/               # theme-manager, theme-creator
+    └── core/                 # about-dialog
 ```
 
 ---
 
-## ⌨️ Keyboard Shortcuts
+## Keyboard Shortcuts
 
 | Shortcut | Action |
 |----------|--------|
 | `Ctrl+Shift+P` | Command Palette |
 | `Ctrl+P` | Quick Open |
 | `Ctrl+B` | Toggle Sidebar |
-| `Ctrl+`` ` | Toggle Terminal |
+| `` Ctrl+` `` | Toggle Terminal |
+| `Ctrl+J` | Toggle Panel |
 | `Ctrl+Shift+E` | Explorer |
 | `Ctrl+Shift+F` | Search |
 | `Ctrl+Shift+G` | Source Control |
 | `Ctrl+Shift+D` | Run & Debug |
 | `Ctrl+Shift+X` | Extensions |
 | `Ctrl+W` | Close Tab |
-| `Ctrl+Tab` | Next Tab |
-| `Ctrl+Shift+Tab` | Previous Tab |
+| `Ctrl+Tab` / `Ctrl+Shift+Tab` | Next / Previous Tab |
 | `Ctrl+K Z` | Zen Mode |
 | `F11` | Fullscreen |
-| `Ctrl+J` | Toggle Panel |
 | `Ctrl+\` | Split Editor |
+| `Ctrl+S` | Save (snapshot) |
+| `Ctrl+Shift+S` | Save Snapshot |
+| `Ctrl+Shift+R` | Restore Snapshot |
 
 ---
 
-## 🎨 Themes
+## Themes
 
-| Theme | Preview |
-|-------|---------|
+| Theme | Description |
+|-------|-------------|
 | **Dark+** (default) | VS Code iconic dark theme |
 | **Light+** | Clean light theme |
 | **Dracula** | Dark purple theme |
 | **Monokai** | Classic monokai |
 | **Custom** | Create your own with Theme Creator |
 
+Use the **Theme Creator** (`Ctrl+Shift+P` → "Theme Creator") to:
+- Edit 17 CSS variables in real time
+- Export/import `.theme` files
+- Persist custom themes to localStorage
+
 ---
 
-## 🗺 Roadmap
+## Plugin API
+
+The built-in Plugin API lets you extend the editor at runtime:
+
+- `registerCommand(id, label, handler)` — Add commands to the palette
+- `registerTheme(id, label, variables)` — Add custom themes
+- `registerPanel(id, label, renderFn)` — Add panel tabs
+- `registerSidebar(id, label, icon, renderFn)` — Add sidebar views
+- `registerStatusItem(id, label, getText)` — Add status bar items
+
+Sample plugins included in `src/plugins/`:
+- **Hello World** — demonstrates all 5 API methods
+- **Date Preview** — shows current date in status bar + command
+
+---
+
+## Roadmap
 
 ### Done ✅
-- [x] Core architecture & layout (ITCSS, Event Bus, ES Modules)
+- [x] Core architecture (ITCSS, Event Bus, ES Modules, localStorage)
 - [x] Activity Bar with 6 views
-- [x] File Explorer with full CRUD + Drag & Drop
-- [x] Editor with syntax highlighting, minimap, breadcrumb, line numbers
-- [x] Terminal with multi-tab + VFS command execution
-- [x] Panel Manager (OUTPUT, PROBLEMS, DEBUG CONSOLE)
-- [x] Command Palette + Quick Open
-- [x] 4 themes + Theme Creator (custom colors)
-- [x] Workspace Snapshots + Layout Presets
-- [x] Toast Notifications + Context Menus
+- [x] File Explorer — full CRUD, drag & drop, rename
+- [x] Code Editor — syntax highlighting, minimap, breadcrumb, line numbers
+- [x] Terminal — multi-tab, ANSI colors, VFS commands
+- [x] Panel Manager — OUTPUT, PROBLEMS, DEBUG CONSOLE
+- [x] Command Palette (37 commands) + Quick Open
+- [x] Theme Creator — real-time color editing, export/import
+- [x] Workspace Snapshots — save/restore full IDE state
+- [x] Layout Presets — 6 presets with smooth transitions
+- [x] Settings Editor — 9 real settings, JSON preview
+- [x] Plugin API — extend at runtime
 - [x] Keyboard shortcuts + focus management
-- [x] Persistence (localStorage)
+- [x] Toast Notifications + Context Menus
 
 ### In Progress 🔧
-- [ ] **Split Editor** — Independent pane content, divider resize, drag-between-panes
-- [ ] **Settings Editor** — JSON settings UI
-- [ ] **Multi Cursor** — Visual feedback, keyboard-driven
+- [ ] Split Editor — independent pane content, divider resize
+- [ ] Multi Cursor — visual feedback, keyboard-driven
+- [ ] Search View — full-text search across workspace
 
 ### Planned 📋
-- [ ] **Live Preview** — HTML/CSS live reload
-- [ ] **Drag & Drop from OS**
-- [ ] **Keyboard Shortcuts Customization**
-- [ ] **Plugin API mock**
-- [ ] **Workspace Switching**
+- [ ] Live Preview — HTML/CSS live reload
+- [ ] Drag & Drop from OS
+- [ ] Keyboard Shortcuts Customization UI
+- [ ] Workspace Switching
+- [ ] File watcher simulation
 
 ---
 
-## 🏆 GitHub Achievements
-
-This project is designed to help earn these GitHub achievements:
-
-### Pull Shark 🦈
-Merge **32+ PRs in a single day**. Strategy:
-1. Create small branches for individual fixes
-2. Open PRs sequentially using `gh pr create`
-3. Merge each with `gh pr merge`
-4. Each PR counts toward the 32 needed
-
-### Pair Extraordinaire 👥
-Add `Co-authored-by: Name <email>` in commit messages.
-```
-Co-authored-by: Mehdi Khorshidi far <mehdi.khorshidi9339@gmail.com>
-```
-
-### Quickdraw ⚡
-Have a **PR merged within 5 minutes of opening**.
-- Prepare a tiny fix branch
-- Open PR and immediately merge
-
-### YOLO 🚀
-**Merge a PR without review** — use `gh pr merge --merge` without any review.
-⚠️ Use on trivial changes only (typo fixes, readme updates).
-
----
-
-## 📬 Connect
+## Connect
 
 <p align="center">
   <a href="mailto:mehdi.khorshidi9339@gmail.com"><img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" /></a>
@@ -264,24 +254,18 @@ Have a **PR merged within 5 minutes of opening**.
 
 ---
 
-## 🤝 Contributing
-
-Contributions are what make the open source community amazing.
-Check out [CONTRIBUTING.md](docs/CONTRIBUTING.md) for guidelines.
-
-## 📄 License
+## License
 
 MIT — see [LICENSE](LICENSE) for details.
 
 ---
 
 <div align="center">
-  <p>If this project helped you, consider giving it a ⭐</p>
   <p>
-    Built with ❤️ and zero frameworks by
-    <a href="https://github.com/Mehdi-dev-sudo">Mehdi Khorshidi far</a>
-  </p>
-  <p>
-    <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=100&section=footer"/>
+    Built by <a href="https://github.com/Mehdi-dev-sudo">Mehdi Khorshidi far</a>
+    &nbsp;·&nbsp;
+    <a href="https://github.com/Mehdi-dev-sudo/vscode-clone">GitHub</a>
+    &nbsp;·&nbsp;
+    Portfolio project — no frameworks, no shortcuts
   </p>
 </div>

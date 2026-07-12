@@ -49,9 +49,14 @@ const ANSI_MAP = {
  * @returns {string}
  */
 function parseAnsi(str) {
+  let openSpans = 0;
   return str.replace(/\x1b\[([\d;]+)m/g, (_, codes) => {
     const codeList = codes.split(';');
-    if (codeList[0] === '0') return '</span>';
+    if (codeList[0] === '0') {
+      const result = '</span>'.repeat(openSpans);
+      openSpans = 0;
+      return result;
+    }
 
     let result = '';
     let hasSpan = false;
@@ -60,6 +65,7 @@ function parseAnsi(str) {
       if (cls) {
         result += `<span class="terminal-${cls}">`;
         hasSpan = true;
+        openSpans++;
       }
     }
     return hasSpan ? result : '';

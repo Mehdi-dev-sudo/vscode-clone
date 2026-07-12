@@ -7,7 +7,7 @@
 
 import { eventBus } from '../../events/event-bus.js';
 import { EVENTS } from '../../core/constants.js';
-import { createElement, empty, $ } from '../../utils/dom.js';
+import { createElement, empty, $, escapeHtml } from '../../utils/dom.js';
 import { highlight, detectLanguage } from '../../utils/syntax.js';
 import { updateMinimap, initMinimap } from './minimap.js';
 import { initMultiCursor } from './multi-cursor.js';
@@ -262,7 +262,7 @@ function renderEditorContent(fileName, content) {
       attrs: { 'data-line': i + 1 },
     });
     if (line.trim()) {
-      lineEl.innerHTML = highlight(line, lang) || ' ';
+      lineEl.innerHTML = highlight(line, lang) || escapeHtml(line);
     } else {
       lineEl.innerHTML = '&nbsp;';
     }

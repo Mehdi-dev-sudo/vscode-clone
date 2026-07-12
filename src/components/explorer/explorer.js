@@ -129,6 +129,7 @@ function removeNode(node, id) {
 /**
  * Handle opening a file.
  * @param {FileNode} node
+ * @returns {void}
  */
 function openFile(node) {
   if (node.type !== 'file') return;

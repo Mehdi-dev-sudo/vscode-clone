@@ -30,6 +30,7 @@ function loadWorkspaces() {
 /**
  * Save workspaces to storage.
  * @param {Array} workspaces
+ * @returns {void}
  */
 function saveWorkspaces(workspaces) {
   setItem('vscode-clone:workspaces', workspaces);

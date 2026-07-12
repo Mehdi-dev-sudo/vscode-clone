@@ -490,6 +490,7 @@ function persistTree() {
 /**
  * Create the Explorer header and tree container.
  * @param {HTMLElement} container - The parent element.
+ * @returns {void}
  */
 function render(container) {
   if (!container) return;

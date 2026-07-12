@@ -194,8 +194,28 @@ export const SplitEditor = {
 
     eventBus.on(EVENTS.COMMAND_EXECUTED, (payload) => {
       if (payload === 'split-editor') {
-        const currentFile = document.querySelector('.tabs-bar .tab--active .tab__label');
-        addSplit(currentFile?.textContent || 'untitled', '// Split editor content\n');
+        const currentTab = document.querySelector('.tabs-bar .tab--active');
+        const name = currentTab?.querySelector('.tab__label')?.textContent || 'untitled';
+        const content = currentTab?.dataset?.content || '// Split editor content\n';
+        addSplit(name, content);
+      }
+    });
+
+    eventBus.on(EVENTS.FILE_SELECTED, (file) => {
+      if (splits.length > 0) {
+        splits[activeSplitIndex] = { id: splits[activeSplitIndex]?.id || `split-${Date.now()}`, fileName: file.name || file.path, content: file.content || '' };
+        renderSplits();
+      }
+    });
+
+    eventBus.on(EVENTS.TAB_OPENED, (file) => {
+      if (splits.length > 0) {
+        const pane = splits[activeSplitIndex];
+        if (pane) {
+          pane.fileName = file.name || file.path || pane.fileName;
+          if (file.content) pane.content = file.content;
+          renderSplits();
+        }
       }
     });
   },

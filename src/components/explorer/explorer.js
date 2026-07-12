@@ -237,6 +237,7 @@ function deleteNode(id) {
  * Handle drag start.
  * @param {DragEvent} e
  * @param {string} id
+ * @returns {void}
  */
 function onDragStart(e, id) {
   dragState.sourceId = id;

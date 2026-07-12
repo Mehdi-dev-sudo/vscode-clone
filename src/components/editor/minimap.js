@@ -45,6 +45,7 @@ function handlePointerDown(clientY) {
 /**
  * Handle pointer move during drag.
  * @param {number} clientY
+ * @returns {void}
  */
 function handlePointerMove(clientY) {
   if (!isDragging || !minimapEl) return;

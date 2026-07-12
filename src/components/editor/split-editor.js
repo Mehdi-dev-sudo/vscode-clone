@@ -66,6 +66,36 @@ function onDividerMouseMove(e) {
 }
 
 /**
+ * Remove all splits except the one at the given index.
+ * @param {number} keepIndex
+ */
+function closeOtherSplits(keepIndex) {
+  splits = [splits[keepIndex]];
+  activeSplitIndex = 0;
+  renderSplits();
+}
+
+/**
+ * Add a new split to the right of the current one.
+ * @param {number} index
+ */
+function splitRight(index) {
+  const current = splits[index];
+  if (current) addSplit(current.fileName, current.content);
+}
+
+/**
+ * Add a new split to the left by inserting before the current one.
+ * @param {number} index
+ */
+function splitLeft(index) {
+  const newSplit = { id: `split-${Date.now()}`, fileName: 'untitled', content: '' };
+  splits.splice(index, 0, newSplit);
+  activeSplitIndex = index;
+  renderSplits();
+}
+
+/**
  * Handle mouse up to finalize divider resize.
  */
 function onDividerMouseUp() {
@@ -88,6 +118,24 @@ function createSplitPane(index) {
     style: { flex: '1', minWidth: '0', display: 'flex', flexDirection: 'column' },
   });
 
+  const showContextMenu = (e) => {
+    e.preventDefault();
+    const menu = createElement('div', {
+      className: 'context-menu',
+      style: { position: 'fixed', left: `${e.clientX}px`, top: `${e.clientY}px`, zIndex: '1000' },
+      children: [
+        createElement('div', { className: 'context-menu__item', text: 'Close', events: { click: () => { removeSplit(index); menu.remove(); } } }),
+        createElement('div', { className: 'context-menu__item', text: 'Close Others', events: { click: () => { closeOtherSplits(index); menu.remove(); } } }),
+        createElement('div', { className: 'context-menu__separator' }),
+        createElement('div', { className: 'context-menu__item', text: 'Split Right', events: { click: () => { splitRight(index); menu.remove(); } } }),
+        createElement('div', { className: 'context-menu__item', text: 'Split Left', events: { click: () => { splitLeft(index); menu.remove(); } } }),
+      ],
+    });
+    document.body.appendChild(menu);
+    const close = (event) => { if (!menu.contains(event.target)) { menu.remove(); document.removeEventListener('mousedown', close); } };
+    document.addEventListener('mousedown', close);
+  };
+
   const header = createElement('div', {
     className: 'editor__split-header',
     style: {
@@ -95,6 +143,7 @@ function createSplitPane(index) {
       backgroundColor: 'var(--bg-secondary)', borderBottom: '1px solid var(--border-primary)',
       fontSize: '12px', color: 'var(--text-secondary)',
     },
+    events: { contextmenu: showContextMenu },
     children: [
       createElement('span', { text: splits[index]?.fileName || 'Untitled' }),
       createElement('div', {
@@ -104,7 +153,7 @@ function createSplitPane(index) {
             className: 'sidebar__action-btn',
             html: ICONS.close,
             attrs: { 'aria-label': 'Close split', title: 'Close Split' },
-            events: { click: () => removeSplit(index) },
+            events: { click: (e) => { e.stopPropagation(); removeSplit(index); } },
           }),
         ],
       }),

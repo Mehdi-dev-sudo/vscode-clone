@@ -86,6 +86,7 @@ function filterCommands(query) {
 /**
  * Execute a command.
  * @param {string} id
+ * @returns {void}
  */
 function executeCommand(id) {
   // Theme commands

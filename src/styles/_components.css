@@ -1536,6 +1536,30 @@
   outline: none;
 }
 
+/* ==================== Multi Cursor ==================== */
+.multi-cursor-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.multi-cursor {
+  position: absolute;
+  width: 2px;
+  height: 1.2em;
+  background-color: var(--text-primary);
+  animation: cursor-blink 1s step-end infinite;
+}
+
+@keyframes cursor-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
 /* ==================== Settings Editor ==================== */
 .settings-editor {
   padding: var(--space-2xl);

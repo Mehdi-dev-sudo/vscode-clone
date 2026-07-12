@@ -13,6 +13,7 @@ import { getRecentFiles } from '../../utils/history.js';
 /**
  * Render the welcome page with recent files and actions.
  * @param {HTMLElement} container
+ * @returns {void}
  */
 export function renderWelcomePage(container) {
   if (!container) return;

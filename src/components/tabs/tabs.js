@@ -255,9 +255,12 @@ export const Tabs = {
 
     renderTabs();
 
-    // Listen for file opens
+    // Listen for file opens (guard against re-emitted events)
     eventBus.on(EVENTS.TAB_OPENED, (file) => {
-      if (file?.name) openTab(file);
+      if (!file?.name) return;
+      const id = file.id || file.name;
+      if (tabs.some((t) => t.id === id)) return;
+      openTab(file);
     });
 
     // Listen for tab close keyboard shortcut
@@ -270,12 +273,12 @@ export const Tabs = {
     // Listen for close-all-tabs command
     eventBus.on(EVENTS.COMMAND_EXECUTED, (cmd) => {
       if (cmd === 'close-all-tabs') {
-        [...openTabs].forEach((t) => closeTab(t.id));
+        [...tabs].forEach((t) => closeTab(t.id));
       }
-      if (cmd === 'previous-tab' && openTabs.length > 1) {
-        const idx = openTabs.findIndex((t) => t.id === activeTabId);
-        const prevIdx = (idx - 1 + openTabs.length) % openTabs.length;
-        switchTab(openTabs[prevIdx].id);
+      if (cmd === 'previous-tab' && tabs.length > 1) {
+        const idx = tabs.findIndex((t) => t.id === activeTabId);
+        const prevIdx = (idx - 1 + tabs.length) % tabs.length;
+        activateTab(tabs[prevIdx].id);
       }
     });
   },

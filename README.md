@@ -67,7 +67,7 @@
 | | Run & Debug (mock sidebar view) | 🟡 Partial |
 | | Extensions View (mock marketplace cards) | 🟡 Partial |
 | | Zen Mode (hides sidebar/panel) | 🟡 Partial |
-| | Split Editor (visual shell, independent panes WIP) | 🔵 Mock |
+| | Split Editor (interactive dividers, context menu, content sync, keyboard nav) | ✅ Real |
 
 ---
 
@@ -231,9 +231,9 @@ Sample plugins included in `src/plugins/`:
 - [x] Toast Notifications + Context Menus
 
 ### In Progress 🔧
-- [ ] Split Editor — independent pane content, divider resize
-- [ ] Multi Cursor — visual feedback, keyboard-driven
-- [ ] Search View — full-text search across workspace
+- [ ] Split Editor — independent pane content, drag-between-panes
+- [ ] Multi Cursor — simultaneous editing at all cursors
+- [ ] Search View — search across workspace files
 
 ### Planned 📋
 - [ ] Live Preview — HTML/CSS live reload

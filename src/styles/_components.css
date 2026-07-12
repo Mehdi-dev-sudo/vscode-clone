@@ -1690,3 +1690,6 @@ button:disabled { cursor: default; }
 
 body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 
+
+.tabs-bar__tab:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: -2px; }
+

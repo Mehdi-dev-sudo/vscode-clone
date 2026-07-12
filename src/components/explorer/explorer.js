@@ -334,6 +334,7 @@ function onDrop(e, targetId) {
  * Show the context menu for a file tree item.
  * @param {MouseEvent} e
  * @param {FileNode} node
+ * @returns {void}
  */
 function showContextMenu(e, node) {
   const items = [];

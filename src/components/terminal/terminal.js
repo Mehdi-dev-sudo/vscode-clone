@@ -72,7 +72,7 @@ function parseAnsi(str) {
  */
 const FS = {
   '~': '/home/user',
-  '/': 'root',
+  '/': '/',
 };
 
 /** Virtual file system. */

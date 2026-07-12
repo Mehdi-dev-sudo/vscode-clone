@@ -39,6 +39,9 @@ const shortcuts = [
   { keys: 'Ctrl+K Z',      event: EVENTS.ZEN_MODE_TOGGLED, payload: 'zen',             description: 'Toggle Zen Mode' },
   { keys: 'Ctrl+J',        event: EVENTS.PANEL_RESIZED,    payload: 'toggle-panel',    description: 'Toggle Panel' },
   { keys: 'Ctrl+\\',       event: EVENTS.COMMAND_EXECUTED, payload: 'split-editor',    description: 'Split Editor' },
+  { keys: 'Ctrl+Shift+1',  event: EVENTS.COMMAND_EXECUTED, payload: 'split-focus-1', description: 'Focus Split 1' },
+  { keys: 'Ctrl+Shift+2',  event: EVENTS.COMMAND_EXECUTED, payload: 'split-focus-2', description: 'Focus Split 2' },
+  { keys: 'Ctrl+Shift+3',  event: EVENTS.COMMAND_EXECUTED, payload: 'split-focus-3', description: 'Focus Split 3' },
   { keys: 'F11',           event: EVENTS.FULLSCREEN_TOGGLED, description: 'Toggle Fullscreen' },
 ];
 

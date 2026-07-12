@@ -196,8 +196,18 @@ export const SplitEditor = {
       if (payload === 'split-editor') {
         const currentTab = document.querySelector('.tabs-bar .tab--active');
         const name = currentTab?.querySelector('.tab__label')?.textContent || 'untitled';
-        const content = currentTab?.dataset?.content || '// Split editor content\n';
+        const content = currentTab?.dataset?.content || '';
         addSplit(name, content);
+      }
+      const splitMatch = typeof payload === 'string' && payload.match(/^split-focus-(\d+)$/);
+      if (splitMatch) {
+        const idx = parseInt(splitMatch[1], 10) - 1;
+        if (idx >= 0 && idx < splits.length) {
+          activeSplitIndex = idx;
+          renderSplits();
+          const panes = editorContentEl?.querySelectorAll('.editor__split-pane');
+          panes?.[idx]?.querySelector('.editor__split-body')?.focus();
+        }
       }
     });
 

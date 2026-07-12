@@ -192,6 +192,7 @@ function commitRename(id, newName) {
  * Create a new file/folder in the target parent.
  * @param {string} parentId - Parent folder ID.
  * @param {'file'|'folder'} type
+ * @returns {void}
  */
 function createNode(parentId, type) {
   let parent = parentId ? findNode(fileTree, parentId) : fileTree;

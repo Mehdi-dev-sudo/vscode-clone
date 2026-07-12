@@ -105,6 +105,7 @@ export function initMinimap() {
  * @param {number} editorScrollTop - Current scroll position of editor.
  * @param {number} editorHeight - Visible editor height.
  * @param {number} editorScrollHeight - Total editor content height.
+ * @returns {void}
  */
 export function updateMinimap(content, editorScrollTop, editorHeight, editorScrollHeight) {
   if (!canvasEl || !minimapEl || !sliderEl) return;

@@ -31,6 +31,7 @@ let container = null;
 /**
  * Handle view switching when a button is clicked.
  * @param {string} viewId
+ * @returns {void}
  */
 function switchView(viewId) {
   if (viewId === activeView) {

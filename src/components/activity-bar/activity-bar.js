@@ -48,6 +48,7 @@ function switchView(viewId) {
 /**
  * Update the active visual state of buttons.
  * @param {string} viewId
+ * @returns {void}
  */
 function updateActiveButton(viewId) {
   buttons.forEach((btn, id) => {

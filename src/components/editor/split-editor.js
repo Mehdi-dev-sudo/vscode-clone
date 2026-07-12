@@ -18,6 +18,64 @@ let activeSplitIndex = 0;
 /** @type {HTMLElement|null} */
 let editorContentEl = null;
 
+/** @type {{ isDragging: boolean, dividerIndex: number, startX: number, startWidths: number[] }|null} */
+let resizeState = null;
+
+/**
+ * Create an interactive split divider.
+ * @param {number} index - Divider position (between pane index and index+1).
+ * @returns {HTMLElement}
+ */
+function createDivider(index) {
+  const divider = createElement('div', {
+    className: 'editor__split-divider',
+    attrs: { 'data-divider': index },
+    style: { width: '4px', cursor: 'col-resize', backgroundColor: 'var(--border-primary)', flexShrink: '0', position: 'relative', zIndex: '1' },
+  });
+
+  divider.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    const container = editorContentEl?.querySelector('.editor__splits');
+    if (!container) return;
+    container.classList.add('editor__splits--resizing');
+    divider.classList.add('editor__split-divider--active');
+    const panes = container.querySelectorAll('.editor__split-pane');
+    const startWidths = Array.from(panes).map((p) => p.getBoundingClientRect().width);
+    resizeState = { isDragging: true, dividerIndex: index, startX: e.clientX, startWidths, container, divider };
+  });
+
+  return divider;
+}
+
+/**
+ * Handle mouse move for divider resize.
+ * @param {MouseEvent} e
+ */
+function onDividerMouseMove(e) {
+  if (!resizeState || !resizeState.isDragging) return;
+  const container = editorContentEl?.querySelector('.editor__splits');
+  if (!container) return;
+  const panes = container.querySelectorAll('.editor__split-pane');
+  const dx = e.clientX - resizeState.startX;
+  const leftWidth = Math.max(100, resizeState.startWidths[resizeState.dividerIndex - 1] + dx);
+  const rightWidth = Math.max(100, resizeState.startWidths[resizeState.dividerIndex] - dx);
+  panes[resizeState.dividerIndex - 1].style.flex = 'none';
+  panes[resizeState.dividerIndex - 1].style.width = `${leftWidth}px`;
+  panes[resizeState.dividerIndex].style.flex = 'none';
+  panes[resizeState.dividerIndex].style.width = `${rightWidth}px`;
+}
+
+/**
+ * Handle mouse up to finalize divider resize.
+ */
+function onDividerMouseUp() {
+  if (!resizeState) return;
+  resizeState.isDragging = false;
+  resizeState.container?.classList.remove('editor__splits--resizing');
+  resizeState.divider?.classList.remove('editor__split-divider--active');
+  resizeState = null;
+}
+
 /**
  * Create a split editor container.
  * @param {number} index
@@ -113,17 +171,10 @@ function renderSplits() {
   }
 
   splits.forEach((_, i) => {
-    if (i > 0) {
-      const divider = createElement('div', {
-        className: 'editor__split-divider',
-        style: {
-          width: '4px', cursor: 'col-resize', backgroundColor: 'var(--border-primary)',
-          flexShrink: '0',
-        },
-      });
-      splitContainer.appendChild(divider);
-    }
     splitContainer.appendChild(createSplitPane(i));
+    if (i < splits.length - 1) {
+      splitContainer.appendChild(createDivider(i + 1));
+    }
   });
 }
 
@@ -137,6 +188,9 @@ export const SplitEditor = {
    */
   init() {
     editorContentEl = document.getElementById('editor-content');
+
+    document.addEventListener('mousemove', onDividerMouseMove);
+    document.addEventListener('mouseup', onDividerMouseUp);
 
     eventBus.on(EVENTS.COMMAND_EXECUTED, (payload) => {
       if (payload === 'split-editor') {

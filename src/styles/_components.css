@@ -1493,6 +1493,17 @@
   background-color: var(--border-focus);
 }
 
+.editor__split-divider--active,
+.editor__split-divider:active {
+  background-color: var(--accent-primary);
+}
+
+/* Prevent text selection during resize */
+.editor__splits--resizing {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 .editor__split-header {
   display: flex;
   align-items: center;

@@ -10,6 +10,7 @@ import { EVENTS } from '../../core/constants.js';
 import { createElement, empty, $ } from '../../utils/dom.js';
 import { highlight, detectLanguage } from '../../utils/syntax.js';
 import { updateMinimap, initMinimap } from './minimap.js';
+import { initMultiCursor } from './multi-cursor.js';
 
 /** @type {HTMLElement|null} */
 let editorContentEl = null;
@@ -391,6 +392,9 @@ export const Editor = {
 
     // Initialize minimap
     initMinimap();
+
+    // Initialize multi-cursor support
+    if (editorContentEl) initMultiCursor(editorContentEl);
 
     // Subscribe to file selection events
     eventBus.on(EVENTS.FILE_SELECTED, (file) => {

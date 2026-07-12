@@ -140,6 +140,7 @@ function openFile(node) {
 /**
  * Toggle folder collapse state.
  * @param {string} id
+ * @returns {void}
  */
 function toggleCollapse(id) {
   const node = findNode(fileTree, id);

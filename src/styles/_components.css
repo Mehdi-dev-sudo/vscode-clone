@@ -1482,6 +1482,11 @@
   flex-direction: column;
 }
 
+.editor__split-pane--active {
+  outline: 1px solid var(--accent-primary);
+  outline-offset: -1px;
+}
+
 .editor__split-divider {
   width: 4px;
   cursor: col-resize;

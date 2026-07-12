@@ -112,8 +112,9 @@ function onDividerMouseUp() {
  * @returns {HTMLElement}
  */
 function createSplitPane(index) {
+  const isActive = index === activeSplitIndex;
   const pane = createElement('div', {
-    className: 'editor__split-pane',
+    className: `editor__split-pane${isActive ? ' editor__split-pane--active' : ''}`,
     attrs: { 'data-split': index, role: 'region', 'aria-label': `Editor split ${index + 1}` },
     style: { flex: '1', minWidth: '0', display: 'flex', flexDirection: 'column' },
   });
@@ -165,6 +166,7 @@ function createSplitPane(index) {
     style: { flex: '1', overflow: 'auto', padding: '4px 16px', fontFamily: 'var(--font-family-monospace)', fontSize: '14px', lineHeight: '1.6', whiteSpace: 'pre', color: 'var(--text-primary)' },
     attrs: { contenteditable: 'true', spellcheck: 'false' },
     text: splits[index]?.content || '',
+    events: { focus: () => { activeSplitIndex = index; renderSplits(); } },
   });
 
   pane.append(header, body);

@@ -150,6 +150,30 @@ export const SearchView = {
     });
     inputGroup.appendChild(searchInput);
 
+    // Replace input
+    const replaceInput = createElement('input', {
+      className: 'search__replace-input',
+      attrs: { type: 'text', placeholder: 'Replace...', 'aria-label': 'Replace text', autocomplete: 'off' },
+    });
+    inputGroup.appendChild(replaceInput);
+
+    // Replace all button
+    const replaceBtn = createElement('button', {
+      className: 'search__replace-btn',
+      html: ICONS.check || '&#10003;',
+      attrs: { 'aria-label': 'Replace All', title: 'Replace All' },
+      events: {
+        click: () => {
+          const query = searchInput.value;
+          const replace = replaceInput.value;
+          if (!query || !replace) return;
+          eventBus.emit(EVENTS.COMMAND_EXECUTED, { type: 'replace-all', query, replace });
+          renderResults([]);
+        },
+      },
+    });
+    inputGroup.appendChild(replaceBtn);
+
     // Toggle buttons
     const toggleOptions = createElement('div', { className: 'search__toggle-options' });
     const toggleConfig = [

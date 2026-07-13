@@ -11,6 +11,7 @@
 
 import { eventBus } from '../events/event-bus.js';
 import { EVENTS } from '../core/constants.js';
+import { Notifications } from '../components/notifications/notifications.js';
 
 /** @type {Map<string, Function>} */
 const commands = new Map();
@@ -49,7 +50,7 @@ export function registerTheme(name, colors) {
   themes[name] = colors;
   localStorage.setItem('vscode-clone:plugin-themes', JSON.stringify(themes));
   eventBus.emit('plugin:theme-registered', { name, colors });
-  eventBus.emit(EVENTS.NOTIFICATION_ADDED, { type: 'info', message: `Plugin theme "${name}" registered` });
+  Notifications.info(`Plugin theme "${name}" registered`);
 }
 
 /**
@@ -61,7 +62,7 @@ export function registerTheme(name, colors) {
 export function registerPanel(id, label, renderFn) {
   panelPlugins.push({ id, label, renderFn });
   eventBus.emit('plugin:panel-registered', { id, label });
-  eventBus.emit(EVENTS.NOTIFICATION_ADDED, { type: 'info', message: `Plugin panel "${label}" added` });
+  Notifications.info(`Plugin panel "${label}" added`);
 }
 
 /**
@@ -74,7 +75,7 @@ export function registerPanel(id, label, renderFn) {
 export function registerSidebar(id, icon, label, renderFn) {
   sidebarPlugins.push({ id, icon, label, renderFn });
   eventBus.emit('plugin:sidebar-registered', { id, label });
-  eventBus.emit(EVENTS.NOTIFICATION_ADDED, { type: 'info', message: `Plugin sidebar "${label}" added` });
+  Notifications.info(`Plugin sidebar "${label}" added`);
 }
 
 /**

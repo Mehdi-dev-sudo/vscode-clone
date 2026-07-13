@@ -11,6 +11,7 @@ import { createElement, empty, $, escapeHtml } from '../../utils/dom.js';
 import { highlight, detectLanguage } from '../../utils/syntax.js';
 import { updateMinimap, initMinimap } from './minimap.js';
 import { initMultiCursor } from './multi-cursor.js';
+import { Notifications } from '../notifications/notifications.js';
 
 /** @type {HTMLElement|null} */
 let editorContentEl = null;
@@ -418,14 +419,14 @@ export const Editor = {
     eventBus.on(EVENTS.COMMAND_EXECUTED, (cmd) => {
       if (cmd === 'save-file') {
         if (currentFileName) {
-          eventBus.emit(EVENTS.NOTIFICATION_ADDED, { type: 'info', message: `File "${currentFileName}" saved.` });
+          Notifications.info(`File "${currentFileName}" saved.`);
         }
       } else if (cmd === 'new-file') {
         const name = `untitled-${Date.now().toString(36)}.js`;
         eventBus.emit(EVENTS.FILE_SELECTED, { name, content: '' });
         eventBus.emit(EVENTS.TAB_OPENED, { name, content: '' });
       } else if (cmd === 'open-folder') {
-        eventBus.emit(EVENTS.NOTIFICATION_ADDED, { type: 'info', message: 'Open Folder ??? drag a folder from your OS onto the app to open it.' });
+        Notifications.info('Open Folder - drag a folder from your OS onto the app to open it.');
       }
     });
 

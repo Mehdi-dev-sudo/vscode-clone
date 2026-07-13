@@ -217,7 +217,7 @@ const INTERNAL_COMMANDS = {
       '\x1b[1;34m สมติ\x1b[0m        \x1b[1mHost:\x1b[0m Browser',
       '\x1b[1;34m   _.สมติ\x1b[0m    \x1b[1mKernel:\x1b[0m Vanilla JS',
       '\x1b[1;34m       _.สมติ\x1b[0m \x1b[1mShell:\x1b[0m bash 5.2',
-      `                   \x1b[1mUptime:\x1b[0m ${Math.floor((Date.now() - performance.now()) / 1000)}s`,
+      `                   \x1b[1mUptime:\x1b[0m ${Math.floor(performance.now() / 1000)}s`,
       '                   \x1b[1mPackages:\x1b[0m 0 (no deps)',
       '                   \x1b[1mResolution:\x1b[0m 1920x1080',
       '                   \x1b[1mTerminal:\x1b[0m xterm-256color',
@@ -456,7 +456,7 @@ function removeTerminal(id) {
     return;
   }
 
-    activeTerminalId = terminals[Math.min(idx, terminals.length - 1)].id;
+  activeTerminalId = terminals[Math.min(idx, terminals.length - 1)].id;
   renderTerminal();
   eventBus.emit(EVENTS.TERMINAL_REMOVED, { id });
 }

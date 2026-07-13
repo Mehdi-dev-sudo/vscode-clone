@@ -56,6 +56,7 @@ function onDividerMouseMove(e) {
   const container = editorContentEl?.querySelector('.editor__splits');
   if (!container) return;
   const panes = container.querySelectorAll('.editor__split-pane');
+  if (panes.length <= resizeState.dividerIndex) return;
   const dx = e.clientX - resizeState.startX;
   const leftWidth = Math.max(100, resizeState.startWidths[resizeState.dividerIndex - 1] + dx);
   const rightWidth = Math.max(100, resizeState.startWidths[resizeState.dividerIndex] - dx);

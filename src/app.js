@@ -7,7 +7,7 @@
 
 import { eventBus } from './events/event-bus.js';
 import { getItem, setItem } from './storage/local-storage.js';
-import { STORAGE_KEYS, THEMES } from './core/constants.js';
+import { STORAGE_KEYS } from './core/constants.js';
 import { ActivityBar } from './components/activity-bar/activity-bar.js';
 import { Sidebar } from './components/sidebar/sidebar.js';
 import { Explorer } from './components/explorer/explorer.js';

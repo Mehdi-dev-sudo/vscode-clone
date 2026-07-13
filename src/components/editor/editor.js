@@ -420,6 +420,12 @@ export const Editor = {
         if (currentFileName) {
           eventBus.emit(EVENTS.NOTIFICATION_ADDED, { type: 'info', message: `File "${currentFileName}" saved.` });
         }
+      } else if (cmd === 'new-file') {
+        const name = `untitled-${Date.now().toString(36)}.js`;
+        eventBus.emit(EVENTS.FILE_SELECTED, { name, content: '' });
+        eventBus.emit(EVENTS.TAB_OPENED, { name, content: '' });
+      } else if (cmd === 'open-folder') {
+        eventBus.emit(EVENTS.NOTIFICATION_ADDED, { type: 'info', message: 'Open Folder — drag a folder from your OS onto the app to open it.' });
       }
     });
 

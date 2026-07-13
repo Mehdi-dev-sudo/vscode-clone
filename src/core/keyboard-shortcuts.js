@@ -25,7 +25,7 @@ const bindings = new Map();
 const shortcuts = [
   { keys: 'Ctrl+Shift+P', event: EVENTS.COMMAND_EXECUTED, payload: 'command-palette', description: 'Show Command Palette' },
   { keys: 'Ctrl+P',        event: EVENTS.COMMAND_EXECUTED, payload: 'quick-open',      description: 'Quick Open' },
-  { keys: 'Ctrl+B',        event: EVENTS.ZEN_MODE_TOGGLED, payload: 'toggle-sidebar',  description: 'Toggle Sidebar' },
+  { keys: 'Ctrl+B',        event: EVENTS.VIEW_CHANGED,     payload: 'toggle-sidebar',  description: 'Toggle Sidebar' },
   { keys: 'Ctrl+`',        event: EVENTS.PANEL_RESIZED,    payload: 'toggle-panel',    description: 'Toggle Terminal' },
   { keys: 'Ctrl+Shift+E',  event: EVENTS.VIEW_CHANGED,     payload: 'explorer',        description: 'Show Explorer' },
   { keys: 'Ctrl+Shift+F',  event: EVENTS.VIEW_CHANGED,     payload: 'search',          description: 'Show Search' },

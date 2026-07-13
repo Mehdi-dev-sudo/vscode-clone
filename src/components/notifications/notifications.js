@@ -6,7 +6,6 @@
 
 import { createElement, empty } from '../../utils/dom.js';
 import { eventBus } from '../../events/event-bus.js';
-import { EVENTS } from '../../core/constants.js';
 import { EVENTS, NOTIFICATION_DURATION } from '../../core/constants.js';
 import { ICONS } from '../../assets/icons/codicons.js';
 

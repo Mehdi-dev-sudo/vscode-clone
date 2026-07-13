@@ -167,7 +167,7 @@ export const SearchView = {
           const query = searchInput.value;
           const replace = replaceInput.value;
           if (!query || !replace) return;
-          eventBus.emit(EVENTS.COMMAND_EXECUTED, { type: 'replace-all', query, replace });
+          eventBus.emit(EVENTS.COMMAND_EXECUTED, 'replace-all');
           renderResults([]);
         },
       },

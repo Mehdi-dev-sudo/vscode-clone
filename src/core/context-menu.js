@@ -137,7 +137,6 @@ function show(e, items, context = null) {
   menuItemsEl.appendChild(renderItems(items));
 
   // Position the menu
-  const menuRect = menu.getBoundingClientRect();
   const menuWidth = menu.offsetWidth || 160;
   const menuHeight = menu.offsetHeight || 200;
   const viewportWidth = window.innerWidth;

@@ -89,6 +89,10 @@ function createDOM() {
     },
   });
 
+  overlayEl.addEventListener('click', (e) => {
+    if (e.target === overlayEl) endTour();
+  });
+
   overlayEl.appendChild(tooltipEl);
   document.body.appendChild(overlayEl);
 }
@@ -142,7 +146,16 @@ function showStep() {
   });
   footer.appendChild(dots);
 
-  const btnGroup = createElement('div', { style: { display: 'flex', gap: '8px' } });
+  const btnGroup = createElement('div', { style: { display: 'flex', gap: '8px', alignItems: 'center' } });
+
+  btnGroup.appendChild(createElement('button', {
+    text: 'Skip',
+    style: {
+      background: 'none', border: 'none', cursor: 'pointer',
+      fontSize: '12px', color: 'var(--text-secondary)', padding: '4px 8px',
+    },
+    events: { click: () => endTour() },
+  }));
 
   if (currentStep < TOUR_STEPS.length - 1) {
     const nextBtn = createElement('button', {

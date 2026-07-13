@@ -60,6 +60,7 @@ export const ThemeManager = {
 
     // Also listen for theme commands from command palette
     eventBus.on(EVENTS.COMMAND_EXECUTED, (payload) => {
+      if (typeof payload !== 'string') return;
       if (payload.startsWith('theme-')) {
         const themeMap = {
           'theme-dark': THEMES.DARK,

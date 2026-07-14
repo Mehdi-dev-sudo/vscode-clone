@@ -272,6 +272,7 @@ function renderQuickOpenResults(files) {
       attrs: { role: 'option' },
       events: {
         click: () => {
+          eventBus.emit(EVENTS.FILE_SELECTED, file);
           eventBus.emit(EVENTS.TAB_OPENED, file);
           hideQuickOpen();
         },

@@ -188,6 +188,29 @@ Open \`index.html\` in any modern browser.
 
 No build tools required.`,
 
+  'src/app.js': `import { eventBus } from './events/event-bus.js';
+import { ThemeManager } from './components/themes/theme-manager.js';
+import { LayoutManager } from './components/layout/layout-manager.js';
+import { KeyboardShortcuts } from './core/keyboard-shortcuts.js';
+import { ActivityBar } from './components/activity-bar/activity-bar.js';
+import { Sidebar } from './components/sidebar/sidebar.js';
+import { Explorer } from './components/explorer/explorer.js';
+import { Editor } from './components/editor/editor.js';
+import { Tabs } from './components/tabs/tabs.js';
+import { Terminal } from './components/terminal/terminal.js';
+import { StatusBar } from './components/status-bar/status-bar.js';
+import { Notifications } from './components/notifications/notifications.js';
+
+function boot() {
+  ThemeManager.restore();
+  LayoutManager.init();
+  KeyboardShortcuts.init();
+  const components = [ActivityBar, Sidebar, Explorer, Tabs, Editor, Terminal, StatusBar, Notifications];
+  components.forEach((c) => { try { c.init?.(); } catch (e) { console.error(c.name, e); } });
+}
+
+document.addEventListener('DOMContentLoaded', boot);`,
+
   '.gitignore': `# Dependencies
 node_modules/
 package-lock.json

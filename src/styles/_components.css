@@ -1698,3 +1698,6 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 .notification--removing { animation: notif-slide-out 0.25s ease forwards; }
 @keyframes notif-slide-out { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(100%); } }
 
+
+.quick-open__item:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: -2px; }
+

@@ -367,7 +367,7 @@ export const CommandPalette = {
       }, 100));
 
       quickOpenInputEl.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') hideQuickOpen();
+        if (e.key === 'Escape') { e.preventDefault(); hideQuickOpen(); return; }
         if (e.key === 'Enter') {
           const item = quickOpenResultsEl.querySelector('.quick-open__item');
           if (item) item.click();

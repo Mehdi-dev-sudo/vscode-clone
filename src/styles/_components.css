@@ -1206,10 +1206,13 @@ button:disabled { cursor: default; opacity: 0.5; }
 }
 
 .command-palette__item:hover,
-.command-palette__item--active,
-.quick-open__item:hover,
-.quick-open__item--active {
+.quick-open__item:hover {
   background-color: var(--bg-hover);
+}
+
+.command-palette__item--active,
+.quick-open__item--active {
+  background-color: rgba(0, 122, 204, 0.2);
 }
 
 .command-palette__item .icon,

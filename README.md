@@ -3,10 +3,11 @@
   <img src="https://img.shields.io/badge/status-active-success" alt="Status" />
   <img src="https://img.shields.io/badge/license-MIT-blue" alt="License" />
   <img src="https://img.shields.io/badge/stack-vanilla-orange" alt="Stack" />
-  <img src="https://img.shields.io/badge/commits-230+-brightgreen" alt="Commits" />
-  <img src="https://img.shields.io/badge/lines-~12K-ff69b4" alt="Lines of Code" />
+  <img src="https://img.shields.io/badge/commits-260+-brightgreen" alt="Commits" />
+  <img src="https://img.shields.io/badge/lines-~13K-ff69b4" alt="Lines of Code" />
   <img src="https://img.shields.io/badge/PRs-63-ff69b4" alt="Pull Requests" />
-  <img src="https://img.shields.io/badge/JS%20modules-35-blue" alt="JavaScript Modules" />
+  <img src="https://img.shields.io/badge/JS%20modules-101-ff69b4" alt="JavaScript Modules" />
+  <img src="https://img.shields.io/badge/type%20safe-%40ts--check-success" alt="Type Safe" />
   <br />
   <br />
 
@@ -31,11 +32,12 @@
 
 **VS Code Clone** is a fully functional web-based code editor that replicates the core experience of Visual Studio Code. Built with **pure HTML, CSS, and Vanilla JavaScript (ES Modules)** — no frameworks, no build tools, no dependencies.
 
-> ⚠️ **Important:** ES Modules require an HTTP server. Open `index.html` directly from disk will NOT work. Use `npx serve .` or `python -m http.server 8000`.
+> ⚠️ **Important:** ES Modules require an HTTP server. Opening `index.html` directly from disk will NOT work. Use `npm run dev` (see below).
 
-- **~12,000 lines of code** across **35+ JavaScript modules**
-- **230+ commits** with ITCSS + BEM architecture
+- **~13,000 lines of code** across **101 JavaScript modules**
+- **260+ commits** with ITCSS + BEM architecture
 - **Zero runtime dependencies** — not even a bundler
+- **100% type-safe** — `// @ts-check` + JSDoc on every file (zero `tsc` errors)
 - **Persistent state** via localStorage
 
 ---
@@ -72,6 +74,9 @@
 | | Zen Mode (hides sidebar/panel) | 🟡 Partial |
 | **Split Editor** | Interactive dividers, context menu, keyboard nav, focus indicator | ✅ Real |
 | **Multi Cursor** | Alt+Click add cursor, Ctrl+D select all, Collapse cursors | ✅ Real |
+| **Quality** | Type Safety (101 files, `// @ts-check` + JSDoc, zero `tsc` errors) | ✅ Real |
+| | Dead Code Removal (4 unused modules removed) | ✅ Real |
+| | Package Scripts (`npm run dev` / `start` / `typecheck`) | ✅ Real |
 
 ---
 
@@ -82,17 +87,20 @@ git clone https://github.com/Mehdi-dev-sudo/vscode-clone.git
 cd vscode-clone
 ```
 
-**Serve locally** (ES Modules require an HTTP server):
-
 ```bash
-npx serve .
-# or
-python -m http.server 8000
-# or
-php -S localhost:8000
+cd vscode-clone
+
+# Install dependencies (serve + TypeScript for type checking)
+npm install
+
+# Start the dev server
+npm run dev
+
+# (optional) Run type checking
+npm run typecheck
 ```
 
-Then open `http://localhost:8000` in your browser.
+Then open `http://localhost:5500` (or whatever port `serve` picks) in your browser.
 
 ---
 
@@ -146,7 +154,7 @@ src/
     ├── sidebar/              # search, scm, debug, extensions
     ├── explorer/
     ├── tabs/
-    ├── editor/               # editor, minimap, split-editor, breadcrumb, welcome
+    ├── editor/               # editor, minimap, split-editor, welcome
     ├── terminal/
     ├── panel/
     ├── status-bar/

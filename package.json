@@ -3,11 +3,20 @@
   "version": "1.0.0",
   "private": true,
   "description": "Portfolio-quality VS Code clone built with vanilla HTML, CSS, and JavaScript (ES Modules). Zero dependencies.",
+  "author": "Mehdi Khorshidi far <mehdi.khorshidi9339@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mehdi-dev-sudo/vscode-clone.git"
+  },
+  "keywords": ["vscode", "clone", "portfolio", "vanilla-js", "code-editor"],
   "scripts": {
-    "dev": "npx serve . -p 5500 --no-open",
-    "dev:full": "npx serve . -p 5500"
+    "dev": "serve . -p 5500",
+    "start": "serve . -p 5500",
+    "typecheck": "tsc --allowJs --checkJs --noEmit --target ES2020 --module ESNext --moduleResolution bundler --strict --noImplicitAny --strictNullChecks --noUnusedLocals --noUnusedParameters --noImplicitReturns --noFallthroughCasesInSwitch --skipLibCheck --lib ES2020,DOM src/app.js"
   },
   "devDependencies": {
-    "typescript": "7.0.2"
+    "serve": "^14.2.0",
+    "typescript": "^7.0.2"
   }
 }

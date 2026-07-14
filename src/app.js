@@ -9,7 +9,7 @@
 
 import { eventBus } from './events/event-bus.js';
 import { getItem } from './storage/local-storage.js';
-import { STORAGE_KEYS } from './core/constants.js';
+import { STORAGE_KEYS, EVENTS } from './core/constants.js';
 import { ActivityBar } from './components/activity-bar/activity-bar.js';
 import { Sidebar } from './components/sidebar/sidebar.js';
 import { Explorer } from './components/explorer/explorer.js';
@@ -94,7 +94,7 @@ function boot() {
 
   // Apply initial view
   const savedView = getItem(STORAGE_KEYS.ACTIVE_VIEW, 'explorer');
-  eventBus.emit('view:changed', savedView);
+  eventBus.emit(EVENTS.VIEW_CHANGED, savedView);
 
   console.log(`%c VS Code Clone v1.0.0 `, 'background:#007acc;color:#fff;font-size:14px;padding:4px;border-radius:2px;');
 }

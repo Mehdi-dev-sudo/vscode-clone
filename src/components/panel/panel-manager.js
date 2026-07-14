@@ -8,6 +8,7 @@
  */
 
 import { eventBus } from '../../events/event-bus.js';
+import { EVENTS } from '../../core/constants.js';
 import { createElement, empty } from '../../utils/dom.js';
 
 /** @type {string} */
@@ -187,7 +188,7 @@ function switchPanelTab(tab) {
       // Terminal is handled by the Terminal component
       // We need to re-trigger terminal render
       if (panelBodyEl) empty(panelBodyEl);
-      eventBus.emit('terminal:show', {});
+      eventBus.emit(EVENTS.TERMINAL_SHOW);
       break;
   }
 }

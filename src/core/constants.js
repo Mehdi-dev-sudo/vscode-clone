@@ -58,6 +58,7 @@ export const THEMES = {
  * @property {string} TERMINAL_ADDED
  * @property {string} TERMINAL_REMOVED
  * @property {string} TERMINAL_RESIZED
+ * @property {string} TERMINAL_SHOW
  * @property {string} SIDEBAR_RESIZED
  * @property {string} PANEL_RESIZED
  * @property {string} COMMAND_EXECUTED
@@ -87,6 +88,7 @@ export const EVENTS = {
   TERMINAL_ADDED: 'terminal:added',
   TERMINAL_REMOVED: 'terminal:removed',
   TERMINAL_RESIZED: 'terminal:resized',
+  TERMINAL_SHOW: 'terminal:show',
   SIDEBAR_RESIZED: 'sidebar:resized',
   PANEL_RESIZED: 'panel:resized',
   COMMAND_EXECUTED: 'command:executed',

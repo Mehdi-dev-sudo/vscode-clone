@@ -519,7 +519,7 @@ export const Terminal = {
     });
 
     // Listen for panel tab switch to terminal
-    eventBus.on('terminal:show', () => {
+    eventBus.on(EVENTS.TERMINAL_SHOW, () => {
       renderTerminal();
     });
 
@@ -534,9 +534,11 @@ export const Terminal = {
             PanelManager.switchTo('terminal');
           });
         }
-        // Focus the terminal input
-        const input = document.querySelector('.terminal__input');
-        if (input) setTimeout(() => /** @type {HTMLElement} */ (input).focus(), 100);
+        // Focus the terminal input (re-query inside rAF to avoid stale refs)
+        requestAnimationFrame(() => {
+          const input = document.querySelector('.terminal__input');
+          if (input) /** @type {HTMLElement} */ (input).focus();
+        });
       }
     });
   },

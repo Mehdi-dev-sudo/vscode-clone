@@ -11,7 +11,7 @@
 
 import { createElement } from '../utils/dom.js';
 import { eventBus } from '../events/event-bus.js';
-import { EVENTS } from '../core/constants.js';
+import { EVENTS, STORAGE_KEYS } from '../core/constants.js';
 import { getItem, setItem } from '../storage/local-storage.js';
 
 const SNAPSHOTS_KEY = 'vscode-clone:snapshots';
@@ -47,9 +47,8 @@ function captureState() {
     activeView: (/** @type {HTMLElement | null} */ (document.querySelector('.activity-bar__btn--active')))?.dataset?.view || 'explorer',
     theme: document.documentElement.className,
     // Open tabs are captured from storage
-    openTabs: getItem('vscode-clone:open-tabs', []),
-    // Explorer state from storage
-    explorerState: getItem('vscode-clone:explorer-state', null),
+    openTabs: getItem(STORAGE_KEYS.OPEN_TABS, []),
+    explorerState: getItem(STORAGE_KEYS.EXPLORER_STATE, null),
     // URL (for future routing)
     url: window.location.href,
   };
@@ -84,12 +83,12 @@ function restoreState(state) {
 
   // Tabs
   if (state.openTabs && state.openTabs.length > 0) {
-    setItem('vscode-clone:open-tabs', state.openTabs);
+    setItem(STORAGE_KEYS.OPEN_TABS, state.openTabs);
   }
 
   // Explorer
   if (state.explorerState) {
-    setItem('vscode-clone:explorer-state', state.explorerState);
+    setItem(STORAGE_KEYS.EXPLORER_STATE, state.explorerState);
   }
 
   // Reload UI to match restored state

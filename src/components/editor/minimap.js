@@ -115,8 +115,8 @@ export function updateMinimap(content, editorScrollTop, editorHeight, editorScro
   const lines = content.split('\n');
   const minimapHeight = minimapEl.clientHeight;
 
-  // Guard against empty content or zero-height container
-  if (!lines.length || !minimapHeight) return;
+  // Guard against empty content, zero-height container, or NaN values
+  if (!lines.length || !minimapHeight || isNaN(editorScrollHeight) || isNaN(editorHeight)) return;
 
   const lineHeight = Math.max(1, Math.floor((minimapHeight / lines.length) * 2) / 2);
   const dpr = window.devicePixelRatio || 1;

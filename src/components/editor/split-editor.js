@@ -165,7 +165,7 @@ function createSplitPane(index) {
   const body = createElement('div', {
     className: 'editor__split-body',
     style: { flex: '1', overflow: 'auto', padding: '4px 16px', fontFamily: 'var(--font-family-monospace)', fontSize: '14px', lineHeight: '1.6', whiteSpace: 'pre', color: 'var(--text-primary)' },
-    attrs: { contenteditable: 'true', spellcheck: 'false' },
+    attrs: { contenteditable: 'true', spellcheck: 'false', 'aria-label': `Split editor ${index + 1}` },
     text: splits[index]?.content || '',
     events: { focus: () => { activeSplitIndex = index; renderSplits(); } },
   });

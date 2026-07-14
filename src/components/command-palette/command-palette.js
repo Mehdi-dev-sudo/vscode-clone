@@ -177,9 +177,6 @@ function executeCommand(id) {
     case 'clear-notifications':
       eventBus.emit(EVENTS.COMMAND_EXECUTED, 'clear-notifications');
       break;
-    case 'about':
-      alert('VS Code Clone v1.0.0\nBuilt with zero frameworks by Mehdi Khorshidi far.\nRepo: https://github.com/Mehdi-dev-sudo');
-      break;
     default:
       eventBus.emit(EVENTS.COMMAND_EXECUTED, id);
   }

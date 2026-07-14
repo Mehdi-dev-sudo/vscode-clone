@@ -161,7 +161,8 @@ const INTERNAL_COMMANDS = {
     }
     if (args[0] === '/') { currentDir = '/'; return ''; }
     if (args[0] === '..') {
-      const parts = currentDir.split('/').filter(Boolean);
+      const resolved = currentDir === '~' ? '/home/user' : currentDir;
+      const parts = resolved.split('/').filter(Boolean);
       parts.pop();
       currentDir = parts.length === 0 ? '/' : `/${parts.join('/')}`;
       if (currentDir === '/home/user') currentDir = '~';

@@ -69,9 +69,7 @@ function showView(viewId) {
  * Render the Search view.
  */
 function renderSearchView() {
-  import('../sidebar/search-replace-view.js').then((m) => m.SearchReplaceView.render(contentEl)).catch(() => {
-    import('../sidebar/search-view.js').then((m) => m.SearchView.render(contentEl));
-  });
+  import('../sidebar/search-view.js').then((m) => m.SearchView.render(contentEl));
 }
 
 /**

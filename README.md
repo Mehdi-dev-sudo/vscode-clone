@@ -3,9 +3,10 @@
   <img src="https://img.shields.io/badge/status-active-success" alt="Status" />
   <img src="https://img.shields.io/badge/license-MIT-blue" alt="License" />
   <img src="https://img.shields.io/badge/stack-vanilla-orange" alt="Stack" />
-  <img src="https://img.shields.io/badge/commits-200+-brightgreen" alt="Commits" />
+  <img src="https://img.shields.io/badge/commits-230+-brightgreen" alt="Commits" />
   <img src="https://img.shields.io/badge/lines-~12K-ff69b4" alt="Lines of Code" />
-  <img src="https://img.shields.io/badge/JS%20files-102-blue" alt="JavaScript Files" />
+  <img src="https://img.shields.io/badge/PRs-63-ff69b4" alt="Pull Requests" />
+  <img src="https://img.shields.io/badge/JS%20modules-35-blue" alt="JavaScript Modules" />
   <br />
   <br />
 
@@ -28,10 +29,12 @@
 
 ## Overview
 
-**VS Code Clone** is a fully functional web-based code editor that replicates the core experience of Visual Studio Code. Built with **pure HTML, CSS, and Vanilla JavaScript (ES Modules)** — no frameworks, no build tools, no dependencies. Just open `index.html` and it works.
+**VS Code Clone** is a fully functional web-based code editor that replicates the core experience of Visual Studio Code. Built with **pure HTML, CSS, and Vanilla JavaScript (ES Modules)** — no frameworks, no build tools, no dependencies.
 
-- **~12,000 lines of code** across **102 JavaScript modules**
-- **200+ commits** with ITCSS + BEM architecture
+> ⚠️ **Important:** ES Modules require an HTTP server. Open `index.html` directly from disk will NOT work. Use `npx serve .` or `python -m http.server 8000`.
+
+- **~12,000 lines of code** across **35+ JavaScript modules**
+- **230+ commits** with ITCSS + BEM architecture
 - **Zero runtime dependencies** — not even a bundler
 - **Persistent state** via localStorage
 
@@ -62,12 +65,13 @@
 | **Advanced** | Settings Editor (9 settings, JSON preview, live CSS vars) | ✅ Real |
 | | Plugin API (registerCommand, registerTheme, registerPanel, etc.) | ✅ Real |
 | | Syntax Highlighting (two-pass tokenizer: JS, HTML, CSS) | ✅ Real |
-| **Partial** | Search View (filtering is basic) | 🟡 Partial |
+| **Partial** | Search View (regex/search options, replace UI) | ✅ Real |
 | | Source Control (mock UI with fake history) | 🟡 Partial |
 | | Run & Debug (mock sidebar view) | 🟡 Partial |
 | | Extensions View (mock marketplace cards) | 🟡 Partial |
 | | Zen Mode (hides sidebar/panel) | 🟡 Partial |
-| | Split Editor (interactive dividers, context menu, content sync, keyboard nav) | ✅ Real |
+| **Split Editor** | Interactive dividers, context menu, keyboard nav, focus indicator | ✅ Real |
+| **Multi Cursor** | Alt+Click add cursor, Ctrl+D select all, Collapse cursors | ✅ Real |
 
 ---
 
@@ -76,10 +80,9 @@
 ```bash
 git clone https://github.com/Mehdi-dev-sudo/vscode-clone.git
 cd vscode-clone
-# Open index.html in your browser — no build step needed
 ```
 
-Or serve locally:
+**Serve locally** (ES Modules require an HTTP server):
 
 ```bash
 npx serve .
@@ -88,6 +91,8 @@ python -m http.server 8000
 # or
 php -S localhost:8000
 ```
+
+Then open `http://localhost:8000` in your browser.
 
 ---
 
@@ -176,6 +181,10 @@ src/
 | `Ctrl+S` | Save (snapshot) |
 | `Ctrl+Shift+S` | Save Snapshot |
 | `Ctrl+Shift+R` | Restore Snapshot |
+| `Ctrl+Shift+↑/↓` | Add Cursor Above/Below |
+| `Ctrl+D` | Select All Occurrences |
+| `Ctrl+Shift+1/2/3` | Focus Split 1/2/3 |
+| `Escape` (with multi-cursor) | Collapse to single cursor |
 
 ---
 
@@ -229,11 +238,9 @@ Sample plugins included in `src/plugins/`:
 - [x] Plugin API — extend at runtime
 - [x] Keyboard shortcuts + focus management
 - [x] Toast Notifications + Context Menus
-
-### In Progress 🔧
-- [ ] Split Editor — independent pane content, drag-between-panes
-- [ ] Multi Cursor — simultaneous editing at all cursors
-- [ ] Search View — search across workspace files
+- [x] Split Editor (interactive dividers, context menu, keyboard nav)
+- [x] Multi Cursor (Alt+Click, keyboard-driven, visual cursors)
+- [x] Search View (regex/whole-word/case-toggle, replace UI, file filter)
 
 ### Planned 📋
 - [ ] Live Preview — HTML/CSS live reload

@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Run & Debug view component — mock debugger controls.
@@ -44,3 +46,4 @@ export const RunDebugView = {
     container.appendChild(emptyState);
   },
 };
+

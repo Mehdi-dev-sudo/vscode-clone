@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Reusable DOM manipulation utilities.
@@ -6,17 +8,21 @@
  */
 
 /**
+ * @typedef {Object} ElementOptions
+ * @property {Object<string,string>} [attrs] - Attribute key/value pairs.
+ * @property {Object<string,string>} [style] - Inline style key/value pairs.
+ * @property {string|Array<string>} [className] - Class name(s).
+ * @property {string} [text] - Text content.
+ * @property {string} [html] - Inner HTML.
+ * @property {Array<Element|string>} [children] - Child elements or strings.
+ * @property {Object<string,Function>} [events] - Event listeners.
+ * @property {Object<string,string>} [dataset] - data-* attributes.
+ */
+
+/**
  * Create an HTML element with attributes and children.
  * @param {string} tag - HTML tag name.
- * @param {Object} [options] - Element configuration.
- * @param {Object<string,string>} [options.attrs] - Attribute key/value pairs.
- * @param {Object<string,string>} [options.style] - Inline style key/value pairs.
- * @param {string|Array<string>} [options.className] - Class name(s).
- * @param {string} [options.text] - Text content.
- * @param {string} [options.html] - Inner HTML.
- * @param {Array<Element|string>} [options.children] - Child elements or strings.
- * @param {Object<string,Function>} [options.events] - Event listeners.
- * @param {Object<string,string>} [options.dataset] - data-* attributes.
+ * @param {ElementOptions} [options] - Element configuration.
  * @returns {HTMLElement}
  */
 export function createElement(tag, options = {}) {
@@ -30,7 +36,7 @@ export function createElement(tag, options = {}) {
 
   if (options.style) {
     for (const [key, value] of Object.entries(options.style)) {
-      el.style[key] = value;
+      /** @type {{[key: string]: string}} */ (/** @type {unknown} */ (el.style))[key] = value;
     }
   }
 
@@ -57,7 +63,7 @@ export function createElement(tag, options = {}) {
 
   if (options.events) {
     for (const [event, handler] of Object.entries(options.events)) {
-      el.addEventListener(event, handler);
+      el.addEventListener(event, /** @type {EventListener} */ (handler));
     }
   }
 
@@ -153,11 +159,17 @@ export function clamp(value, min, max) {
  * @returns {Function}
  */
 export function debounce(fn, delay) {
+  /** @type {number|null} */
   let timer = null;
-  return function (...args) {
+  /**
+   * @this {*}
+   * @param {...*} args
+   */
+  function debounced(...args) {
     if (timer) clearTimeout(timer);
     timer = setTimeout(() => fn.apply(this, args), delay);
-  };
+  }
+  return debounced;
 }
 
 /**

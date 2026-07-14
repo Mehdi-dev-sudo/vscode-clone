@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Multi-cursor simulation for the editor.
@@ -93,3 +95,4 @@ export function selectAllOccurrences(editorEl) {
     }
   });
 }
+

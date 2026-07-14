@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Extension Detail view — shows detailed information about a marketplace extension.
@@ -98,3 +100,4 @@ function detailRow(label, value) {
     ],
   });
 }
+

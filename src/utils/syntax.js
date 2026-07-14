@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Simple syntax highlighter for common languages.
@@ -135,6 +137,11 @@ export function highlight(code, language = 'javascript') {
   }
 }
 
+/**
+ * Escape HTML special characters.
+ * @param {string} str
+ * @returns {string}
+ */
 function escapeHtml(str) {
   const div = document.createElement('div');
   div.appendChild(document.createTextNode(str));

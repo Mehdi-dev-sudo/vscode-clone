@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Date utility helpers.
@@ -22,3 +24,4 @@ export function timeAgo(date) {
   const days = Math.floor(hours / 24);
   return `${days}d ago`;
 }
+

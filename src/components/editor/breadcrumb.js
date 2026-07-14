@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Breadcrumb component — shows the file path with clickable segments.
@@ -74,3 +76,4 @@ export function initBreadcrumb() {
     breadcrumbEl.style.display = 'none';
   }
 }
+

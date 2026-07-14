@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Array utility helpers.
@@ -29,3 +31,4 @@ export function groupBy(arr, key) {
     return acc;
   }, {});
 }
+

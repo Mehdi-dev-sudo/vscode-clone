@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * String utility helpers.
@@ -16,3 +18,4 @@ export function truncateMiddle(str, maxLen = 30) {
   const half = Math.floor((maxLen - 3) / 2);
   return str.slice(0, half) + '...' + str.slice(str.length - half);
 }
+

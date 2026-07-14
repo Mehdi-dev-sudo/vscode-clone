@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Validator utility — common validation checks.
@@ -31,3 +33,4 @@ export function isAlpha(str) {
 export function isAlphanumeric(str) {
   return /^[a-zA-Z0-9]+$/.test(str);
 }
+

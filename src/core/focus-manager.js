@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Focus Manager — manages focus ring styles and keyboard tab navigation
@@ -6,9 +8,10 @@
 
 /**
  * Initialize focus manager to handle :focus-visible polyfill behavior.
+ * @returns {void}
  */
 export function initFocusManager() {
-  document.addEventListener('keydown', (e) => {
+  document.addEventListener('keydown', (/** @type {KeyboardEvent} */ e) => {
     if (e.key === 'Tab') {
       document.body.classList.add('keyboard-navigation');
     }

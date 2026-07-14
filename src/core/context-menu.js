@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Context menu system.
@@ -18,14 +20,15 @@ import { createElement, $ } from '../utils/dom.js';
  * @property {string} [shortcut] - Keyboard shortcut hint.
  */
 
-/** The context menu DOM element. */
+/** @type {HTMLElement|null} */
 let menuEl = null;
+/** @type {HTMLElement|null} */
 let menuItemsEl = null;
 
-/** Currently active context. */
+/** @type {*} */
 let activeContext = null;
 
-/** Hide the menu. */
+/** @returns {void} */
 function hide() {
   if (!menuEl) return;
   menuEl.hidden = true;
@@ -33,7 +36,10 @@ function hide() {
   activeContext = null;
 }
 
-/** Get or create the context menu element. */
+/**
+ * Get or create the context menu element.
+ * @returns {HTMLElement|null}
+ */
 function getMenu() {
   if (!menuEl) {
     menuEl = document.getElementById('context-menu');
@@ -75,7 +81,7 @@ function renderItems(items) {
         },
         mouseenter: () => {
           // Close sibling submenus
-          menuEl.querySelectorAll('.context-menu__item--open').forEach((el) => {
+          menuEl && menuEl.querySelectorAll('.context-menu__item--open').forEach((el) => {
             el.classList.remove('context-menu__item--open');
           });
         },
@@ -127,6 +133,7 @@ function renderItems(items) {
  * @param {MouseEvent} e - The triggering event.
  * @param {Array<ContextMenuItem>} items - Menu items.
  * @param {*} [context] - Contextual data passed to actions.
+ * @returns {void}
  */
 function show(e, items, context = null) {
   const menu = getMenu();
@@ -161,14 +168,20 @@ function show(e, items, context = null) {
   menu.classList.add('context-menu--visible');
 }
 
-/** Handle document click to close the menu. */
+/**
+ * Handle document click to close the menu.
+ * @param {MouseEvent} e
+ */
 function onDocumentClick(e) {
-  if (menuEl && !menuEl.contains(e.target)) {
+  if (menuEl && !menuEl.contains(/** @type {Node} */ (e.target))) {
     hide();
   }
 }
 
-/** Handle Escape key to close the menu. */
+/**
+ * Handle Escape key to close the menu.
+ * @param {KeyboardEvent} e
+ */
 function onKeyDown(e) {
   if (e.key === 'Escape') {
     hide();

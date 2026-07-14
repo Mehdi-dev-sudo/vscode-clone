@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Emitter utility — lightweight pub/sub alternative.
@@ -30,3 +32,4 @@ export class Emitter {
     this.on(event, wrapper);
   }
 }
+

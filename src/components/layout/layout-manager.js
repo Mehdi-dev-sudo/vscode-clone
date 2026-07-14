@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Layout Manager — handles resizable sidebar and terminal panel.

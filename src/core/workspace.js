@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Workspace management — handles switching between different workspaces,
@@ -90,3 +92,4 @@ export const WorkspaceManager = {
    */
   add(name, path) { addWorkspace(name, path); },
 };
+

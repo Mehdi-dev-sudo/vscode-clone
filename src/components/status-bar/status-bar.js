@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Status Bar component — the bottom bar showing editor state.
@@ -21,6 +23,7 @@ let rightEl = null;
 
 /**
  * Render the status bar.
+ * @returns {void}
  */
 function render() {
   if (!statusBarEl) return;

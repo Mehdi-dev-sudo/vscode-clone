@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Utility: format bytes to human-readable size.
@@ -19,3 +21,4 @@ export function truncate(str, len = 40) {
   if (str.length <= len) return str;
   return str.slice(0, len) + '...';
 }
+

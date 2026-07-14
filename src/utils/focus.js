@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Focus utility helpers.
@@ -22,3 +24,4 @@ export function getFocusableElements(el) {
     'a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])'
   );
 }
+

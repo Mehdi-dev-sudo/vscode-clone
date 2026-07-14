@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Color palette generator utility.
@@ -26,3 +28,4 @@ export function shadeColor(hex, percent) {
   const B = Math.min(255, Math.max(0, (num & 0x0000FF) + amt));
   return `#${(1 << 24 | R << 16 | G << 8 | B).toString(16).slice(1)}`;
 }
+

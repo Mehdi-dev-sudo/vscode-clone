@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Logging utility with levels and styling.
@@ -22,3 +24,4 @@ export const Log = {
   group(label) { console.group(label); },
   groupEnd() { console.groupEnd(); },
 };
+

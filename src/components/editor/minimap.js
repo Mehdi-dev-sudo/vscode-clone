@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Minimap component — renders a scaled-down view of the editor content
@@ -9,7 +11,7 @@ import { createElement, clamp } from '../../utils/dom.js';
 /** @type {HTMLElement|null} */
 let minimapEl = null;
 
-/** @type {HTMLElement|null} */
+/** @type {HTMLCanvasElement|null} */
 let canvasEl = null;
 
 /** @type {HTMLElement|null} */

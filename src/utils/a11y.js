@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Accessibility utility helpers.
@@ -26,3 +28,4 @@ export function trapFocus(el) {
     else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   });
 }
+

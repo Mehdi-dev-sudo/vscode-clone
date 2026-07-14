@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Timing utility helpers.
@@ -25,3 +27,4 @@ export function throttle(fn, limit = 300) {
 export function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+

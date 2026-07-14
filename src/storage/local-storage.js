@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * LocalStorage abstraction layer.
@@ -5,7 +7,7 @@
  * where localStorage is unavailable.
  */
 
-/** Checks if localStorage is available. */
+/** @type {boolean} */
 const STORAGE_AVAILABLE = (() => {
   try {
     const key = '__test__';
@@ -17,7 +19,7 @@ const STORAGE_AVAILABLE = (() => {
   }
 })();
 
-/** In-memory fallback when localStorage is unavailable. */
+/** @type {Map<string, *>} */
 const memoryStore = new Map();
 
 /**
@@ -43,6 +45,7 @@ export function getItem(key, fallback = null) {
  * Write a value to storage.
  * @param {string} key
  * @param {*} value - Will be JSON-serialized.
+ * @returns {void}
  */
 export function setItem(key, value) {
   if (!STORAGE_AVAILABLE) {
@@ -59,6 +62,7 @@ export function setItem(key, value) {
 /**
  * Remove a key from storage.
  * @param {string} key
+ * @returns {void}
  */
 export function removeItem(key) {
   if (!STORAGE_AVAILABLE) {
@@ -74,6 +78,7 @@ export function removeItem(key) {
 
 /**
  * Clear all application storage (keys prefixed with `vscode-clone:`).
+ * @returns {void}
  */
 export function clearAppStorage() {
   if (!STORAGE_AVAILABLE) {

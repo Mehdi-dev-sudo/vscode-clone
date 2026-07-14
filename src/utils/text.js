@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Text utility helpers.
@@ -26,3 +28,4 @@ export function wordWrap(text, maxWidth = 80) {
   if (current.trim()) lines.push(current.trim());
   return lines.join('\n');
 }
+

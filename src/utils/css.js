@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * CSS utility helpers.
@@ -26,3 +28,4 @@ export function setStyle(el, prop, value) {
 export function getStyle(el, prop) {
   return getComputedStyle(el)[prop];
 }
+

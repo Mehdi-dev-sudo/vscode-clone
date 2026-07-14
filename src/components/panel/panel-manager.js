@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Panel Manager — handles switching between panel tabs:
@@ -14,7 +16,17 @@ let activePanelTab = 'terminal';
 /** @type {HTMLElement|null} */
 let panelBodyEl = null;
 
-/** @type {Object<string, Array<string>>} */
+/**
+ * @typedef {Object} ProblemItem
+ * @property {'error'|'warning'|'info'} type
+ * @property {string} file
+ * @property {number} line
+ * @property {string} message
+ */
+
+/**
+ * @type {Object<string, string[]|ProblemItem[]>}
+ */
 const panelContents = {
   output: [
     '[main] Extension host started successfully',
@@ -40,6 +52,7 @@ const panelContents = {
 
 /**
  * Render the output panel content.
+ * @returns {void}
  */
 function renderOutput() {
   if (!panelBodyEl) return;
@@ -63,6 +76,7 @@ function renderOutput() {
 
 /**
  * Render the problems panel.
+ * @returns {void}
  */
 function renderProblems() {
   if (!panelBodyEl) return;
@@ -112,6 +126,7 @@ function renderProblems() {
 
 /**
  * Render the debug console panel.
+ * @returns {void}
  */
 function renderDebug() {
   if (!panelBodyEl) return;
@@ -150,6 +165,7 @@ function renderDebug() {
 /**
  * Switch the active panel tab.
  * @param {string} tab - 'terminal', 'output', 'problems', 'debug'
+ * @returns {void}
  */
 function switchPanelTab(tab) {
   activePanelTab = tab;
@@ -177,6 +193,7 @@ function switchPanelTab(tab) {
 
 /**
  * Update the panel tab button styles.
+ * @returns {void}
  */
 function updatePanelTabUI() {
   document.querySelectorAll('.panel__tab').forEach((tab) => {

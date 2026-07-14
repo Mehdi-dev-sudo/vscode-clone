@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Promise utility helpers.
@@ -18,3 +20,4 @@ export function retry(fn, attempts = 3, delay = 300) {
       .then(() => retry(fn, attempts - 1, delay));
   });
 }
+

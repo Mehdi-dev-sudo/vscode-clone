@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * MIME type lookup utility.
@@ -25,3 +27,4 @@ export function getMimeType(filename) {
   const ext = filename.slice(filename.lastIndexOf('.')).toLowerCase();
   return MIME_TYPES[ext] || 'application/octet-stream';
 }
+

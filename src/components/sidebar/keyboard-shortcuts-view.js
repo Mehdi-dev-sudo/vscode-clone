@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Keyboard Shortcuts viewer — displays all available keyboard shortcuts
@@ -131,3 +133,4 @@ export const KeyboardShortcutsView = {
   /** @param {HTMLElement} container */
   render(container) { render(container); },
 };
+

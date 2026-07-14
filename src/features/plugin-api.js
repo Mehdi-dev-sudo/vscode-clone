@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Plugin API — allows third-party plugins to extend the IDE.
@@ -105,17 +107,27 @@ export function executePluginCommand(id) {
   return false;
 }
 
-/** Get all registered panel plugins. */
+/**
+ * Get all registered panel plugins.
+ * @returns {Array<{id: string, label: string, renderFn: Function}>}
+ */
 export function getPanelPlugins() { return panelPlugins; }
 
-/** Get all registered sidebar plugins. */
+/**
+ * Get all registered sidebar plugins.
+ * @returns {Array<{id: string, icon: string, label: string, renderFn: Function}>}
+ */
 export function getSidebarPlugins() { return sidebarPlugins; }
 
-/** Get all registered status plugins. */
+/**
+ * Get all registered status plugins.
+ * @returns {Array<{id: string, renderFn: Function}>}
+ */
 export function getStatusPlugins() { return statusPlugins; }
 
 /**
  * Load all known plugins from the plugins/ directory.
+ * @returns {Promise<void>}
  */
 async function loadKnownPlugins() {
   const pluginPaths = [

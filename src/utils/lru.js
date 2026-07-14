@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Data structure: simple LRU cache.
@@ -30,3 +32,4 @@ export class LRUCache {
   clear() { this.cache.clear(); }
   get size() { return this.cache.size; }
 }
+

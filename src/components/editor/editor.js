@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Editor component — the main code editing area.

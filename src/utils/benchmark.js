@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Benchmark utility for measuring performance.
@@ -18,3 +20,4 @@ export async function measureAsync(label, fn) {
   console.log(`[Benchmark] ${label}: ${elapsed}ms`);
   return result;
 }
+

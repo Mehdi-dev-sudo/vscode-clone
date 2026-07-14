@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Recent files and command history tracking.
@@ -72,3 +74,4 @@ eventBus.on(EVENTS.TAB_OPENED, (file) => {
     addRecentFile(file);
   }
 });
+

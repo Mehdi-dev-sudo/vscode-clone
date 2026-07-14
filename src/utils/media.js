@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Media query utility helpers.
@@ -26,3 +28,4 @@ export function isDarkMode() {
 export function isReducedMotion() {
   return matchQuery('(prefers-reduced-motion: reduce)').matches;
 }
+

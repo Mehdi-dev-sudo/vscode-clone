@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * URL utility helpers.
@@ -19,3 +21,4 @@ export function removeQueryParam(name) {
   url.searchParams.delete(name);
   window.history.replaceState({}, '', url);
 }
+

@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Extensions view component — mock marketplace for installing extensions.
@@ -102,3 +104,4 @@ export const ExtensionsView = {
     });
   },
 };
+

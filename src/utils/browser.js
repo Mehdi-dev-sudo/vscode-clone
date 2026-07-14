@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Browser detection helpers.
@@ -23,3 +25,4 @@ export function prefersDark() {
 export function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
+

@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Storage utility — simplified wrapper around localStorage with size limit.
@@ -27,3 +29,4 @@ export function getKeys() {
   }
   return keys;
 }
+

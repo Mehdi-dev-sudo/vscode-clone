@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * File naming utilities — generates sequential untitled names
@@ -80,3 +82,4 @@ export function getLanguageFromFileName(name) {
 export function sanitizeFileName(name) {
   return name.replace(/[<>:"/\\|?*]/g, '_');
 }
+

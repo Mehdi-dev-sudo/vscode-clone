@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Environment detection helpers.
@@ -15,3 +17,4 @@ export function getPlatform() {
   if (isLinux) return 'linux';
   return 'unknown';
 }
+

@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * File type icon mapping — returns the correct icon for a file
@@ -55,3 +57,4 @@ export function getFileIcon(fileName) {
 export function getFolderIcon(open) {
   return open ? ICONS.folderOpen : ICONS.folder;
 }
+

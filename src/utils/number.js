@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Number utility helpers.
@@ -17,3 +19,4 @@ export function toOrdinal(n) {
   const v = n % 100;
   return n + (s[(v - 20) % 10] || s[v] || s[0]);
 }
+

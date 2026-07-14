@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Search view component — full-text search across workspace files.
@@ -12,7 +14,7 @@ import { EVENTS, DEBOUNCE_DELAY } from '../../core/constants.js';
 /** @type {HTMLElement|null} */
 let resultsEl = null;
 
-/** @type {{ matchCase: boolean, wholeWord: boolean, useRegex: boolean }} */
+/** @type {{ [key: string]: boolean }} */
 let searchOptions = { matchCase: false, wholeWord: false, useRegex: false };
 
 /** Mock file data for search. */
@@ -27,7 +29,7 @@ const MOCK_FILES = [
 /**
  * Perform a search across mock files.
  * @param {string} query
- * @returns {Array}
+ * @returns {SearchResult[]}
  */
 function performSearch(query) {
   if (!query.trim()) return [];
@@ -66,7 +68,8 @@ function performSearch(query) {
 
 /**
  * Render search results.
- * @param {Array} results
+ * @param {SearchResult[]} results
+ * @returns {void}
  */
 function renderResults(results) {
   if (!resultsEl) return;
@@ -106,6 +109,11 @@ function renderResults(results) {
   });
 }
 
+/**
+ * Escape HTML special characters.
+ * @param {string} str
+ * @returns {string}
+ */
 function escapeHtml(str) {
   const div = document.createElement('div');
   div.appendChild(document.createTextNode(str));
@@ -117,7 +125,22 @@ function escapeHtml(str) {
  * @namespace
  */
 export const SearchView = {
-  /**
+/**
+ * @typedef {Object} SearchResult
+ * @property {string} file
+ * @property {number} line
+ * @property {string} text
+ * @property {number} matchStart
+ * @property {number} matchEnd
+ */
+
+/**
+ * @typedef {Object} MockFile
+ * @property {string} path
+ * @property {string} content
+ */
+
+/**
    * Render the Search view.
    * @param {HTMLElement} container
    */

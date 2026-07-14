@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * First-time user tour — guides new visitors through the app's features.
@@ -67,6 +69,7 @@ let isActive = false;
 
 /**
  * Create the tour overlay and tooltip elements.
+ * @returns {void}
  */
 function createDOM() {
   overlayEl = createElement('div', {
@@ -99,6 +102,7 @@ function createDOM() {
 
 /**
  * Show the current tour step.
+ * @returns {void}
  */
 function showStep() {
   if (!tooltipEl || !overlayEl) return;
@@ -187,6 +191,7 @@ function showStep() {
 
 /**
  * End the tour.
+ * @returns {void}
  */
 function endTour() {
   isActive = false;
@@ -197,6 +202,7 @@ function endTour() {
 
 /**
  * Start the tour.
+ * @returns {void}
  */
 function startTour() {
   if (isActive) return;
@@ -206,8 +212,12 @@ function startTour() {
   showStep();
 }
 
+/** @namespace */
 export const Tour = {
-  /** Check if this is the first visit and show tour if needed. */
+  /**
+   * Check if this is the first visit and show tour if needed.
+   * @returns {void}
+   */
   init() {
     const shown = getItem(TOUR_KEY, false);
     if (!shown) {
@@ -215,7 +225,9 @@ export const Tour = {
       setTimeout(startTour, 800);
     }
   },
-
-  /** Manually start the tour. */
+  /**
+   * Manually start the tour.
+   * @returns {void}
+   */
   start() { startTour(); },
 };

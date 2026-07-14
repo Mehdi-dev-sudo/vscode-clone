@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Layout Presets — switch between predefined IDE layouts.
@@ -49,6 +51,18 @@ const PRESETS = {
   },
 };
 
+/**
+ * @typedef {Object} LayoutPreset
+ * @property {string} sidebarWidth
+ * @property {string} panelHeight
+ * @property {boolean} sidebarVisible
+ * @property {boolean} panelVisible
+ */
+
+/**
+ * @param {string} name
+ * @returns {void}
+ */
 function applyPreset(name) {
   const preset = PRESETS[name];
   if (!preset) return;
@@ -84,6 +98,9 @@ const LAYOUT_COMMANDS = {
   'layout-minimal': 'Minimal',
 };
 
+/**
+ * @returns {void}
+ */
 function showDialog() {
   document.querySelector('.layout-presets')?.remove();
 
@@ -151,10 +168,14 @@ function showDialog() {
   document.body.appendChild(overlay);
 }
 
+/**
+ * @returns {void}
+ */
 function close() {
   document.querySelector('.layout-presets')?.remove();
 }
 
+/** @namespace */
 export const LayoutPresets = {
   init() {
     eventBus.on(EVENTS.COMMAND_EXECUTED, (cmd) => {

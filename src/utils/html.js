@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * HTML utility helpers.
@@ -19,3 +21,4 @@ export function createDocumentFragment(strings, ...values) {
   template.innerHTML = html;
   return template.content;
 }
+

@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Global keyboard shortcut handler.
@@ -21,7 +23,7 @@ import { KEYBOARD_SHORTCUTS, EVENTS } from './constants.js';
 /** @type {Map<string, ShortcutBinding>} */
 const bindings = new Map();
 
-/** Registered shortcuts. */
+/** @type {Array<ShortcutBinding>} */
 const shortcuts = [
   { keys: 'Ctrl+Shift+P', event: EVENTS.COMMAND_EXECUTED, payload: 'command-palette', description: 'Show Command Palette' },
   { keys: 'Ctrl+P',        event: EVENTS.COMMAND_EXECUTED, payload: 'quick-open',      description: 'Quick Open' },
@@ -93,10 +95,14 @@ function matches(e, binding) {
   );
 }
 
-/** Handle keydown events. */
+/**
+ * Handle keydown events.
+ * @param {KeyboardEvent} e
+ */
 function onKeyDown(e) {
   // Don't intercept when typing in inputs
-  if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
+  const target = /** @type {HTMLElement} */ (e.target);
+  if (['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) return;
 
   for (const shortcut of shortcuts) {
     const parsed = parseKeys(shortcut.keys);
@@ -118,7 +124,7 @@ function onKeyDown(e) {
  * @namespace
  */
 export const KeyboardShortcuts = {
-  /** Initialize global keyboard listener. */
+  /** Initialize global keyboard listener. @returns {void} */
   init() {
     document.addEventListener('keydown', onKeyDown);
   },

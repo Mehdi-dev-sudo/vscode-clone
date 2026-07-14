@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Debounced resize observer utility.
@@ -18,3 +20,4 @@ export function onMutation(el, callback, options = { childList: true, subtree: t
   observer.observe(el, options);
   return () => observer.disconnect();
 }
+

@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Application configuration — merges default settings with persisted user settings.
@@ -10,9 +12,27 @@ import { eventBus } from '../events/event-bus.js';
 import { EVENTS } from './constants.js';
 
 /**
- * Default configuration values.
- * @type {Object}
+ * @typedef {Object} ConfigOptions
+ * @property {number} fontSize
+ * @property {number} tabSize
+ * @property {boolean} wordWrap
+ * @property {boolean} lineNumbers
+ * @property {boolean} minimap
+ * @property {boolean} smoothScrolling
+ * @property {string} cursorBlinking
+ * @property {boolean} autoSave
+ * @property {boolean} formatOnSave
+ * @property {boolean} bracketPairColorization
+ * @property {string} sidebarPosition
+ * @property {string} activityBarPosition
+ * @property {boolean} terminalClearOnNewCommand
+ * @property {boolean} confirmDelete
+ * @property {boolean} autoRevealExplorer
+ * @property {string} tabCloseButton
+ * @property {string} animationSpeed
  */
+
+/** @readonly @type {ConfigOptions} */
 const DEFAULTS = {
   fontSize: 14,
   tabSize: 4,
@@ -33,7 +53,7 @@ const DEFAULTS = {
   animationSpeed: 'normal',
 };
 
-/** Cached config state. */
+/** @type {{[key: string]: *}} */
 let config = {};
 
 /**
@@ -66,13 +86,14 @@ export const Config = {
    */
   get(key, fallback) {
     if (Object.keys(config).length === 0) load();
-    return key in config ? config[key] : (fallback ?? DEFAULTS[key]);
+    return key in config ? config[key] : (fallback ?? /** @type {{[key: string]: *}} */ (DEFAULTS)[key]);
   },
 
   /**
    * Set a config value.
    * @param {string} key
    * @param {*} value
+   * @returns {void}
    */
   set(key, value) {
     load();
@@ -90,7 +111,7 @@ export const Config = {
     return { ...config };
   },
 
-  /** Reset config to defaults. */
+  /** Reset config to defaults. @returns {void} */
   reset() {
     config = { ...DEFAULTS };
     save();

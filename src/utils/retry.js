@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Retry utility — retry async operations with exponential backoff.
@@ -25,3 +27,4 @@ export async function retryWithDelay(fn, attempts = 3, delay = 500) {
     }
   }
 }
+

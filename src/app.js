@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Main application entry point.
@@ -35,6 +37,7 @@ import { SettingsEditor } from './features/settings-editor.js';
 /**
  * Bootstrap the application.
  * Order matters: layout and theme before components that depend on them.
+ * @returns {void}
  */
 function boot() {
   // Restore persisted theme before anything renders

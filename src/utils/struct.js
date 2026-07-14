@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Stack data structure.
@@ -26,3 +28,4 @@ export class Queue {
   get size() { return this.items.length; }
   clear() { this.items = []; }
 }
+

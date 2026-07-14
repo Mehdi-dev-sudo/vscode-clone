@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Command Palette component (Ctrl+Shift+P) and Quick Open (Ctrl+P).
@@ -75,7 +77,7 @@ let isQuickOpenOpen = false;
 /**
  * Filter commands based on query.
  * @param {string} query
- * @returns {Array}
+ * @returns {Array<{id: string, label: string, icon?: string, shortcut?: string, action?: Function|null}>}
  */
 function filterCommands(query) {
   if (!query.trim()) return COMMANDS;
@@ -185,7 +187,7 @@ function executeCommand(id) {
 
 /**
  * Render command results.
- * @param {Array} items
+ * @param {Array<{id: string, label: string, icon?: string, shortcut?: string}>} items
  * @returns {void}
  */
 function renderResults(items) {
@@ -256,7 +258,7 @@ function showQuickOpen() {
 
 /**
  * Render quick open results.
- * @param {Array} files
+ * @param {Array<{name: string}>} files
  * @returns {void}
  */
 function renderQuickOpenResults(files) {

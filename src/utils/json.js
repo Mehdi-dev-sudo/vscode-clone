@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * JSON utility helpers.
@@ -27,3 +29,4 @@ export function isJson(str) {
     return false;
   }
 }
+

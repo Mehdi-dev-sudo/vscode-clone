@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Path utility helpers for file system operations.
@@ -26,3 +28,4 @@ export function join(...parts) {
 export function normalize(path) {
   return path.replace(/\/+/g, '/').replace(/\/$/, '') || '/';
 }
+

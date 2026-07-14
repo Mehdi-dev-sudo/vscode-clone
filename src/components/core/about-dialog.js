@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * About Dialog — displays application info, version, author, and credits.
@@ -13,6 +15,7 @@ let dialogEl = null;
 
 /**
  * Create and show the about dialog.
+ * @returns {void}
  */
 function show() {
   // Remove existing dialog if any
@@ -101,6 +104,9 @@ function show() {
   document.addEventListener('keydown', onKeyDown);
 }
 
+/**
+ * @returns {void}
+ */
 function hide() {
   document.querySelector('.about-dialog')?.remove();
 }

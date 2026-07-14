@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Explorer component — the file tree view in the sidebar.

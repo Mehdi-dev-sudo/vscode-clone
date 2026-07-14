@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Animation utilities for smooth transitions and effects.
@@ -76,3 +78,4 @@ export function fadeOut(el, duration = 150) {
     }, duration);
   });
 }
+

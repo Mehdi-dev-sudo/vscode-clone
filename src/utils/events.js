@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Event utility helpers.
@@ -20,3 +22,4 @@ export function once(el, event, handler) {
   const wrapper = (e) => { handler(e); el.removeEventListener(event, wrapper); };
   el.addEventListener(event, wrapper);
 }
+

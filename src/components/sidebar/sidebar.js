@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Sidebar component — manages the left panel that shows different views
@@ -67,6 +69,7 @@ function showView(viewId) {
 
 /**
  * Render the Search view.
+ * @returns {void}
  */
 function renderSearchView() {
   import('../sidebar/search-view.js').then((m) => m.SearchView.render(contentEl));
@@ -74,6 +77,7 @@ function renderSearchView() {
 
 /**
  * Render the Source Control view.
+ * @returns {void}
  */
 function renderSourceControlView() {
   import('../sidebar/source-control-view.js').then((m) => m.SourceControlView.render(contentEl));
@@ -81,6 +85,7 @@ function renderSourceControlView() {
 
 /**
  * Render the Run & Debug view.
+ * @returns {void}
  */
 function renderRunDebugView() {
   import('../sidebar/run-debug-view.js').then((m) => m.RunDebugView.render(contentEl));
@@ -88,6 +93,7 @@ function renderRunDebugView() {
 
 /**
  * Render the Extensions view.
+ * @returns {void}
  */
 function renderExtensionsView() {
   import('../sidebar/extensions-view.js').then((m) => m.ExtensionsView.render(contentEl));
@@ -95,6 +101,7 @@ function renderExtensionsView() {
 
 /**
  * Render the Settings view.
+ * @returns {void}
  */
 function renderSettingsView() {
   import('../sidebar/settings-view.js').then((m) => m.SettingsView.render(contentEl));
@@ -102,6 +109,7 @@ function renderSettingsView() {
 
 /**
  * Render the Keyboard Shortcuts view.
+ * @returns {void}
  */
 function renderKeyboardShortcutsView() {
   import('../sidebar/keyboard-shortcuts-view.js').then((m) => m.KeyboardShortcutsView.render(contentEl));
@@ -109,6 +117,7 @@ function renderKeyboardShortcutsView() {
 
 /**
  * Render the Git History view.
+ * @returns {void}
  */
 function renderGitHistoryView() {
   import('../sidebar/git-view.js').then((m) => m.GitView.render(contentEl));
@@ -116,6 +125,7 @@ function renderGitHistoryView() {
 
 /**
  * Toggle sidebar visibility.
+ * @returns {void}
  */
 function toggle() {
   const sidebar = document.getElementById('sidebar');
@@ -126,6 +136,9 @@ function toggle() {
 
 /**
  * Sidebar component module.
+ * @namespace
+ */
+/**
  * @namespace
  */
 export const Sidebar = {

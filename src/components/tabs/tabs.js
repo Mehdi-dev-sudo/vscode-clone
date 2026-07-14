@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Tabs component — manages open editor tabs.

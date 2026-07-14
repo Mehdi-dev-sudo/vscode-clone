@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Error handling utilities — centralized error reporting and user-friendly
@@ -60,3 +62,4 @@ export async function trySafe(fn, errorCode = 'unknown') {
     return null;
   }
 }
+

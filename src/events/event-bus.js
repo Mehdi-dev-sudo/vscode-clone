@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Publish/subscribe event bus for decoupled component communication.
@@ -25,7 +27,7 @@ class EventBus {
     if (!this.#listeners.has(event)) {
       this.#listeners.set(event, new Set());
     }
-    this.#listeners.get(event).add(listener);
+    /** @type {Set<Listener>} */ (this.#listeners.get(event)).add(listener);
     return () => this.off(event, listener);
   }
 
@@ -36,6 +38,7 @@ class EventBus {
    * @returns {Function} Unsubscribe function.
    */
   once(event, listener) {
+    /** @type {(...args: *[]) => void} */
     const wrapper = (...args) => {
       listener(...args);
       this.off(event, wrapper);
@@ -47,6 +50,7 @@ class EventBus {
    * Unsubscribe a listener from an event.
    * @param {string} event
    * @param {Listener} listener
+   * @returns {void}
    */
   off(event, listener) {
     this.#listeners.get(event)?.delete(listener);
@@ -54,8 +58,9 @@ class EventBus {
 
   /**
    * Emit an event, invoking all registered listeners.
+   * @template T
    * @param {string} event
-   * @param {...*} args - Arguments passed to each listener.
+   * @param {...T} args - Arguments passed to each listener.
    */
   emit(event, ...args) {
     this.#listeners.get(event)?.forEach((listener) => {

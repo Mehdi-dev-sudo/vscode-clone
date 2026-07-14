@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Notification Center — stores a history of all notifications
@@ -69,3 +71,4 @@ export function removeFromHistory(id) {
   history = history.filter((n) => n.id !== id);
   save();
 }
+

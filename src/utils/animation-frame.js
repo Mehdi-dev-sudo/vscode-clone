@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Animation frame utility — rAF wrapper with fallback.
@@ -26,3 +28,4 @@ export function whileRaf(conditionFn, actionFn) {
   }
   raf(loop);
 }
+

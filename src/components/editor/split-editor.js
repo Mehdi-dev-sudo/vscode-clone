@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Split Editor component — enables side-by-side editing.
@@ -9,7 +11,24 @@ import { EVENTS } from '../../core/constants.js';
 import { createElement, empty, $ } from '../../utils/dom.js';
 import { ICONS } from '../../assets/icons/codicons.js';
 
-/** @type {Array<{id: string, fileName: string, content: string}>} */
+/**
+ * @typedef {Object} SplitData
+ * @property {string} id
+ * @property {string} fileName
+ * @property {string} content
+ */
+
+/**
+ * @typedef {Object} ResizeState
+ * @property {boolean} isDragging
+ * @property {number} dividerIndex
+ * @property {number} startX
+ * @property {number[]} startWidths
+ * @property {HTMLElement} container
+ * @property {HTMLElement} divider
+ */
+
+/** @type {SplitData[]} */
 let splits = [];
 
 /** @type {number} */
@@ -18,7 +37,7 @@ let activeSplitIndex = 0;
 /** @type {HTMLElement|null} */
 let editorContentEl = null;
 
-/** @type {{ isDragging: boolean, dividerIndex: number, startX: number, startWidths: number[] }|null} */
+/** @type {ResizeState|null} */
 let resizeState = null;
 
 /**
@@ -50,6 +69,7 @@ function createDivider(index) {
 /**
  * Handle mouse move for divider resize.
  * @param {MouseEvent} e
+ * @returns {void}
  */
 function onDividerMouseMove(e) {
   if (!resizeState || !resizeState.isDragging) return;
@@ -69,6 +89,7 @@ function onDividerMouseMove(e) {
 /**
  * Remove all splits except the one at the given index.
  * @param {number} keepIndex
+ * @returns {void}
  */
 function closeOtherSplits(keepIndex) {
   splits = [splits[keepIndex]];
@@ -79,6 +100,7 @@ function closeOtherSplits(keepIndex) {
 /**
  * Add a new split to the right of the current one.
  * @param {number} index
+ * @returns {void}
  */
 function splitRight(index) {
   const current = splits[index];
@@ -88,6 +110,7 @@ function splitRight(index) {
 /**
  * Add a new split to the left by inserting before the current one.
  * @param {number} index
+ * @returns {void}
  */
 function splitLeft(index) {
   const newSplit = { id: `split-${Date.now()}`, fileName: 'untitled', content: '' };
@@ -98,6 +121,7 @@ function splitLeft(index) {
 
 /**
  * Handle mouse up to finalize divider resize.
+ * @returns {void}
  */
 function onDividerMouseUp() {
   if (!resizeState) return;
@@ -202,6 +226,7 @@ function removeSplit(index) {
 
 /**
  * Render all split panes.
+ * @returns {void}
  */
 function renderSplits() {
   if (!editorContentEl) return;

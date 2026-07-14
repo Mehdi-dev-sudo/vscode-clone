@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Object utility helpers.
@@ -23,3 +25,4 @@ export function deepClone(obj) {
 export function merge(target, ...sources) {
   return Object.assign(target, ...sources);
 }
+

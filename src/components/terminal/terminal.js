@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Terminal component — a working terminal emulator embedded in the panel.
@@ -13,13 +15,22 @@ import { ICONS } from '../../assets/icons/codicons.js';
  * @typedef {Object} TerminalTab
  * @property {string} id
  * @property {string} name
- * @property {Array<string>} history
+ * @property {string[]} history
  * @property {string} currentInput
- * @property {Array<string>} [commandHistory]
+ * @property {string[]} [commandHistory]
  * @property {number} [historyIndex]
  */
 
-/** @type {Array<TerminalTab>} */
+/**
+ * @typedef {Object} VFSEntry
+ * @property {'dir'|'file'} type
+ * @property {string[]} [children]
+ * @property {string} [content]
+ */
+
+/**
+ * @type {TerminalTab[]}
+ */
 let terminals = [];
 
 /** Current terminal tab ID. */
@@ -81,8 +92,10 @@ const FS = {
   '/': '/',
 };
 
-/** Virtual file system. */
-const VFS = {
+/**
+ * Virtual file system.
+ * @type {Object<string, VFSEntry>}
+ */
   '/': { type: 'dir', children: ['home', 'usr', 'etc', 'var', 'tmp'] },
   '/home': { type: 'dir', children: ['user'] },
   '/home/user': { type: 'dir', children: ['src', 'index.html', 'README.md', '.gitignore', 'package.json', 'node_modules'] },
@@ -119,6 +132,7 @@ function getPathDisplay(dir) {
 
 /**
  * Commands that the terminal can process.
+ * @type {Object<string, Function>}
  */
 const INTERNAL_COMMANDS = {
   help() {
@@ -256,6 +270,7 @@ function processCommand(input) {
 
 /**
  * Render the terminal display.
+ * @returns {void}
  */
 function renderTerminal() {
   if (!panelBodyEl) return;
@@ -405,6 +420,7 @@ function renderTerminalSubTabs() {
  * Execute a command in a terminal.
  * @param {string} cmd
  * @param {TerminalTab} terminal
+ * @returns {void}
  */
 function executeCommand(cmd, terminal) {
   if (!cmd.trim()) return;
@@ -428,6 +444,7 @@ function executeCommand(cmd, terminal) {
 
 /**
  * Create a new terminal tab.
+ * @returns {void}
  */
 function addTerminal() {
   const id = `terminal-${Date.now()}`;
@@ -445,6 +462,7 @@ function addTerminal() {
 /**
  * Remove a terminal tab.
  * @param {string} id
+ * @returns {void}
  */
 function removeTerminal(id) {
   const idx = terminals.findIndex((t) => t.id === id);

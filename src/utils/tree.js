@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Tree data structure helpers.
@@ -28,3 +30,4 @@ export function mapTree(tree, fn, childrenKey = 'children') {
   }
   return node;
 }
+

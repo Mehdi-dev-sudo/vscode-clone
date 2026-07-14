@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Context menu actions for editor tabs: close, close others, close all,

@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Random utility helpers.
@@ -19,3 +21,4 @@ export function randomString(length = 8) {
 export function randomBoolean() {
   return Math.random() > 0.5;
 }
+

@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Drag & Drop utility helpers.
@@ -35,3 +37,4 @@ export function makeDraggable(el, onDragStart, onDrag, onDragEnd) {
     document.removeEventListener('mouseup', onMouseUp);
   };
 }
+

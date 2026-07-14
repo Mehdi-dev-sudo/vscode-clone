@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Git History view — displays commit history, branches, and changes.
@@ -120,3 +122,4 @@ export const GitView = {
   /** @param {HTMLElement} container */
   render(container) { render(container); },
 };
+

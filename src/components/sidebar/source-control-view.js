@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Source Control view component — Git integration mock.
@@ -63,3 +65,4 @@ export const SourceControlView = {
     container.appendChild(emptyState);
   },
 };
+

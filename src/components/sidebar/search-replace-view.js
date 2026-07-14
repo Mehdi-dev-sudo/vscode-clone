@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Search & Replace view — extends the search view with replace functionality.
@@ -247,3 +249,4 @@ function renderResults(container, results) {
     resultsEl.appendChild(item);
   });
 }
+

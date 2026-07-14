@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * MultiCursor component — visual multi-cursor support for the editor.

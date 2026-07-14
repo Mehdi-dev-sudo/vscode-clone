@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Settings Editor view — JSON-inspired settings UI.
@@ -171,3 +173,4 @@ export const SettingsView = {
     render(container);
   },
 };
+

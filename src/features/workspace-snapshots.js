@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Workspace Snapshots — save and restore the entire workspace state:
@@ -15,8 +17,22 @@ import { getItem, setItem } from '../storage/local-storage.js';
 const SNAPSHOTS_KEY = 'vscode-clone:snapshots';
 
 /**
+ * @typedef {Object} WorkspaceState
+ * @property {number} timestamp
+ * @property {string} sidebarWidth
+ * @property {string} panelHeight
+ * @property {boolean} sidebarVisible
+ * @property {boolean} panelVisible
+ * @property {string} activeView
+ * @property {string} theme
+ * @property {Array} openTabs
+ * @property {Object|null} explorerState
+ * @property {string} url
+ */
+
+/**
  * Capture the current workspace state.
- * @returns {Object}
+ * @returns {WorkspaceState}
  */
 function captureState() {
   const sidebar = document.getElementById('sidebar');
@@ -41,7 +57,8 @@ function captureState() {
 
 /**
  * Restore a saved state.
- * @param {Object} state
+ * @param {WorkspaceState} state
+ * @returns {void}
  */
 function restoreState(state) {
   if (!state) return;
@@ -80,6 +97,7 @@ function restoreState(state) {
 
 /**
  * Show the snapshots dialog.
+ * @returns {void}
  */
 function showDialog() {
   document.querySelector('.snapshot-dialog')?.remove();
@@ -187,6 +205,9 @@ function showDialog() {
   document.body.appendChild(overlay);
 }
 
+/**
+ * @returns {void}
+ */
 function saveSnapshot() {
   const input = document.getElementById('snapshot-name');
   const name = input?.value?.trim();
@@ -203,16 +224,26 @@ function saveSnapshot() {
   showDialog();
 }
 
+/**
+ * @param {string} name
+ * @returns {void}
+ */
 function deleteSnapshot(name) {
   const snapshots = getItem(SNAPSHOTS_KEY, {});
   delete snapshots[name];
   setItem(SNAPSHOTS_KEY, snapshots);
 }
 
+/**
+ * @returns {void}
+ */
 function close() {
   document.querySelector('.snapshot-dialog')?.remove();
 }
 
+/**
+ * @namespace
+ */
 export const WorkspaceSnapshots = {
   init() {
     eventBus.on(EVENTS.COMMAND_EXECUTED, (cmd) => {

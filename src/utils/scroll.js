@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Scroll utility helpers.
@@ -29,3 +31,4 @@ export function smoothScrollTo(el, target, duration = 300) {
   }
   requestAnimationFrame(step);
 }
+

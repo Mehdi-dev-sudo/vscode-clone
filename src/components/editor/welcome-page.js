@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Enhanced Welcome Page — shows recent files, quick actions,

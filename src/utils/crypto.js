@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Crypto utility — simple hash and ID generation.
@@ -23,3 +25,4 @@ export function simpleHash(str) {
   }
   return Math.abs(hash).toString(36);
 }
+

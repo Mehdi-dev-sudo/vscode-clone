@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Theme Creator — lets users edit theme colors in real-time and
@@ -42,6 +44,7 @@ let currentThemeName = null;
 /**
  * Load a custom theme's colors.
  * @param {string} name
+ * @returns {Object<string, string>}
  */
 function loadTheme(name) {
   const themes = getItem(CUSTOM_THEMES_KEY, {});
@@ -51,7 +54,8 @@ function loadTheme(name) {
 /**
  * Save a custom theme.
  * @param {string} name
- * @param {Object} colors
+ * @param {Object<string, string>} colors
+ * @returns {void}
  */
 function saveTheme(name, colors) {
   const themes = getItem(CUSTOM_THEMES_KEY, {});
@@ -69,7 +73,8 @@ function getThemeNames() {
 
 /**
  * Apply colors to the document root.
- * @param {Object} colors
+ * @param {Object<string, string>} colors
+ * @returns {void}
  */
 function applyColors(colors) {
   const root = document.documentElement;
@@ -80,6 +85,7 @@ function applyColors(colors) {
 
 /**
  * Reset custom colors.
+ * @returns {void}
  */
 function resetColors() {
   const root = document.documentElement;
@@ -88,6 +94,7 @@ function resetColors() {
 
 /**
  * Render the theme creator dialog.
+ * @returns {void}
  */
 function render() {
   // Remove existing dialog
@@ -237,6 +244,9 @@ function render() {
   document.body.appendChild(overlay);
 }
 
+/**
+ * @returns {void}
+ */
 function saveCurrentTheme() {
   if (!currentThemeName) {
     currentThemeName = 'Custom-' + Date.now().toString(36);
@@ -247,6 +257,9 @@ function saveCurrentTheme() {
   Notifications.info(`Theme "${currentThemeName}" saved`);
 }
 
+/**
+ * @returns {void}
+ */
 function exportThemeJSON() {
   const name = currentThemeName || 'custom-theme';
   const colors = { ...currentColors };
@@ -267,6 +280,9 @@ function exportThemeJSON() {
   Notifications.info(`Theme "${name}" exported`);
 }
 
+/**
+ * @returns {void}
+ */
 function importThemeJSON() {
   const input = document.createElement('input');
   input.type = 'file';
@@ -304,6 +320,9 @@ function importThemeJSON() {
   input.click();
 }
 
+/**
+ * @returns {void}
+ */
 function close() {
   document.querySelector('.theme-creator')?.remove();
 }

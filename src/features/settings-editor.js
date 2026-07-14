@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Settings Editor — persists and applies user settings from a JSON file.
@@ -51,16 +53,43 @@ const SETTING_FIELDS = [
 
 let currentSettings = { ...DEFAULT_SETTINGS };
 
+/**
+ * @typedef {Object} SettingField
+ * @property {string} key
+ * @property {string} label
+ * @property {'boolean'|'range'|'select'} type
+ * @property {number} [min]
+ * @property {number} [max]
+ * @property {number} [step]
+ * @property {Array<string|number>} [options]
+ */
+
+/**
+ * @typedef {Object} SettingChange
+ * @property {string} key
+ * @property {string|number|boolean} value
+ */
+
+/**
+ * @returns {Object<string, string|number|boolean>}
+ */
 function load() {
   const saved = getItem(SETTINGS_KEY, {});
   currentSettings = { ...DEFAULT_SETTINGS, ...saved };
   return currentSettings;
 }
 
+/**
+ * @returns {void}
+ */
 function save() {
   setItem(SETTINGS_KEY, currentSettings);
 }
 
+/**
+ * @param {SettingChange} setting
+ * @returns {void}
+ */
 function apply(setting) {
   const root = document.documentElement;
   if (setting.key === 'fontSize') {
@@ -85,17 +114,28 @@ function apply(setting) {
   }
 }
 
+/**
+ * @returns {void}
+ */
 function applyAll() {
   Object.entries(currentSettings).forEach(([key, value]) => {
     apply({ key, value });
   });
 }
 
+/**
+ * @param {string} key
+ * @returns {string}
+ */
 function renderLabel(key) {
   const field = SETTING_FIELDS.find((f) => f.key === key);
   return field ? field.label : key;
 }
 
+/**
+ * @param {string} key
+ * @returns {HTMLElement|null}
+ */
 function renderSettingRow(key) {
   const field = SETTING_FIELDS.find((f) => f.key === key);
   if (!field) return null;
@@ -172,6 +212,9 @@ function renderSettingRow(key) {
   return row;
 }
 
+/**
+ * @returns {void}
+ */
 function showDialog() {
   document.querySelector('.settings-editor')?.remove();
 
@@ -234,11 +277,21 @@ function showDialog() {
   document.body.appendChild(overlay);
 }
 
+/**
+ * @returns {void}
+ */
 function close() {
   document.querySelector('.settings-editor')?.remove();
 }
 
+/**
+ * @namespace
+ */
 export const SettingsEditor = {
+  /**
+   * Initialize the settings editor.
+   * @returns {void}
+   */
   init() {
     load();
     applyAll();
@@ -251,10 +304,21 @@ export const SettingsEditor = {
     });
   },
 
+  /**
+   * Get a setting value by key.
+   * @param {string} key
+   * @returns {string|number|boolean}
+   */
   get(key) {
     return currentSettings[key];
   },
 
+  /**
+   * Set a setting value.
+   * @param {string} key
+   * @param {string|number|boolean} value
+   * @returns {void}
+   */
   set(key, value) {
     currentSettings[key] = value;
     apply({ key, value });

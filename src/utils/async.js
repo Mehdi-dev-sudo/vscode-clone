@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Async iterable utility helpers.
@@ -23,3 +25,4 @@ export async function series(arr, fn) {
   }
   return results;
 }
+

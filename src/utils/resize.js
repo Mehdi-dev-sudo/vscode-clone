@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Throttle-able resize handler utility.
@@ -28,3 +30,4 @@ export function offWindowResize(id) {
     handlers.delete(id);
   }
 }
+

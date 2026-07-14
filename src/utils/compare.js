@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Comparison utility helpers.
@@ -21,3 +23,4 @@ export function shallowEquals(a, b) {
   if (keysA.length !== keysB.length) return false;
   return keysA.every((key) => a[key] === b[key]);
 }
+

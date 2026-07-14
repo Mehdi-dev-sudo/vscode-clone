@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Clipboard utility helpers.
@@ -27,3 +29,4 @@ export async function readFromClipboard() {
     return null;
   }
 }
+

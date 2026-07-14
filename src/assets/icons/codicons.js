@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * VS Code Codicon SVG definitions.

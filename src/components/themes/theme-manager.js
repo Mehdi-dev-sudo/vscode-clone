@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Theme Manager — handles theme switching, persistence, and application.

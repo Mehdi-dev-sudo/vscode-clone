@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Unit conversion utility helpers.
@@ -26,3 +28,4 @@ export function bytesToSize(bytes) {
   while (size >= 1024 && i < units.length - 1) { size /= 1024; i++; }
   return `${size.toFixed(1)} ${units[i]}`;
 }
+

@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Notification system — toast-style notifications.
@@ -24,6 +26,7 @@ const MAX_VISIBLE = 5;
 /**
  * Remove a notification by ID.
  * @param {string} id
+ * @returns {void}
  */
 function remove(id) {
   const el = activeNotifications.get(id);
@@ -43,6 +46,7 @@ function remove(id) {
  * @param {string} title
  * @param {string} [message]
  * @param {number} [duration] - Auto-dismiss in ms. 0 means persist.
+ * @returns {string} Notification ID.
  */
 function show(type = 'info', title, message = '', duration = NOTIFICATION_DURATION) {
   if (!containerEl) return;

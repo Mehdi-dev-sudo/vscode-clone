@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Idle callback utility — runs function when browser is idle.
@@ -17,3 +19,4 @@ export function cancelIdle(id) {
     clearTimeout(id);
   }
 }
+

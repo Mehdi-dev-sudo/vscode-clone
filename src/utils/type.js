@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Type checking utility helpers.
@@ -16,3 +18,4 @@ export function isEmpty(val) {
   if (isObject(val)) return Object.keys(val).length === 0;
   return false;
 }
+

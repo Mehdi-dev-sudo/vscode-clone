@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Activity Bar component — the vertical icon bar on the left.

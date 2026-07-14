@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @fileoverview
  * Data URI utility for generating inline assets.
@@ -14,3 +16,4 @@ export function svgToDataUri(svgString) {
 export function cssToDataUri(css, mime = 'text/css') {
   return `data:${mime},${encodeURIComponent(css)}`;
 }
+

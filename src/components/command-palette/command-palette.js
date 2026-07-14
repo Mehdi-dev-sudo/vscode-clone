@@ -6,7 +6,7 @@
  */
 
 import { eventBus } from '../../events/event-bus.js';
-import { EVENTS } from '../../core/constants.js';
+import { EVENTS, VIEWS } from '../../core/constants.js';
 import { createElement, empty, $, debounce } from '../../utils/dom.js';
 import { ICONS } from '../../assets/icons/codicons.js';
 
@@ -116,7 +116,7 @@ function executeCommand(id) {
       eventBus.emit(EVENTS.VIEW_CHANGED, 'source-control');
       break;
     case 'view-debug':
-      eventBus.emit(EVENTS.VIEW_CHANGED, 'debug');
+      eventBus.emit(EVENTS.VIEW_CHANGED, VIEWS.RUN_DEBUG);
       break;
     case 'view-extensions':
       eventBus.emit(EVENTS.VIEW_CHANGED, 'extensions');

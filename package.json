@@ -1,0 +1,10 @@
+{
+  "name": "vscode-clone",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Portfolio-quality VS Code clone built with vanilla HTML, CSS, and JavaScript (ES Modules). Zero dependencies.",
+  "scripts": {
+    "dev": "npx serve . -p 5500 --no-open",
+    "dev:full": "npx serve . -p 5500"
+  }
+}

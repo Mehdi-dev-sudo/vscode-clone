@@ -96,6 +96,7 @@ const FS = {
  * Virtual file system.
  * @type {Object<string, VFSEntry>}
  */
+const VFS = {
   '/': { type: 'dir', children: ['home', 'usr', 'etc', 'var', 'tmp'] },
   '/home': { type: 'dir', children: ['user'] },
   '/home/user': { type: 'dir', children: ['src', 'index.html', 'README.md', '.gitignore', 'package.json', 'node_modules'] },

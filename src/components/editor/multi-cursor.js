@@ -33,17 +33,18 @@ export function initMultiCursor(editorElement) {
   editorEl.appendChild(cursorContainer);
 
   // Alt+Click to add cursor at mouse position
-  editorEl.addEventListener('mousedown', (e) => {
+  editorEl.addEventListener('mousedown', (/** @type {MouseEvent} */ e) => {
     if (!e.altKey) return;
     e.preventDefault();
-    const lineEl = e.target.closest('[data-line]');
+    const lineEl = /** @type {HTMLElement} */ (e.target).closest('[data-line]');
     if (!lineEl) return;
-    const line = parseInt(lineEl.dataset.line, 10);
-    const textBefore = getTextBeforeOffset(lineEl, e.target, e.offsetX);
+    const lineElHTM = /** @type {HTMLElement} */ (lineEl);
+    const line = parseInt(lineElHTM.dataset.line || '0', 10);
+    const textBefore = getTextBeforeOffset(lineElHTM, /** @type {Node} */ (e.target), /** @type {MouseEvent} */ (e).offsetX);
     addCursorAt(line, textBefore.length);
   });
 
-  eventBus.on(EVENTS.COMMAND_EXECUTED, (payload) => {
+  eventBus.on(EVENTS.COMMAND_EXECUTED, (/** @type {string} */ payload) => {
     if (payload === 'multicursor-add-above') addCursorAbove();
     if (payload === 'multicursor-add-below') addCursorBelow();
     if (payload === 'multicursor-select-all') selectAllOccurrences();
@@ -54,24 +55,24 @@ export function initMultiCursor(editorElement) {
 /**
  * Get the text before the clicked offset within a line element.
  * @param {HTMLElement} lineEl
- * @param {Node} targetNode
+ * @param {Node} _targetNode
  * @param {number} offsetX
  * @returns {string}
  */
-function getTextBeforeOffset(lineEl, targetNode, offsetX) {
+function getTextBeforeOffset(lineEl, _targetNode, offsetX) {
   const walker = document.createTreeWalker(lineEl, NodeFilter.SHOW_TEXT);
   let currentOffset = 0;
   let node;
   while ((node = walker.nextNode())) {
     const rect = node.parentElement?.getBoundingClientRect();
     if (rect) {
-      const charWidth = rect.width / (node.textContent?.length || 1);
+      const charWidth = rect.width / ((node.textContent || '').length || 1);
       const nodeStart = rect.left;
-      if (offsetX < nodeStart + node.textContent.length * charWidth) {
+      if (offsetX < nodeStart + (node.textContent || '').length * charWidth) {
         const charIndex = Math.floor((offsetX - nodeStart) / charWidth);
         return lineEl.textContent?.substring(0, currentOffset + Math.max(0, charIndex)) || '';
       }
-      currentOffset += node.textContent?.length || 0;
+      currentOffset += (node.textContent || '').length;
     }
   }
   return lineEl.textContent || '';
@@ -83,12 +84,12 @@ function getTextBeforeOffset(lineEl, targetNode, offsetX) {
  */
 function getCurrentPosition() {
   const sel = window.getSelection();
-  if (!sel.rangeCount) return null;
+  if (!sel || !sel.rangeCount) return null;
   const range = sel.getRangeAt(0);
   const node = range.startContainer;
-  const lineEl = node?.nodeType === 3 ? node.parentElement?.closest('[data-line]') : node?.closest('[data-line]');
+  const lineEl = node?.nodeType === 3 ? node.parentElement?.closest('[data-line]') : node?.nodeType === 1 ? /** @type {HTMLElement} */ (node).closest('[data-line]') : null;
   if (!lineEl) return null;
-  const line = parseInt(lineEl.dataset.line, 10);
+  const line = parseInt(/** @type {HTMLElement} */ (lineEl).dataset.line || '0', 10);
   const col = range.startOffset;
   return { line, col };
 }
@@ -147,7 +148,7 @@ function addCursorAt(line, col) {
   if (editorRect && lineRect) {
     const charWidth = 8; // approximate monospace char width
     cursorEl.style.left = `${col * charWidth}px`;
-    cursorEl.style.top = `${lineRect.top - editorRect.top + lineEl.offsetTop}px`;
+    cursorEl.style.top = `${lineRect.top - editorRect.top + /** @type {HTMLElement} */ (lineEl).offsetTop}px`;
   }
 
   cursorContainer?.appendChild(cursorEl);
@@ -170,6 +171,7 @@ function removeCursorElement(index) {
  */
 export function selectAllOccurrences() {
   const sel = window.getSelection();
+  if (!sel) return;
   const text = sel.toString().trim();
   if (!text) return;
 
@@ -181,7 +183,7 @@ export function selectAllOccurrences() {
     while (idx !== -1) {
       idx = lineText.indexOf(text, idx);
       if (idx === -1) break;
-      addCursorAt(parseInt(lineEl.dataset.line, 10), idx);
+      addCursorAt(parseInt(/** @type {HTMLElement} */ (lineEl).dataset.line || '0', 10), idx);
       idx += 1;
     }
   });
@@ -209,6 +211,6 @@ export function updateCursorPositions() {
     const lineRect = lineEl.getBoundingClientRect();
     const charWidth = 8;
     c.el.style.left = `${c.col * charWidth}px`;
-    c.el.style.top = `${lineRect.top - editorRect.top + lineEl.offsetTop}px`;
+    c.el.style.top = `${lineRect.top - editorRect.top + /** @type {HTMLElement} */ (lineEl).offsetTop}px`;
   });
 }

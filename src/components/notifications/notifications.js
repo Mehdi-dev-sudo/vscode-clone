@@ -6,7 +6,7 @@
  * Supports: info, warning, error types, auto-dismiss, manual close.
  */
 
-import { createElement, empty } from '../../utils/dom.js';
+import { createElement } from '../../utils/dom.js';
 import { eventBus } from '../../events/event-bus.js';
 import { EVENTS, NOTIFICATION_DURATION } from '../../core/constants.js';
 import { ICONS } from '../../assets/icons/codicons.js';
@@ -49,7 +49,7 @@ function remove(id) {
  * @returns {string} Notification ID.
  */
 function show(type = 'info', title, message = '', duration = NOTIFICATION_DURATION) {
-  if (!containerEl) return;
+  if (!containerEl) return '';
 
   const id = `notif-${++counter}`;
   const iconMap = { info: ICONS.info, warning: ICONS.warning, error: ICONS.error };
@@ -68,7 +68,7 @@ function show(type = 'info', title, message = '', duration = NOTIFICATION_DURATI
         children: [
           createElement('div', { className: 'notification__title', text: title }),
           message ? createElement('div', { className: 'notification__message', text: message }) : null,
-        ].filter(Boolean),
+        ].filter((v) => v !== null),
       }),
       createElement('button', {
         className: 'notification__close',
@@ -115,8 +115,8 @@ export const Notifications = {
     // would cause infinite recursion.
 
     // Listen for clear-notifications command
-    eventBus.on(EVENTS.COMMAND_EXECUTED, (cmd) => {
-      if (cmd === 'clear-notifications') {
+    eventBus.on(EVENTS.COMMAND_EXECUTED, (/** @type {string} */ cmd) => {
+      if (cmd === 'clear-notifications' && containerEl) {
         containerEl.innerHTML = '';
         activeNotifications.clear();
       }

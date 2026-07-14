@@ -10,7 +10,7 @@
 
 import { eventBus } from '../../events/event-bus.js';
 import { EVENTS } from '../../core/constants.js';
-import { createElement, empty, $ } from '../../utils/dom.js';
+import { createElement } from '../../utils/dom.js';
 import { getItem, setItem } from '../../storage/local-storage.js';
 import { Notifications } from '../notifications/notifications.js';
 
@@ -42,33 +42,15 @@ let currentColors = {};
 let currentThemeName = null;
 
 /**
- * Load a custom theme's colors.
- * @param {string} name
- * @returns {Object<string, string>}
- */
-function loadTheme(name) {
-  const themes = getItem(CUSTOM_THEMES_KEY, {});
-  return themes[name] || {};
-}
-
-/**
  * Save a custom theme.
  * @param {string} name
- * @param {Object<string, string>} colors
+ * @param {{[key: string]: string}} colors
  * @returns {void}
  */
 function saveTheme(name, colors) {
   const themes = getItem(CUSTOM_THEMES_KEY, {});
   themes[name] = colors;
   setItem(CUSTOM_THEMES_KEY, themes);
-}
-
-/**
- * Get all custom theme names.
- * @returns {string[]}
- */
-function getThemeNames() {
-  return Object.keys(getItem(CUSTOM_THEMES_KEY, {}));
 }
 
 /**
@@ -107,7 +89,7 @@ function render() {
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       backgroundColor: 'rgba(0,0,0,0.5)',
     },
-    events: { click: (e) => { if (e.target === overlay) close(); } },
+    events: { click: (/** @type {MouseEvent} */ e) => { if (e.target === overlay) close(); } },
   });
 
   const dialog = createElement('div', {
@@ -144,7 +126,7 @@ function render() {
       createElement('input', {
         style: { flex: '1', background: 'var(--bg-input)', border: '1px solid var(--border-primary)', color: 'var(--text-primary)', padding: '4px 8px', fontSize: '13px' },
         attrs: { type: 'text', value: currentThemeName || '', placeholder: 'My Custom Theme', id: 'theme-creator-name' },
-        events: { input: (e) => { currentThemeName = e.target.value; } },
+        events: { input: (/** @type {Event} */ e) => { currentThemeName = /** @type {HTMLInputElement} */ (e.target).value; } },
       }),
       createElement('button', {
         style: { backgroundColor: 'var(--accent-primary)', color: '#fff', padding: '4px 12px', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' },
@@ -179,8 +161,8 @@ function render() {
           style: { width: '28px', height: '28px', padding: '0', border: '1px solid var(--border-primary)', borderRadius: '2px', cursor: 'pointer', background: 'none' },
           attrs: { type: 'color', value, 'data-key': v.key },
           events: {
-            input: (e) => {
-              currentColors[v.key] = e.target.value;
+            input: (/** @type {Event} */ e) => {
+              currentColors[v.key] = /** @type {HTMLInputElement} */ (e.target).value;
               applyColors(currentColors);
             },
           },
@@ -189,11 +171,12 @@ function render() {
           style: { width: '80px', background: 'var(--bg-input)', border: '1px solid var(--border-primary)', color: 'var(--text-primary)', padding: '2px 4px', fontSize: '11px', fontFamily: 'monospace' },
           attrs: { type: 'text', value, 'data-key': v.key },
           events: {
-            input: (e) => {
-              currentColors[v.key] = e.target.value;
+            input: (/** @type {Event} */ e) => {
+              const target = /** @type {HTMLInputElement} */ (e.target);
+              currentColors[v.key] = target.value;
               applyColors(currentColors);
-              const colorInput = row.querySelector('input[type="color"]');
-              if (colorInput) colorInput.value = e.target.value;
+              const colorInput = /** @type {HTMLInputElement|null} */ (row.querySelector('input[type="color"]'));
+              if (colorInput) colorInput.value = target.value;
             },
           },
         }),
@@ -250,7 +233,7 @@ function render() {
 function saveCurrentTheme() {
   if (!currentThemeName) {
     currentThemeName = 'Custom-' + Date.now().toString(36);
-    const input = document.getElementById('theme-creator-name');
+    const input = /** @type {HTMLInputElement|null} */ (document.getElementById('theme-creator-name'));
     if (input) input.value = currentThemeName;
   }
   saveTheme(currentThemeName, currentColors);
@@ -287,27 +270,33 @@ function importThemeJSON() {
   const input = document.createElement('input');
   input.type = 'file';
   input.accept = '.json';
-  input.addEventListener('change', (e) => {
-    const file = e.target.files[0];
+  input.addEventListener('change', (/** @type {Event} */ e) => {
+    const target = /** @type {HTMLInputElement|null} */ (e.target);
+    if (!target || !target.files) return;
+    const file = target.files[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = (ev) => {
+    reader.onload = (/** @type {ProgressEvent<FileReader>} */ ev) => {
       try {
-        const data = JSON.parse(ev.target.result);
+        const fr = /** @type {FileReader|null} */ (ev.target);
+        if (!fr) return;
+        const data = JSON.parse(/** @type {string} */ (fr.result));
         if (data.colors) {
           currentColors = { ...data.colors };
           if (data.name) currentThemeName = data.name;
           applyColors(currentColors);
-          const nameInput = document.getElementById('theme-creator-name');
+          const nameInput = /** @type {HTMLInputElement|null} */ (document.getElementById('theme-creator-name'));
           if (nameInput && data.name) nameInput.value = data.name;
           // Update color inputs in the UI
           document.querySelectorAll('.theme-creator input[type="color"]').forEach((el) => {
-            const key = el.dataset.key;
-            if (currentColors[key]) el.value = currentColors[key];
+            const inputEl = /** @type {HTMLInputElement} */ (el);
+            const key = inputEl.dataset.key;
+            if (key && currentColors[key]) inputEl.value = currentColors[key];
           });
           document.querySelectorAll('.theme-creator input[type="text"]').forEach((el) => {
-            const key = el.dataset.key;
-            if (currentColors[key]) el.value = currentColors[key];
+            const inputEl = /** @type {HTMLInputElement} */ (el);
+            const key = inputEl.dataset.key;
+            if (key && currentColors[key]) inputEl.value = currentColors[key];
           });
           Notifications.info(`Theme "${data.name || 'imported'}" loaded`);
         }
@@ -329,7 +318,7 @@ function close() {
 
 export const ThemeCreator = {
   init() {
-    eventBus.on(EVENTS.COMMAND_EXECUTED, (cmd) => {
+    eventBus.on(EVENTS.COMMAND_EXECUTED, (/** @type {string} */ cmd) => {
       if (cmd === 'theme-creator') {
         currentColors = {};
         currentThemeName = null;

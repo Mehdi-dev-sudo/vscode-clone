@@ -138,7 +138,7 @@ export const StatusBar = {
     render();
 
     // Update theme name dynamically
-    eventBus.on(EVENTS.THEME_CHANGED, (theme) => {
+    eventBus.on(EVENTS.THEME_CHANGED, (/** @type {string} */ theme) => {
       const themeEl = statusBarEl?.querySelector('.status-bar__item--theme');
       if (themeEl) {
         const name = theme.replace('theme-', '');

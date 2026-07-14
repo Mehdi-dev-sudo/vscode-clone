@@ -13,7 +13,8 @@
  * @returns {string}
  */
 export function detectLanguage(fileName) {
-  const ext = fileName.split('.').pop().toLowerCase();
+  const ext = (fileName.split('.').pop() || '').toLowerCase();
+  /** @type {{[key: string]: string}} */
   const map = {
     js: 'javascript',
     jsx: 'javascript',
@@ -52,6 +53,7 @@ export function detectLanguage(fileName) {
  * @returns {string} HTML with syntax spans.
  */
 export function highlightJavaScript(code) {
+  /** @type {{[key: string]: string}} */
   const CLASS_MAP = {
     comment: 'syntax-comment',
     string: 'syntax-string',

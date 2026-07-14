@@ -13,15 +13,14 @@
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "baseUrl": ".",
     "paths": {
-      "@core/*": ["src/core/*"],
-      "@events/*": ["src/events/*"],
-      "@storage/*": ["src/storage/*"],
-      "@utils/*": ["src/utils/*"],
-      "@components/*": ["src/components/*"],
-      "@features/*": ["src/features/*"],
-      "@assets/*": ["src/assets/*"]
+      "@core/*": ["./src/core/*"],
+      "@events/*": ["./src/events/*"],
+      "@storage/*": ["./src/storage/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@components/*": ["./src/components/*"],
+      "@features/*": ["./src/features/*"],
+      "@assets/*": ["./src/assets/*"]
     }
   },
   "include": ["src/**/*.js", "src/**/*.jsx"],

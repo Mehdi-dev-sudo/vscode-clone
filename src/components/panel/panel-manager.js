@@ -25,7 +25,7 @@ let panelBodyEl = null;
  */
 
 /**
- * @type {Object<string, string[]|ProblemItem[]>}
+ * @type {{[key: string]: string[]|ProblemItem[]}}
  */
 const panelContents = {
   output: [
@@ -64,9 +64,10 @@ function renderOutput() {
   });
 
   output.forEach((line) => {
+    const text = /** @type {string} */ (line);
     const el = createElement('div', {
-      style: { color: line.startsWith('[warn]') ? 'var(--notification-warning)' : line.startsWith('[error]') ? 'var(--notification-error)' : 'var(--terminal-text)' },
-      text: line,
+      style: { color: text.startsWith('[warn]') ? 'var(--notification-warning)' : text.startsWith('[error]') ? 'var(--notification-error)' : 'var(--terminal-text)' },
+      text,
     });
     container.appendChild(el);
   });
@@ -86,7 +87,7 @@ function renderProblems() {
     style: { padding: '8px 0', fontSize: '13px', lineHeight: '1.5' },
   });
 
-  const problems = panelContents.problems;
+  const problems = /** @type {ProblemItem[]} */ (panelContents.problems);
 
   // Summary
   const errors = problems.filter((p) => p.type === 'error').length;
@@ -105,8 +106,8 @@ function renderProblems() {
     const item = createElement('div', {
       style: { display: 'flex', gap: '8px', padding: '3px 16px', cursor: 'pointer' },
       events: {
-        mouseenter: (e) => { e.currentTarget.style.backgroundColor = 'var(--sidebar-item-hover)'; },
-        mouseleave: (e) => { e.currentTarget.style.backgroundColor = ''; },
+        mouseenter: (/** @type {MouseEvent} */ e) => { /** @type {HTMLElement} */ (e.currentTarget).style.backgroundColor = 'var(--sidebar-item-hover)'; },
+        mouseleave: (/** @type {MouseEvent} */ e) => { /** @type {HTMLElement} */ (e.currentTarget).style.backgroundColor = ''; },
       },
       children: [
         createElement('span', { style: { color, width: '16px', textAlign: 'center' }, text: icon }),
@@ -136,7 +137,7 @@ function renderDebug() {
     style: { padding: '8px 16px', fontFamily: 'var(--font-family-monospace)', fontSize: '12px', lineHeight: '1.6', color: 'var(--terminal-text)' },
   });
 
-  panelContents.debug.forEach((line) => {
+  /** @type {string[]} */ (panelContents.debug).forEach((line) => {
     let color = 'var(--terminal-text)';
     if (line.includes('Debug session')) color = 'var(--color-green, #6a9955)';
     else if (line.includes('Waiting')) color = 'var(--notification-warning)';
@@ -153,7 +154,7 @@ function renderDebug() {
       createElement('input', {
         style: { flex: '1', background: 'transparent', border: 'none', color: 'var(--terminal-text)', fontFamily: 'inherit', fontSize: '12px', outline: 'none' },
         attrs: { type: 'text', placeholder: 'Type debug command...', 'aria-label': 'Debug console input' },
-        events: { keydown: (e) => { if (e.key === 'Enter') e.target.value = ''; } },
+        events: { keydown: (/** @type {KeyboardEvent} */ e) => { if (e.key === 'Enter') /** @type {HTMLInputElement} */ (e.target).value = ''; } },
       }),
     ],
   });
@@ -185,7 +186,7 @@ function switchPanelTab(tab) {
     default:
       // Terminal is handled by the Terminal component
       // We need to re-trigger terminal render
-      empty(panelBodyEl);
+      if (panelBodyEl) empty(panelBodyEl);
       eventBus.emit('terminal:show', {});
       break;
   }
@@ -197,9 +198,10 @@ function switchPanelTab(tab) {
  */
 function updatePanelTabUI() {
   document.querySelectorAll('.panel__tab').forEach((tab) => {
-    const isActive = tab.dataset.panel === activePanelTab;
-    tab.classList.toggle('panel__tab--active', isActive);
-    tab.setAttribute('aria-selected', isActive.toString());
+    const el = /** @type {HTMLElement} */ (tab);
+    const isActive = el.dataset.panel === activePanelTab;
+    el.classList.toggle('panel__tab--active', isActive);
+    el.setAttribute('aria-selected', String(isActive));
   });
 }
 
@@ -214,8 +216,9 @@ export const PanelManager = {
 
     const panelTabs = document.getElementById('panel-tabs');
     if (panelTabs) {
-      panelTabs.addEventListener('click', (e) => {
-        const tab = e.target.closest('.panel__tab');
+      panelTabs.addEventListener('click', (/** @type {MouseEvent} */ e) => {
+        const target = /** @type {HTMLElement} */ (e.target);
+        const tab = /** @type {HTMLElement|null} */ (target.closest('.panel__tab'));
         if (!tab) return;
         const panel = tab.dataset.panel;
         if (panel) switchPanelTab(panel);

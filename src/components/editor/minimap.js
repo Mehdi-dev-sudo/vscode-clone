@@ -72,7 +72,7 @@ export function initMinimap() {
   minimapEl.appendChild(sliderEl);
 
   // Mouse events
-  minimapEl.addEventListener('mousedown', (e) => {
+  minimapEl.addEventListener('mousedown', (/** @type {MouseEvent} */ e) => {
     if (e.target === sliderEl) {
       isDragging = true;
     } else {
@@ -80,7 +80,7 @@ export function initMinimap() {
     }
   });
 
-  document.addEventListener('mousemove', (e) => {
+  document.addEventListener('mousemove', (/** @type {MouseEvent} */ e) => {
     if (!isDragging) return;
     handlePointerMove(e.clientY);
   });
@@ -88,12 +88,12 @@ export function initMinimap() {
   document.addEventListener('mouseup', () => { isDragging = false; });
 
   // Touch events
-  minimapEl.addEventListener('touchstart', (e) => {
+  minimapEl.addEventListener('touchstart', (/** @type {TouchEvent} */ e) => {
     const touch = e.touches[0];
     handlePointerDown(touch.clientY);
   }, { passive: true });
 
-  minimapEl.addEventListener('touchmove', (e) => {
+  minimapEl.addEventListener('touchmove', (/** @type {TouchEvent} */ e) => {
     const touch = e.touches[0];
     handlePointerMove(touch.clientY);
   }, { passive: true });
@@ -126,6 +126,7 @@ export function updateMinimap(content, editorScrollTop, editorHeight, editorScro
   canvasEl.width = logicalWidth * dpr;
 
   const ctx = canvasEl.getContext('2d');
+  if (!ctx) return;
   ctx.scale(dpr, dpr);
 
   // Background

@@ -6,7 +6,7 @@
  * Only shows once (persisted in localStorage).
  */
 
-import { createElement, $ } from './dom.js';
+import { createElement } from './dom.js';
 import { getItem, setItem } from '../storage/local-storage.js';
 
 const TOUR_KEY = 'vscode-clone:tour-shown';

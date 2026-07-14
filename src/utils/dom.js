@@ -9,7 +9,7 @@
 
 /**
  * @typedef {Object} ElementOptions
- * @property {Object<string,string>} [attrs] - Attribute key/value pairs.
+ * @property {Object<string,string|undefined>} [attrs] - Attribute key/value pairs.
  * @property {Object<string,string>} [style] - Inline style key/value pairs.
  * @property {string|Array<string>} [className] - Class name(s).
  * @property {string} [text] - Text content.
@@ -30,7 +30,7 @@ export function createElement(tag, options = {}) {
 
   if (options.attrs) {
     for (const [key, value] of Object.entries(options.attrs)) {
-      el.setAttribute(key, value);
+      if (value !== undefined) el.setAttribute(key, value);
     }
   }
 

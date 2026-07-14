@@ -55,12 +55,13 @@ export const ExtensionsView = {
         autocomplete: 'off',
       },
       events: {
-        input: (e) => {
-          const query = e.target.value.toLowerCase();
+        input: (/** @type {Event} */ e) => {
+          const query = /** @type {HTMLInputElement} */ (e.target).value.toLowerCase();
           const items = container.querySelectorAll('.extensions__item');
           items.forEach((item) => {
-            const name = item.dataset.name?.toLowerCase() || '';
-            item.style.display = name.includes(query) ? 'flex' : 'none';
+            const el = /** @type {HTMLElement} */ (item);
+            const name = el.dataset.name?.toLowerCase() || '';
+            el.style.display = name.includes(query) ? 'flex' : 'none';
           });
         },
       },
@@ -87,7 +88,7 @@ export const ExtensionsView = {
                 className: 'extensions__item-install-btn',
                 text: ext.installed ? 'Uninstall' : 'Install',
                 events: {
-                  click: (e) => {
+                  click: (/** @type {MouseEvent} */ e) => {
                     e.stopPropagation();
                     toggleInstall(ext.id);
                     // Re-render just this item

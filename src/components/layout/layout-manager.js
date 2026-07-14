@@ -9,7 +9,7 @@
 import { eventBus } from '../../events/event-bus.js';
 import { EVENTS, STORAGE_KEYS, DIMENSIONS } from '../../core/constants.js';
 import { getItem, setItem } from '../../storage/local-storage.js';
-import { $, clamp } from '../../utils/dom.js';
+import { clamp } from '../../utils/dom.js';
 
 /** @type {boolean} */
 let isDragging = false;
@@ -31,7 +31,7 @@ function initSidebarResize() {
   const sidebar = document.getElementById('sidebar');
   if (!handle || !sidebar) return;
 
-  handle.addEventListener('mousedown', (e) => {
+  handle.addEventListener('mousedown', (/** @type {MouseEvent} */ e) => {
     e.preventDefault();
     isDragging = true;
     dragType = 'sidebar';
@@ -50,7 +50,7 @@ function initPanelResize() {
   const panel = document.getElementById('panel');
   if (!handle || !panel) return;
 
-  handle.addEventListener('mousedown', (e) => {
+  handle.addEventListener('mousedown', (/** @type {MouseEvent} */ e) => {
     e.preventDefault();
     isDragging = true;
     dragType = 'panel';
@@ -120,7 +120,7 @@ export const LayoutManager = {
     document.addEventListener('mouseup', onMouseUp);
 
     // Handle Zen Mode toggle
-    eventBus.on(EVENTS.ZEN_MODE_TOGGLED, (payload) => {
+    eventBus.on(EVENTS.ZEN_MODE_TOGGLED, (/** @type {string} */ payload) => {
       if (payload === 'zen') {
         document.getElementById('app')?.classList.toggle('app--zen');
       }

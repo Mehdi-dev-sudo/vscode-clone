@@ -9,7 +9,7 @@
 
 import { eventBus } from '../../events/event-bus.js';
 import { EVENTS } from '../../core/constants.js';
-import { createElement, empty, $, uid, escapeHtml } from '../../utils/dom.js';
+import { createElement, empty, $, uid } from '../../utils/dom.js';
 import { getItem, setItem } from '../../storage/local-storage.js';
 import { STORAGE_KEYS } from '../../core/constants.js';
 import { ICONS } from '../../assets/icons/codicons.js';
@@ -54,27 +54,18 @@ let fileTree = createDefaultTree();
 /** @type {HTMLElement|null} */
 let treeEl = null;
 
-/** Currently selected node ID. */
+/** @type {string|null} */
 let selectedId = null;
 
-/** Currently renamed node ID (null if not renaming). */
+/** @type {string|null} */
 let renamingId = null;
 
-/** Drag state. */
+/** @type {{ sourceId: string|null, targetId: string|null, position: 'before'|'after'|'inside'|null }} */
 const dragState = {
   sourceId: null,
   targetId: null,
-  position: null, // 'before' | 'after' | 'inside'
+  position: null,
 };
-
-/**
- * Deep clone a file tree node.
- * @param {FileNode} node
- * @returns {FileNode}
- */
-function cloneNode(node) {
-  return JSON.parse(JSON.stringify(node));
-}
 
 /**
  * Find a node by ID in the tree.
@@ -162,10 +153,11 @@ function startRename(id) {
   renderTree();
   // Focus the input in next tick
   requestAnimationFrame(() => {
+    if (!treeEl) return;
     const input = $(`.file-tree__rename-input`, treeEl);
     if (input) {
-      input.focus();
-      input.select();
+      /** @type {HTMLInputElement} */ (input).focus();
+      /** @type {HTMLInputElement} */ (input).select();
     }
   });
 }
@@ -192,7 +184,7 @@ function commitRename(id, newName) {
 
 /**
  * Create a new file/folder in the target parent.
- * @param {string} parentId - Parent folder ID.
+ * @param {string|null} parentId - Parent folder ID.
  * @param {'file'|'folder'} type
  * @returns {void}
  */
@@ -243,8 +235,10 @@ function deleteNode(id) {
  */
 function onDragStart(e, id) {
   dragState.sourceId = id;
-  e.dataTransfer.effectAllowed = 'move';
-  e.dataTransfer.setData('text/plain', id);
+  if (e.dataTransfer) {
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', id);
+  }
   eventBus.emit(EVENTS.DRAG_START, { id });
 }
 
@@ -256,13 +250,15 @@ function onDragStart(e, id) {
  */
 function onDragOver(e, id) {
   e.preventDefault();
-  e.dataTransfer.dropEffect = 'move';
+  if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
 
-  const rect = e.target.getBoundingClientRect();
+  const target = /** @type {HTMLElement} */ (e.target);
+  const rect = target.getBoundingClientRect();
   const y = e.clientY - rect.top;
   const height = rect.height;
   const threshold = height * 0.25;
 
+  /** @type {'before'|'after'|'inside'} */
   let position;
   if (y < threshold) position = 'before';
   else if (y > height - threshold) position = 'after';
@@ -299,13 +295,12 @@ function clearDragOver() {
  */
 function onDrop(e, targetId) {
   e.preventDefault();
-  const sourceId = dragState.sourceId || e.dataTransfer.getData('text/plain');
+  const sourceId = dragState.sourceId || (e.dataTransfer ? e.dataTransfer.getData('text/plain') : '');
   if (!sourceId || sourceId === targetId) return;
 
   const sourceNode = findNode(fileTree, sourceId);
   if (!sourceNode) return;
 
-  const sourceParent = findParent(fileTree, sourceId);
   const targetNode = findNode(fileTree, targetId);
   if (!targetNode) return;
 
@@ -377,25 +372,25 @@ function renderNode(node, depth = 0) {
       'data-type': node.type,
       draggable: 'true',
       role: 'treeitem',
-      'aria-expanded': isFolder ? (!isCollapsed).toString() : undefined,
+      'aria-expanded': isFolder ? String(!isCollapsed) : undefined,
       'aria-selected': isSelected ? 'true' : 'false',
       style: `--depth: ${depth};`,
     },
     events: {
-      click: (e) => {
+      click: (/** @type {MouseEvent} */ e) => {
         e.stopPropagation();
         selectedId = node.id;
         renderTree();
         if (isFolder) toggleCollapse(node.id);
         else openFile(node);
       },
-      dblclick: (e) => {
+      dblclick: () => {
         if (isFolder) startRename(node.id);
       },
-      contextmenu: (e) => showContextMenu(e, node),
-      dragstart: (e) => onDragStart(e, node.id),
-      dragover: (e) => onDragOver(e, node.id),
-      drop: (e) => onDrop(e, node.id),
+      contextmenu: (/** @type {MouseEvent} */ e) => showContextMenu(e, node),
+      dragstart: (/** @type {DragEvent} */ e) => onDragStart(e, node.id),
+      dragover: (/** @type {DragEvent} */ e) => onDragOver(e, node.id),
+      drop: (/** @type {DragEvent} */ e) => onDrop(e, node.id),
       dragend: () => { dragState.sourceId = null; clearDragOver(); },
     },
   });
@@ -426,9 +421,9 @@ function renderNode(node, depth = 0) {
         'aria-label': 'Rename file',
       },
       events: {
-        blur: (e) => commitRename(node.id, e.target.value),
-        keydown: (e) => {
-          if (e.key === 'Enter') commitRename(node.id, e.target.value);
+        blur: (/** @type {FocusEvent} */ e) => commitRename(node.id, /** @type {HTMLInputElement} */ (e.target).value),
+        keydown: (/** @type {KeyboardEvent} */ e) => {
+          if (e.key === 'Enter') commitRename(node.id, /** @type {HTMLInputElement} */ (e.target).value);
           if (e.key === 'Escape') { renamingId = null; renderTree(); }
           e.stopPropagation();
         },

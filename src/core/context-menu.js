@@ -7,7 +7,7 @@
  * Supports separators, disabled items, submenus, and keyboard navigation.
  */
 
-import { createElement, $ } from '../utils/dom.js';
+import { createElement } from '../utils/dom.js';
 
 /**
  * @typedef {Object} ContextMenuItem

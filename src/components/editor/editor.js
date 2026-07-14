@@ -9,7 +9,7 @@
 
 import { eventBus } from '../../events/event-bus.js';
 import { EVENTS } from '../../core/constants.js';
-import { createElement, empty, $, escapeHtml } from '../../utils/dom.js';
+import { createElement, empty, escapeHtml } from '../../utils/dom.js';
 import { highlight, detectLanguage } from '../../utils/syntax.js';
 import { updateMinimap, initMinimap } from './minimap.js';
 import { initMultiCursor } from './multi-cursor.js';
@@ -29,9 +29,6 @@ let gutterEl = null;
 
 /** @type {HTMLElement|null} */
 let minimapEl = null;
-
-/** Currently open file content lines. */
-let currentLines = [''];
 
 /** Currently open file name. */
 let currentFileName = '';
@@ -249,7 +246,6 @@ function renderEditorContent(fileName, content) {
   if (welcomeEl) welcomeEl.style.display = 'none';
 
   const lines = content.split('\n');
-  currentLines = lines;
   currentFileName = fileName;
 
   // Clear content
@@ -257,14 +253,15 @@ function renderEditorContent(fileName, content) {
   if (existingLines) existingLines.remove();
 
   // Create line number gutter
-  if (gutterEl) {
-    empty(gutterEl);
+  const gutter = gutterEl;
+  if (gutter) {
+    empty(gutter);
     lines.forEach((_, i) => {
       const lineNum = createElement('div', {
         text: String(i + 1),
         style: { lineHeight: '1.6', fontFamily: 'var(--font-family-monospace)', fontSize: 'var(--font-size-md)' },
       });
-      gutterEl.appendChild(lineNum);
+      gutter.appendChild(lineNum);
     });
   }
 
@@ -285,7 +282,7 @@ function renderEditorContent(fileName, content) {
   lines.forEach((line, i) => {
     const lineEl = createElement('div', {
       className: 'editor__line',
-      attrs: { 'data-line': i + 1 },
+      attrs: { 'data-line': String(i + 1) },
     });
     if (line.trim()) {
       lineEl.innerHTML = highlight(line, lang) || escapeHtml(line);
@@ -309,6 +306,7 @@ function renderEditorContent(fileName, content) {
   // Update minimap
   requestAnimationFrame(() => {
     const editorScroll = editorContentEl;
+    if (!editorScroll) return;
     updateMinimap(
       content,
       editorScroll.scrollTop,
@@ -331,7 +329,6 @@ function showWelcome() {
   if (existingLines) existingLines.remove();
 
   currentFileName = '';
-  currentLines = [''];
 }
 
 /**
@@ -382,6 +379,7 @@ function renderMinimap(content) {
 
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
+  if (!ctx) return;
   canvas.width = 60;
   canvas.height = Math.max(100, lines.length * lineHeight * scale);
 
@@ -423,25 +421,25 @@ export const Editor = {
     if (editorContentEl) initMultiCursor(editorContentEl);
 
     // Subscribe to file selection events
-    eventBus.on(EVENTS.FILE_SELECTED, (file) => {
+    eventBus.on(EVENTS.FILE_SELECTED, (/** @type {{name?: string, id?: string}|null} */ file) => {
       if (!file) {
         showWelcome();
         return;
       }
-      const name = file.name || file.id;
+      const name = file.name || file.id || 'untitled';
       // Strip directory prefix for MOCK_FILES lookup (e.g. 'src/index.js' -> 'index.js')
-      const baseName = name.split('/').pop();
+      const baseName = name.split('/').pop() || '';
       const content = MOCK_FILES[baseName] || MOCK_FILES[name] || `// ${name}\n// No content available.\n`;
       renderEditorContent(name, content);
       // Auto-focus the editor content
       setTimeout(() => {
         const editorLines = document.querySelector('.editor__lines');
-        if (editorLines) editorLines.focus();
+        if (editorLines) /** @type {HTMLElement} */ (editorLines).focus();
       }, 50);
     });
 
     // Listen for save-file command
-    eventBus.on(EVENTS.COMMAND_EXECUTED, (cmd) => {
+    eventBus.on(EVENTS.COMMAND_EXECUTED, (/** @type {string} */ cmd) => {
       if (cmd === 'save-file') {
         if (currentFileName) {
           Notifications.info(`File "${currentFileName}" saved.`);
@@ -456,7 +454,7 @@ export const Editor = {
     });
 
     // Listen for focus-editor command
-    eventBus.on(EVENTS.COMMAND_EXECUTED, (cmd) => {
+    eventBus.on(EVENTS.COMMAND_EXECUTED, (/** @type {string} */ cmd) => {
       if (cmd === 'focus-editor') {
         const editorBody = document.getElementById('editor');
         if (editorBody) editorBody.focus();
@@ -465,10 +463,10 @@ export const Editor = {
 
     // Welcome page buttons
     if (welcomeEl) {
-      welcomeEl.addEventListener('click', (e) => {
-        const btn = e.target.closest('[data-action]');
+      welcomeEl.addEventListener('click', (/** @type {MouseEvent} */ e) => {
+        const btn = /** @type {HTMLElement} */ (e.target).closest('[data-action]');
         if (!btn) return;
-        const action = btn.dataset.action;
+        const action = /** @type {HTMLElement} */ (btn).dataset.action;
         if (action === 'command-palette') {
           eventBus.emit(EVENTS.COMMAND_EXECUTED, 'command-palette');
         } else if (action === 'new-file') {

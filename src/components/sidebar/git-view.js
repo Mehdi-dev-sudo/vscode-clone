@@ -60,8 +60,8 @@ function render(container) {
         cursor: 'pointer', position: 'relative',
       },
       events: {
-        mouseenter: (e) => { e.currentTarget.style.backgroundColor = 'var(--sidebar-item-hover)'; },
-        mouseleave: (e) => { e.currentTarget.style.backgroundColor = ''; },
+        mouseenter: (/** @type {MouseEvent} */ e) => { /** @type {HTMLElement} */ (e.currentTarget).style.backgroundColor = 'var(--sidebar-item-hover)'; },
+        mouseleave: (/** @type {MouseEvent} */ e) => { /** @type {HTMLElement} */ (e.currentTarget).style.backgroundColor = ''; },
       },
     });
 
@@ -86,7 +86,7 @@ function render(container) {
             backgroundColor: 'var(--border-primary)', minHeight: '20px',
           },
         }) : null,
-      ].filter(Boolean),
+      ].filter((v) => v !== null),
     });
 
     // Content
@@ -106,7 +106,7 @@ function render(container) {
               style: { color: 'var(--color-yellow, #d7ba7d)' },
               text: commit.branch,
             }) : null,
-          ].filter(Boolean),
+      ].filter((v) => v !== null),
         }),
       ],
     });

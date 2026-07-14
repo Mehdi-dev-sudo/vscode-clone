@@ -6,7 +6,7 @@
  * Triggered from the command palette.
  */
 
-import { createElement, $ } from '../../utils/dom.js';
+import { createElement } from '../../utils/dom.js';
 import { eventBus } from '../../events/event-bus.js';
 import { EVENTS, APP_NAME, APP_VERSION } from '../../core/constants.js';
 
@@ -28,7 +28,7 @@ function show() {
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       backgroundColor: 'rgba(0,0,0,0.5)',
     },
-    events: { click: (e) => { if (e.target === overlay) hide(); } },
+    events: { click: (/** @type {MouseEvent} */ e) => { if (e.target === overlay) hide(); } },
   });
 
   dialogEl = createElement('div', {
@@ -98,7 +98,7 @@ function show() {
   document.body.appendChild(overlay);
 
   // Keyboard shortcut to close
-  const onKeyDown = (e) => {
+  const onKeyDown = (/** @type {KeyboardEvent} */ e) => {
     if (e.key === 'Escape') { hide(); document.removeEventListener('keydown', onKeyDown); }
   };
   document.addEventListener('keydown', onKeyDown);
@@ -114,7 +114,7 @@ function hide() {
 export const AboutDialog = {
   /** Initialize the about dialog. */
   init() {
-    eventBus.on(EVENTS.COMMAND_EXECUTED, (cmd) => {
+    eventBus.on(EVENTS.COMMAND_EXECUTED, (/** @type {string} */ cmd) => {
       if (cmd === 'about') show();
     });
   },

@@ -8,7 +8,7 @@
 
 import { eventBus } from '../../events/event-bus.js';
 import { EVENTS } from '../../core/constants.js';
-import { createElement, empty, $ } from '../../utils/dom.js';
+import { createElement, empty } from '../../utils/dom.js';
 import { ICONS } from '../../assets/icons/codicons.js';
 
 /**
@@ -34,6 +34,7 @@ import { ICONS } from '../../assets/icons/codicons.js';
 let terminals = [];
 
 /** Current terminal tab ID. */
+/** @type {string|null} */
 let activeTerminalId = null;
 
 /** Terminal counter for naming. */
@@ -72,7 +73,7 @@ function parseAnsi(str) {
     let result = '';
     let hasSpan = false;
     for (const code of codeList) {
-      const cls = ANSI_MAP[code];
+      const cls = ANSI_MAP[/** @type {keyof typeof ANSI_MAP} */ (code)];
       if (cls) {
         result += `<span class="terminal-${cls}">`;
         hasSpan = true;
@@ -157,11 +158,12 @@ const INTERNAL_COMMANDS = {
     ];
   },
   clear() { return 'CLEAR'; },
-  echo(args) { return args.join(' '); },
-  ls(args) {
+  /** @param {string[]} args */ echo(args) { return args.join(' '); },
+  /** @param {string[]} args */ ls(args) {
     const target = args[0] ? resolvePath(args[0]) : resolvePath('.');
     const dir = VFS[target];
     if (!dir || dir.type !== 'dir') return `\x1b[31mls: ${args[0] || '.'}: No such directory\x1b[0m`;
+    if (!dir.children) return '\x1b[31mEmpty directory\x1b[0m';
     return dir.children.map((c) => {
       const fullPath = target === '/' ? `/${c}` : `${target}/${c}`;
       const entry = VFS[fullPath];
@@ -169,7 +171,7 @@ const INTERNAL_COMMANDS = {
     });
   },
   pwd() { return getPathDisplay(currentDir); },
-  cd(args) {
+  /** @param {string[]} args */ cd(args) {
     if (!args[0] || args[0] === '~' || args[0] === '') {
       currentDir = '~';
       return '';
@@ -189,11 +191,11 @@ const INTERNAL_COMMANDS = {
     currentDir = target === '/home/user' ? '~' : target;
     return '';
   },
-  mkdir(args) {
+  /** @param {string[]} args */ mkdir(args) {
     if (!args[0]) return '\x1b[31mmkdir: missing operand\x1b[0m';
     const parent = resolvePath('.');
     const dir = VFS[parent];
-    if (dir && dir.type === 'dir') {
+    if (dir && dir.type === 'dir' && dir.children) {
       const newPath = parent === '/' ? `/${args[0]}` : `${parent}/${args[0]}`;
       if (!VFS[newPath]) {
         VFS[newPath] = { type: 'dir', children: [] };
@@ -202,18 +204,18 @@ const INTERNAL_COMMANDS = {
     }
     return '';
   },
-  touch(args) {
+  /** @param {string[]} args */ touch(args) {
     if (!args[0]) return '\x1b[31mtouch: missing operand\x1b[0m';
     const parent = resolvePath('.');
     const dir = VFS[parent];
-    if (dir && dir.type === 'dir' && !dir.children.includes(args[0])) {
+    if (dir && dir.type === 'dir' && dir.children && !dir.children.includes(args[0])) {
       const newPath = parent === '/' ? `/${args[0]}` : `${parent}/${args[0]}`;
       VFS[newPath] = { type: 'file', content: '' };
       dir.children.push(args[0]);
     }
     return '';
   },
-  cat(args) {
+  /** @param {string[]} args */ cat(args) {
     if (!args[0]) return '\x1b[31mcat: missing operand\x1b[0m';
     const target = resolvePath(args[0]);
     const file = VFS[target];
@@ -296,7 +298,7 @@ function renderTerminal() {
     events: {
       click: () => {
         const input = body.querySelector('.terminal__input');
-        if (input) input.focus();
+        if (input) /** @type {HTMLElement} */ (input).focus();
       },
     },
   });
@@ -325,16 +327,17 @@ function renderTerminal() {
       spellcheck: 'false',
     },
     events: {
-      keydown: (e) => {
+      keydown: (/** @type {KeyboardEvent} */ e) => {
+        const inputEl = /** @type {HTMLInputElement} */ (input);
         if (e.key === 'Enter') {
-          const value = input.value;
+          const value = inputEl.value;
           // Save to command history
           terminal.commandHistory = terminal.commandHistory || [];
           if (value.trim()) {
             terminal.commandHistory.push(value);
             terminal.historyIndex = terminal.commandHistory.length;
           }
-          input.value = '';
+          inputEl.value = '';
           executeCommand(value, terminal);
         } else if (e.key === 'ArrowUp') {
           e.preventDefault();
@@ -342,7 +345,7 @@ function renderTerminal() {
           terminal.historyIndex = terminal.historyIndex ?? terminal.commandHistory.length;
           if (terminal.historyIndex > 0) {
             terminal.historyIndex--;
-            input.value = terminal.commandHistory[terminal.historyIndex] || '';
+            inputEl.value = terminal.commandHistory[terminal.historyIndex] || '';
           }
         } else if (e.key === 'ArrowDown') {
           e.preventDefault();
@@ -350,10 +353,10 @@ function renderTerminal() {
           terminal.historyIndex = terminal.historyIndex ?? terminal.commandHistory.length;
           if (terminal.historyIndex < terminal.commandHistory.length - 1) {
             terminal.historyIndex++;
-            input.value = terminal.commandHistory[terminal.historyIndex] || '';
+            inputEl.value = terminal.commandHistory[terminal.historyIndex] || '';
           } else {
             terminal.historyIndex = terminal.commandHistory.length;
-            input.value = '';
+            inputEl.value = '';
           }
         }
       },
@@ -369,7 +372,7 @@ function renderTerminal() {
   body.scrollTop = body.scrollHeight;
 
   // Focus input
-  input.focus();
+  /** @type {HTMLElement} */ (input).focus();
 }
 
 /**
@@ -386,7 +389,7 @@ function renderTerminalSubTabs() {
     const isActive = t.id === activeTerminalId;
     const tabEl = createElement('div', {
       className: `terminal__tab${isActive ? ' terminal__tab--active' : ''}`,
-      attrs: { 'data-id': t.id, role: 'tab', 'aria-selected': isActive.toString() },
+      attrs: { 'data-id': t.id, role: 'tab', 'aria-selected': String(isActive) },
       events: {
         click: () => {
           activeTerminalId = t.id;
@@ -399,7 +402,7 @@ function renderTerminalSubTabs() {
           className: 'tab__close-btn',
           html: ICONS.close,
           attrs: { 'aria-label': `Close ${t.name}` },
-          events: { click: (e) => { e.stopPropagation(); removeTerminal(t.id); } },
+          events: { click: (/** @type {MouseEvent} */ e) => { e.stopPropagation(); removeTerminal(t.id); } },
         }),
       ],
     });
@@ -506,7 +509,7 @@ export const Terminal = {
     addTerminal();
 
     // Listen for panel toggle
-    eventBus.on(EVENTS.PANEL_RESIZED, (payload) => {
+    eventBus.on(EVENTS.PANEL_RESIZED, (/** @type {{[key: string]: any}|string} */ payload) => {
       if (payload === 'toggle-panel') {
         const panel = document.getElementById('panel');
         if (panel) {
@@ -521,7 +524,7 @@ export const Terminal = {
     });
 
     // Listen for focus-terminal command
-    eventBus.on(EVENTS.COMMAND_EXECUTED, (cmd) => {
+    eventBus.on(EVENTS.COMMAND_EXECUTED, (/** @type {string} */ cmd) => {
       if (cmd === 'focus-terminal') {
         const panel = document.getElementById('panel');
         if (panel) {
@@ -533,7 +536,7 @@ export const Terminal = {
         }
         // Focus the terminal input
         const input = document.querySelector('.terminal__input');
-        if (input) setTimeout(() => input.focus(), 100);
+        if (input) setTimeout(() => /** @type {HTMLElement} */ (input).focus(), 100);
       }
     });
   },

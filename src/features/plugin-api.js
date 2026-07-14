@@ -43,7 +43,7 @@ export function registerCommand(id, handler) {
 /**
  * Register a custom theme.
  * @param {string} name - Theme name (e.g., 'My Theme')
- * @param {Object<string, string>} colors - CSS variable map
+ * @param {{[key: string]: string}} colors - CSS variable map
  */
 export function registerTheme(name, colors) {
   if (!name || !colors) return;
@@ -98,7 +98,8 @@ export function registerStatusItem(id, renderFn) {
 export function executePluginCommand(id) {
   if (commands.has(id)) {
     try {
-      commands.get(id)();
+      const handler = commands.get(id);
+      if (handler) handler();
       return true;
     } catch (err) {
       console.error(`[Plugin API] Command "${id}" failed:`, err);
@@ -143,7 +144,7 @@ async function loadKnownPlugins() {
         console.log(`[Plugin API] Loaded: ${path}`);
       }
     } catch (err) {
-      console.log(`[Plugin API] Skipped ${path}:`, err?.message || 'not found');
+      console.log(`[Plugin API] Skipped ${path}:`, /** @type {Error} */ (err).message || 'not found');
     }
   }
 }
@@ -151,7 +152,7 @@ async function loadKnownPlugins() {
 export const PluginAPI = {
   init() {
     // Listen for command execution that might be plugin-registered
-    eventBus.on(EVENTS.COMMAND_EXECUTED, (cmd) => {
+    eventBus.on(EVENTS.COMMAND_EXECUTED, (/** @type {string} */ cmd) => {
       if (cmd.startsWith('plugin:')) {
         executePluginCommand(cmd.slice(7));
       }

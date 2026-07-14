@@ -25,7 +25,7 @@ const SNAPSHOTS_KEY = 'vscode-clone:snapshots';
  * @property {boolean} panelVisible
  * @property {string} activeView
  * @property {string} theme
- * @property {Array} openTabs
+ * @property {Array<Object>} openTabs
  * @property {Object|null} explorerState
  * @property {string} url
  */
@@ -44,7 +44,7 @@ function captureState() {
     panelHeight: panel?.style?.height || '200px',
     sidebarVisible: !sidebar?.classList.contains('app__sidebar--hidden'),
     panelVisible: !panel?.classList.contains('app__panel--hidden'),
-    activeView: document.querySelector('.activity-bar__btn--active')?.dataset?.view || 'explorer',
+    activeView: (/** @type {HTMLElement | null} */ (document.querySelector('.activity-bar__btn--active')))?.dataset?.view || 'explorer',
     theme: document.documentElement.className,
     // Open tabs are captured from storage
     openTabs: getItem('vscode-clone:open-tabs', []),
@@ -111,7 +111,7 @@ function showDialog() {
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       backgroundColor: 'rgba(0,0,0,0.5)',
     },
-    events: { click: (e) => { if (e.target === overlay) close(); } },
+    events: { click: (/** @type {MouseEvent} */ e) => { if (e.target === overlay) close(); } },
   });
 
   const dialog = createElement('div', {
@@ -143,7 +143,7 @@ function showDialog() {
       createElement('input', {
         style: { flex: '1', background: 'var(--bg-input)', border: '1px solid var(--border-primary)', color: 'var(--text-primary)', padding: '6px 8px', fontSize: '13px' },
         attrs: { type: 'text', placeholder: 'Snapshot name...', id: 'snapshot-name', autocomplete: 'off' },
-        events: { keydown: (e) => { if (e.key === 'Enter') saveSnapshot(); } },
+        events: { keydown: (/** @type {KeyboardEvent} */ e) => { if (e.key === 'Enter') saveSnapshot(); } },
       }),
       createElement('button', {
         style: { backgroundColor: 'var(--accent-primary)', color: '#fff', padding: '6px 16px', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', whiteSpace: 'nowrap' },
@@ -174,8 +174,8 @@ function showDialog() {
           padding: '10px 20px', cursor: 'pointer', borderBottom: '1px solid var(--border-primary)',
         },
         events: {
-          mouseenter: (e) => { e.currentTarget.style.backgroundColor = 'var(--sidebar-item-hover)'; },
-          mouseleave: (e) => { e.currentTarget.style.backgroundColor = ''; },
+          mouseenter: (/** @type {MouseEvent} */ e) => { /** @type {HTMLElement} */ (e.currentTarget).style.backgroundColor = 'var(--sidebar-item-hover)'; },
+          mouseleave: (/** @type {MouseEvent} */ e) => { /** @type {HTMLElement} */ (e.currentTarget).style.backgroundColor = ''; },
         },
         children: [
           createElement('div', { style: { flex: '1' },
@@ -187,12 +187,12 @@ function showDialog() {
           createElement('button', {
             style: { backgroundColor: 'var(--button-secondary-bg)', color: 'var(--text-primary)', padding: '4px 10px', border: 'none', borderRadius: '3px', cursor: 'pointer', fontSize: '11px' },
             text: 'Restore',
-            events: { click: (e) => { e.stopPropagation(); restoreState(snap); } },
+            events: { click: (/** @type {MouseEvent} */ e) => { e.stopPropagation(); restoreState(snap); } },
           }),
           createElement('button', {
             style: { color: 'var(--notification-error)', cursor: 'pointer', fontSize: '14px', background: 'none', border: 'none', padding: '4px' },
             text: '🗑',
-            events: { click: (e) => { e.stopPropagation(); deleteSnapshot(name); showDialog(); } },
+            events: { click: (/** @type {MouseEvent} */ e) => { e.stopPropagation(); deleteSnapshot(name); showDialog(); } },
           }),
         ],
       });
@@ -209,7 +209,7 @@ function showDialog() {
  * @returns {void}
  */
 function saveSnapshot() {
-  const input = document.getElementById('snapshot-name');
+  const input = /** @type {HTMLInputElement | null} */ (document.getElementById('snapshot-name'));
   const name = input?.value?.trim();
   if (!name) return;
 
@@ -246,7 +246,7 @@ function close() {
  */
 export const WorkspaceSnapshots = {
   init() {
-    eventBus.on(EVENTS.COMMAND_EXECUTED, (cmd) => {
+    eventBus.on(EVENTS.COMMAND_EXECUTED, (/** @type {string} */ cmd) => {
       if (cmd === 'workspace-snapshots') showDialog();
     });
   },

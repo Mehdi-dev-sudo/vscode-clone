@@ -31,8 +31,13 @@ const MOCK_FILES = [
  * @param {string} query
  * @returns {SearchResult[]}
  */
+/**
+ * @param {string} query
+ * @returns {{file: string, line: number, text: string, matchStart: number, matchEnd: number}[]}
+ */
 function performSearch(query) {
   if (!query.trim()) return [];
+  /** @type {{file: string, line: number, text: string, matchStart: number, matchEnd: number}[]} */
   const results = [];
 
   let searchQuery = query;
@@ -67,16 +72,15 @@ function performSearch(query) {
 }
 
 /**
- * Render search results.
- * @param {SearchResult[]} results
- * @returns {void}
+ * @param {{file: string, line: number, text: string, matchStart: number, matchEnd: number}[]} results
  */
 function renderResults(results) {
   if (!resultsEl) return;
-  empty(resultsEl);
+  const container = resultsEl;
+  empty(container);
 
   if (results.length === 0) {
-    resultsEl.appendChild(createElement('div', {
+    container.appendChild(createElement('div', {
       className: 'search__empty',
       text: 'No results found',
     }));
@@ -105,7 +109,7 @@ function renderResults(results) {
         }),
       ],
     });
-    resultsEl.appendChild(item);
+    container.appendChild(item);
   });
 }
 
@@ -164,10 +168,11 @@ export const SearchView = {
         spellcheck: 'false',
       },
       events: {
-        input: debounce((e) => {
-          const results = performSearch(e.target.value);
+        input: debounce((/** @type {Event} */ e) => {
+          const target = /** @type {HTMLInputElement} */ (e.target);
+          const results = performSearch(target.value);
           renderResults(results);
-          eventBus.emit(EVENTS.SEARCH_QUERIED, e.target.value);
+          eventBus.emit(EVENTS.SEARCH_QUERIED, target.value);
         }, DEBOUNCE_DELAY),
       },
     });
@@ -187,8 +192,8 @@ export const SearchView = {
       attrs: { 'aria-label': 'Replace All', title: 'Replace All' },
       events: {
         click: () => {
-          const query = searchInput.value;
-          const replace = replaceInput.value;
+          const query = /** @type {HTMLInputElement} */ (searchInput).value;
+          const replace = /** @type {HTMLInputElement} */ (replaceInput).value;
           if (!query || !replace) return;
           eventBus.emit(EVENTS.COMMAND_EXECUTED, 'replace-all');
           renderResults([]);
@@ -215,7 +220,7 @@ export const SearchView = {
             btn.classList.toggle('search__toggle-btn--active');
             const input = container.querySelector('.search__input');
             if (input) {
-              const results = performSearch(input.value);
+              const results = performSearch(/** @type {HTMLInputElement} */ (input).value);
               renderResults(results);
             }
           },

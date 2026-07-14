@@ -23,10 +23,10 @@ import { eventBus } from '../events/event-bus.js';
 import { EVENTS } from '../core/constants.js';
 import { createElement } from '../utils/dom.js';
 import { getItem, setItem } from '../storage/local-storage.js';
-import { Notifications } from '../components/notifications/notifications.js';
 
 const SETTINGS_KEY = 'vscode-clone:settings';
 
+/** @type {{[key: string]: string|number|boolean}} */
 const DEFAULT_SETTINGS = {
   fontSize: 14,
   theme: 'theme-dark',
@@ -71,7 +71,7 @@ let currentSettings = { ...DEFAULT_SETTINGS };
  */
 
 /**
- * @returns {Object<string, string|number|boolean>}
+ * @returns {{[key: string]: string|number|boolean}}
  */
 function load() {
   const saved = getItem(SETTINGS_KEY, {});
@@ -94,7 +94,7 @@ function apply(setting) {
   const root = document.documentElement;
   if (setting.key === 'fontSize') {
     root.style.setProperty('--font-size-md', `${setting.value}px`);
-    root.style.setProperty('--font-size-sm', `${Math.max(10, setting.value - 2)}px`);
+    root.style.setProperty('--font-size-sm', `${Math.max(10, Number(setting.value) - 2)}px`);
   } else if (setting.key === 'theme') {
     eventBus.emit(EVENTS.THEME_CHANGED, setting.value);
   } else if (setting.key === 'wordWrap') {
@@ -125,15 +125,6 @@ function applyAll() {
 
 /**
  * @param {string} key
- * @returns {string}
- */
-function renderLabel(key) {
-  const field = SETTING_FIELDS.find((f) => f.key === key);
-  return field ? field.label : key;
-}
-
-/**
- * @param {string} key
  * @returns {HTMLElement|null}
  */
 function renderSettingRow(key) {
@@ -156,26 +147,28 @@ function renderSettingRow(key) {
       style: { width: '16px', height: '16px', cursor: 'pointer', accentColor: 'var(--accent-primary)' },
       attrs: { type: 'checkbox' },
       events: {
-        change: (e) => {
-          currentSettings[key] = e.target.checked;
-          apply({ key, value: e.target.checked });
+        change: (/** @type {Event} */ e) => {
+          const target = /** @type {HTMLInputElement} */ (e.target);
+          currentSettings[key] = target.checked;
+          apply({ key, value: target.checked });
           save();
         },
       },
     });
-    checkbox.checked = value;
+    /** @type {HTMLInputElement} */ (checkbox).checked = !!value;
     row.appendChild(checkbox);
   } else if (field.type === 'range') {
     const rangeRow = createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '8px' } });
     const input = createElement('input', {
       style: { width: '120px', cursor: 'pointer' },
-      attrs: { type: 'range', min: field.min, max: field.max, step: field.step, value },
+      attrs: { type: 'range', min: String(field.min), max: String(field.max), step: String(field.step), value: String(value) },
       events: {
-        input: (e) => {
-          currentSettings[key] = Number(e.target.value);
+        input: (/** @type {Event} */ e) => {
+          const target = /** @type {HTMLInputElement} */ (e.target);
+          currentSettings[key] = Number(target.value);
           apply({ key, value: currentSettings[key] });
           save();
-          valueDisplay.textContent = e.target.value;
+          valueDisplay.textContent = target.value;
         },
       },
     });
@@ -192,20 +185,21 @@ function renderSettingRow(key) {
         color: 'var(--text-primary)', padding: '3px 6px', fontSize: '12px', borderRadius: '3px',
       },
       events: {
-        change: (e) => {
-          currentSettings[key] = e.target.value;
-          apply({ key, value: e.target.value });
+        change: (/** @type {Event} */ e) => {
+          const target = /** @type {HTMLSelectElement} */ (e.target);
+          currentSettings[key] = target.value;
+          apply({ key, value: target.value });
           save();
         },
       },
     });
-    field.options.forEach((opt) => {
+    if (field.options) { field.options.forEach((opt) => {
       const option = document.createElement('option');
-      option.value = opt;
+      option.value = String(opt);
       option.textContent = String(opt);
       if (String(opt) === String(value)) option.selected = true;
       select.appendChild(option);
-    });
+    }); }
     row.appendChild(select);
   }
 
@@ -225,7 +219,7 @@ function showDialog() {
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       backgroundColor: 'rgba(0,0,0,0.5)',
     },
-    events: { click: (e) => { if (e.target === overlay) close(); } },
+    events: { click: (/** @type {MouseEvent} */ e) => { if (e.target === overlay) close(); } },
   });
 
   const dialog = createElement('div', {
@@ -296,7 +290,7 @@ export const SettingsEditor = {
     load();
     applyAll();
 
-    eventBus.on(EVENTS.COMMAND_EXECUTED, (cmd) => {
+    eventBus.on(EVENTS.COMMAND_EXECUTED, (/** @type {string} */ cmd) => {
       if (cmd === 'settings') {
         load();
         showDialog();

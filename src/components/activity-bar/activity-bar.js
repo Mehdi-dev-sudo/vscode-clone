@@ -25,9 +25,11 @@ const VIEW_BUTTONS = [
 let activeView = VIEWS.EXPLORER;
 
 /** Store button elements by ID. */
+/** @type {Map<string, HTMLElement>} */
 const buttons = new Map();
 
 /** The activity bar container element. */
+/** @type {HTMLElement|null} */
 let container = null;
 
 /**
@@ -55,7 +57,7 @@ function switchView(viewId) {
 function updateActiveButton(viewId) {
   buttons.forEach((btn, id) => {
     btn.classList.toggle('activity-bar__btn--active', id === viewId);
-    btn.setAttribute('aria-selected', id === viewId);
+    btn.setAttribute('aria-selected', id === viewId ? 'true' : 'false');
   });
 }
 
@@ -80,7 +82,7 @@ function render() {
       className: `activity-bar__btn${view.id === activeView ? ' activity-bar__btn--active' : ''}`,
       attrs: {
         role: 'tab',
-        'aria-selected': view.id === activeView,
+        'aria-selected': view.id === activeView ? 'true' : 'false',
         'aria-label': view.label,
         title: view.label,
         'data-view': view.id,
@@ -130,7 +132,7 @@ export const ActivityBar = {
     render();
 
     // Listen for external view changes
-    eventBus.on(EVENTS.VIEW_CHANGED, (viewId) => {
+    eventBus.on(EVENTS.VIEW_CHANGED, (/** @type {string} */ viewId) => {
       if (VIEW_BUTTONS.some((v) => v.id === viewId)) {
         activeView = viewId;
         updateActiveButton(viewId);

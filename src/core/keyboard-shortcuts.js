@@ -7,7 +7,7 @@
  */
 
 import { eventBus } from '../events/event-bus.js';
-import { KEYBOARD_SHORTCUTS, EVENTS } from './constants.js';
+import { EVENTS } from './constants.js';
 
 /** @typedef {Function} ShortcutHandler */
 
@@ -19,9 +19,6 @@ import { KEYBOARD_SHORTCUTS, EVENTS } from './constants.js';
  * @property {string} [description] - Human-readable description.
  * @property {Function} [handler] - Direct callback (alternative to event).
  */
-
-/** @type {Map<string, ShortcutBinding>} */
-const bindings = new Map();
 
 /** @type {Array<ShortcutBinding>} */
 const shortcuts = [

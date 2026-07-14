@@ -9,10 +9,10 @@
 
 import { eventBus } from '../../events/event-bus.js';
 import { EVENTS, VIEWS } from '../../core/constants.js';
-import { createElement, empty, $, debounce } from '../../utils/dom.js';
+import { createElement, empty, debounce } from '../../utils/dom.js';
 import { ICONS } from '../../assets/icons/codicons.js';
 
-/** @type {Array<{id: string, label: string, icon?: string, shortcut?: string, action?: Function}>} */
+/** @type {Array<{id: string, label: string, icon?: string, shortcut?: string, action?: Function|null}>} */
 const COMMANDS = [
   { id: 'command-palette', label: 'Show All Commands', icon: ICONS.search, shortcut: 'Ctrl+Shift+P', action: null },
   { id: 'quick-open', label: 'Quick Open File', icon: ICONS.file, shortcut: 'Ctrl+P', action: null },
@@ -209,13 +209,13 @@ function renderResults(items) {
       events: {
         click: () => executeCommand(cmd.id),
       },
-      children: [
+      children: /** @type {Array<Element|string>} */ ([
         cmd.icon ? createElement('span', { className: 'icon', html: cmd.icon, attrs: { 'aria-hidden': 'true' } }) : null,
         createElement('span', { className: 'command-palette__item-label', text: cmd.label }),
         cmd.shortcut ? createElement('span', { className: 'command-palette__item-shortcut', text: cmd.shortcut }) : null,
-      ].filter(Boolean),
+      ].filter(Boolean)),
     });
-    resultsEl.appendChild(item);
+    resultsEl?.appendChild(item);
   });
 }
 
@@ -228,7 +228,7 @@ function show() {
   paletteEl.hidden = false;
   renderResults(COMMANDS);
   if (inputEl) {
-    inputEl.value = '';
+    /** @type {HTMLInputElement} */ (inputEl).value = '';
     inputEl.focus();
   }
 }
@@ -251,7 +251,7 @@ function showQuickOpen() {
   ];
   renderQuickOpenResults(mockFiles);
   if (quickOpenInputEl) {
-    quickOpenInputEl.value = '';
+    /** @type {HTMLInputElement} */ (quickOpenInputEl).value = '';
     quickOpenInputEl.focus();
   }
 }
@@ -281,7 +281,7 @@ function renderQuickOpenResults(files) {
         createElement('span', { className: 'quick-open__item-label', text: file.name }),
       ],
     });
-    quickOpenResultsEl.appendChild(item);
+    quickOpenResultsEl?.appendChild(item);
   });
 }
 
@@ -316,16 +316,19 @@ export const CommandPalette = {
     if (!paletteEl || !resultsEl || !inputEl) return;
 
     // Input filtering
-    inputEl.addEventListener('input', debounce((e) => {
-      const results = filterCommands(e.target.value);
+    /** @type {EventListener} */
+    const onInput = (/** @type {Event} */ e) => {
+      const results = filterCommands(/** @type {HTMLInputElement} */ (e.target).value);
       renderResults(results);
-    }, 100));
+    };
+    inputEl.addEventListener('input', /** @type {EventListener} */ (debounce(onInput, 100)));
 
     // Keyboard navigation
-    inputEl.addEventListener('keydown', (e) => {
+    inputEl.addEventListener('keydown', (/** @type {KeyboardEvent} */ e) => {
+      if (!resultsEl) return;
       const items = resultsEl.querySelectorAll('.command-palette__item');
       const active = resultsEl.querySelector('.command-palette__item--active');
-      let idx = Array.from(items).indexOf(active);
+      let idx = Array.from(items).indexOf(/** @type {Element} */ (active));
 
       if (e.key === 'ArrowDown') {
         e.preventDefault();
@@ -344,7 +347,7 @@ export const CommandPalette = {
         const activeItem = resultsEl.querySelector('.command-palette__item--active') ||
                           resultsEl.querySelector('.command-palette__item');
         if (activeItem) {
-          const id = activeItem.dataset.id;
+          const id = /** @type {HTMLElement} */ (activeItem).dataset.id;
           if (id) executeCommand(id);
         }
       } else if (e.key === 'Escape') {
@@ -358,18 +361,20 @@ export const CommandPalette = {
 
     // Quick Open
     if (quickOpenEl && quickOpenInputEl && quickOpenResultsEl) {
-      quickOpenInputEl.addEventListener('input', debounce((e) => {
-        const query = e.target.value.toLowerCase();
+      /** @type {EventListener} */
+      const onQuickOpenInput = (/** @type {Event} */ e) => {
+        const query = /** @type {HTMLInputElement} */ (e.target).value.toLowerCase();
         const mockFiles = ['src/index.js', 'src/app.js', 'src/styles.css', 'index.html', 'README.md', '.gitignore'];
         const filtered = query ? mockFiles.filter((f) => f.includes(query)).map((name) => ({ name })) : mockFiles.map((name) => ({ name }));
         renderQuickOpenResults(filtered);
-      }, 100));
+      };
+      quickOpenInputEl.addEventListener('input', /** @type {EventListener} */ (debounce(onQuickOpenInput, 100)));
 
-      quickOpenInputEl.addEventListener('keydown', (e) => {
+      quickOpenInputEl.addEventListener('keydown', (/** @type {KeyboardEvent} */ e) => {
         if (e.key === 'Escape') { e.preventDefault(); hideQuickOpen(); return; }
         if (e.key === 'Enter') {
-          const item = quickOpenResultsEl.querySelector('.quick-open__item');
-          if (item) item.click();
+          const item = quickOpenResultsEl?.querySelector('.quick-open__item');
+          if (item) /** @type {HTMLElement} */ (item).click();
         }
       });
 
@@ -378,13 +383,13 @@ export const CommandPalette = {
     }
 
     // Listen for command execution events (from keyboard shortcuts)
-    eventBus.on(EVENTS.COMMAND_EXECUTED, (payload) => {
+    eventBus.on(EVENTS.COMMAND_EXECUTED, (/** @type {string} */ payload) => {
       if (payload === 'command-palette') show();
       else if (payload === 'quick-open') showQuickOpen();
     });
 
     // Close on Escape globally
-    document.addEventListener('keydown', (e) => {
+    document.addEventListener('keydown', (/** @type {KeyboardEvent} */ e) => {
       if (e.key === 'Escape') {
         e.preventDefault();
         if (isPaletteOpen) hide();

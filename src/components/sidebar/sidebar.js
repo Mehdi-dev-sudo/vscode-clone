@@ -9,13 +9,13 @@
 
 import { eventBus } from '../../events/event-bus.js';
 import { VIEWS, EVENTS } from '../../core/constants.js';
-import { $, empty } from '../../utils/dom.js';
+import { empty } from '../../utils/dom.js';
 import { Explorer } from '../explorer/explorer.js';
 
-/** @type {HTMLElement} */
+/** @type {HTMLElement|null} */
 let sidebarEl = null;
 
-/** @type {HTMLElement} */
+/** @type {HTMLElement|null} */
 let contentEl = null;
 
 /** Current view displayed in the sidebar. */
@@ -27,6 +27,8 @@ let currentView = VIEWS.EXPLORER;
  */
 function showView(viewId) {
   if (!contentEl) return;
+  /** @type {HTMLElement} */
+  const el = contentEl;
   currentView = viewId;
 
   // Show sidebar if hidden
@@ -35,92 +37,36 @@ function showView(viewId) {
     sidebar.classList.remove('app__sidebar--hidden');
   }
 
-  empty(contentEl);
+  empty(el);
 
   switch (viewId) {
     case VIEWS.EXPLORER:
-      Explorer.render(contentEl);
+      Explorer.render(el);
       break;
     case VIEWS.SEARCH:
-      renderSearchView();
+      import('../sidebar/search-view.js').then((m) => m.SearchView.render(el));
       break;
     case VIEWS.SOURCE_CONTROL:
-      renderSourceControlView();
+      import('../sidebar/source-control-view.js').then((m) => m.SourceControlView.render(el));
       break;
     case VIEWS.RUN_DEBUG:
-      renderRunDebugView();
+      import('../sidebar/run-debug-view.js').then((m) => m.RunDebugView.render(el));
       break;
     case VIEWS.EXTENSIONS:
-      renderExtensionsView();
+      import('../sidebar/extensions-view.js').then((m) => m.ExtensionsView.render(el));
       break;
     case 'settings':
-      renderSettingsView();
+      import('../sidebar/settings-view.js').then((m) => m.SettingsView.render(el));
       break;
     case 'keyboard-shortcuts':
-      renderKeyboardShortcutsView();
+      import('../sidebar/keyboard-shortcuts-view.js').then((m) => m.KeyboardShortcutsView.render(el));
       break;
     case 'git-history':
-      renderGitHistoryView();
+      import('../sidebar/git-view.js').then((m) => m.GitView.render(el));
       break;
     default:
       break;
   }
-}
-
-/**
- * Render the Search view.
- * @returns {void}
- */
-function renderSearchView() {
-  import('../sidebar/search-view.js').then((m) => m.SearchView.render(contentEl));
-}
-
-/**
- * Render the Source Control view.
- * @returns {void}
- */
-function renderSourceControlView() {
-  import('../sidebar/source-control-view.js').then((m) => m.SourceControlView.render(contentEl));
-}
-
-/**
- * Render the Run & Debug view.
- * @returns {void}
- */
-function renderRunDebugView() {
-  import('../sidebar/run-debug-view.js').then((m) => m.RunDebugView.render(contentEl));
-}
-
-/**
- * Render the Extensions view.
- * @returns {void}
- */
-function renderExtensionsView() {
-  import('../sidebar/extensions-view.js').then((m) => m.ExtensionsView.render(contentEl));
-}
-
-/**
- * Render the Settings view.
- * @returns {void}
- */
-function renderSettingsView() {
-  import('../sidebar/settings-view.js').then((m) => m.SettingsView.render(contentEl));
-}
-
-/**
- * Render the Keyboard Shortcuts view.
- * @returns {void}
- */
-function renderKeyboardShortcutsView() {
-  import('../sidebar/keyboard-shortcuts-view.js').then((m) => m.KeyboardShortcutsView.render(contentEl));
-}
-
-/**
- * Render the Git History view.
- * @returns {void}
- */
-function renderGitHistoryView() {
-  import('../sidebar/git-view.js').then((m) => m.GitView.render(contentEl));
 }
 
 /**
@@ -149,7 +95,7 @@ export const Sidebar = {
     if (!sidebarEl || !contentEl) return;
 
     // Listen for view changes from Activity Bar or keyboard
-    eventBus.on(EVENTS.VIEW_CHANGED, (view) => {
+    eventBus.on(EVENTS.VIEW_CHANGED, (/** @type {string} */ view) => {
       if (view === 'toggle-sidebar') {
         toggle();
         return;
@@ -162,7 +108,7 @@ export const Sidebar = {
     });
 
     // Handle special commands from command palette
-    eventBus.on(EVENTS.COMMAND_EXECUTED, (cmd) => {
+    eventBus.on(EVENTS.COMMAND_EXECUTED, (/** @type {string} */ cmd) => {
       if (cmd === 'settings') {
         showView('settings');
       } else if (cmd === 'keyboard-shortcuts') {

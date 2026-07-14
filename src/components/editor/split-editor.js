@@ -8,7 +8,7 @@
 
 import { eventBus } from '../../events/event-bus.js';
 import { EVENTS } from '../../core/constants.js';
-import { createElement, empty, $ } from '../../utils/dom.js';
+import { createElement, empty } from '../../utils/dom.js';
 import { ICONS } from '../../assets/icons/codicons.js';
 
 /**
@@ -48,7 +48,7 @@ let resizeState = null;
 function createDivider(index) {
   const divider = createElement('div', {
     className: 'editor__split-divider',
-    attrs: { 'data-divider': index },
+    attrs: { 'data-divider': String(index) },
     style: { width: '4px', cursor: 'col-resize', backgroundColor: 'var(--border-primary)', flexShrink: '0', position: 'relative', zIndex: '1' },
   });
 
@@ -60,7 +60,7 @@ function createDivider(index) {
     divider.classList.add('editor__split-divider--active');
     const panes = container.querySelectorAll('.editor__split-pane');
     const startWidths = Array.from(panes).map((p) => p.getBoundingClientRect().width);
-    resizeState = { isDragging: true, dividerIndex: index, startX: e.clientX, startWidths, container, divider };
+    resizeState = { isDragging: true, dividerIndex: index, startX: e.clientX, startWidths, container: /** @type {HTMLElement} */ (container), divider: /** @type {HTMLElement} */ (divider) };
   });
 
   return divider;
@@ -71,7 +71,7 @@ function createDivider(index) {
  * @param {MouseEvent} e
  * @returns {void}
  */
-function onDividerMouseMove(e) {
+function onDividerMouseMove(/** @type {MouseEvent} */ e) {
   if (!resizeState || !resizeState.isDragging) return;
   const container = editorContentEl?.querySelector('.editor__splits');
   if (!container) return;
@@ -80,10 +80,10 @@ function onDividerMouseMove(e) {
   const dx = e.clientX - resizeState.startX;
   const leftWidth = Math.max(100, resizeState.startWidths[resizeState.dividerIndex - 1] + dx);
   const rightWidth = Math.max(100, resizeState.startWidths[resizeState.dividerIndex] - dx);
-  panes[resizeState.dividerIndex - 1].style.flex = 'none';
-  panes[resizeState.dividerIndex - 1].style.width = `${leftWidth}px`;
-  panes[resizeState.dividerIndex].style.flex = 'none';
-  panes[resizeState.dividerIndex].style.width = `${rightWidth}px`;
+  /** @type {HTMLElement} */ (panes[resizeState.dividerIndex - 1]).style.flex = 'none';
+  /** @type {HTMLElement} */ (panes[resizeState.dividerIndex - 1]).style.width = `${leftWidth}px`;
+  /** @type {HTMLElement} */ (panes[resizeState.dividerIndex]).style.flex = 'none';
+  /** @type {HTMLElement} */ (panes[resizeState.dividerIndex]).style.width = `${rightWidth}px`;
 }
 
 /**
@@ -140,11 +140,11 @@ function createSplitPane(index) {
   const isActive = index === activeSplitIndex;
   const pane = createElement('div', {
     className: `editor__split-pane${isActive ? ' editor__split-pane--active' : ''}`,
-    attrs: { 'data-split': index, role: 'region', 'aria-label': `Editor split ${index + 1}` },
+    attrs: { 'data-split': String(index), role: 'region', 'aria-label': `Editor split ${index + 1}` },
     style: { flex: '1', minWidth: '0', display: 'flex', flexDirection: 'column' },
   });
 
-  const showContextMenu = (e) => {
+  const showContextMenu = (/** @type {MouseEvent} */ e) => {
     e.preventDefault();
     const menu = createElement('div', {
       className: 'context-menu',
@@ -158,7 +158,7 @@ function createSplitPane(index) {
       ],
     });
     document.body.appendChild(menu);
-    const close = (event) => { if (!menu.contains(event.target)) { menu.remove(); document.removeEventListener('mousedown', close); } };
+    const close = (/** @type {MouseEvent} */ event) => { if (!menu.contains(/** @type {Node} */ (event.target))) { menu.remove(); document.removeEventListener('mousedown', close); } };
     document.addEventListener('mousedown', close);
   };
 
@@ -179,7 +179,7 @@ function createSplitPane(index) {
             className: 'sidebar__action-btn',
             html: ICONS.close,
             attrs: { 'aria-label': 'Close split', title: 'Close Split' },
-            events: { click: (e) => { e.stopPropagation(); removeSplit(index); } },
+            events: { click: (/** @type {MouseEvent} */ e) => { e.stopPropagation(); removeSplit(index); } },
           }),
         ],
       }),
@@ -269,11 +269,11 @@ export const SplitEditor = {
     document.addEventListener('mousemove', onDividerMouseMove);
     document.addEventListener('mouseup', onDividerMouseUp);
 
-    eventBus.on(EVENTS.COMMAND_EXECUTED, (payload) => {
+    eventBus.on(EVENTS.COMMAND_EXECUTED, (/** @type {string} */ payload) => {
       if (payload === 'split-editor') {
-        const currentTab = document.querySelector('.tabs-bar .tab--active');
+        const currentTab = /** @type {HTMLElement} */ (document.querySelector('.tabs-bar .tab--active'));
         const name = currentTab?.querySelector('.tab__label')?.textContent || 'untitled';
-        const content = currentTab?.dataset?.content || '';
+        const content = currentTab ? /** @type {HTMLElement} */ (currentTab).dataset.content || '' : '';
         addSplit(name, content);
       }
       const splitMatch = typeof payload === 'string' && payload.match(/^split-focus-(\d+)$/);
@@ -283,19 +283,20 @@ export const SplitEditor = {
           activeSplitIndex = idx;
           renderSplits();
           const panes = editorContentEl?.querySelectorAll('.editor__split-pane');
-          panes?.[idx]?.querySelector('.editor__split-body')?.focus();
+          const splitBody = panes?.[idx]?.querySelector('.editor__split-body');
+          if (splitBody) /** @type {HTMLElement} */ (splitBody).focus();
         }
       }
     });
 
-    eventBus.on(EVENTS.FILE_SELECTED, (file) => {
+    eventBus.on(EVENTS.FILE_SELECTED, (/** @type {{name?: string, path?: string, content?: string}} */ file) => {
       if (splits.length > 0) {
-        splits[activeSplitIndex] = { id: splits[activeSplitIndex]?.id || `split-${Date.now()}`, fileName: file.name || file.path, content: file.content || '' };
+        splits[activeSplitIndex] = { id: splits[activeSplitIndex]?.id || `split-${Date.now()}`, fileName: file.name || file.path || 'untitled', content: file.content || '' };
         renderSplits();
       }
     });
 
-    eventBus.on(EVENTS.TAB_OPENED, (file) => {
+    eventBus.on(EVENTS.TAB_OPENED, (/** @type {{name?: string, path?: string, content?: string}} */ file) => {
       if (splits.length > 0) {
         const pane = splits[activeSplitIndex];
         if (pane) {

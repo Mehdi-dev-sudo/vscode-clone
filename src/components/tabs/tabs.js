@@ -8,7 +8,7 @@
 
 import { eventBus } from '../../events/event-bus.js';
 import { EVENTS } from '../../core/constants.js';
-import { createElement, empty, $ } from '../../utils/dom.js';
+import { createElement, empty } from '../../utils/dom.js';
 import { getItem, setItem } from '../../storage/local-storage.js';
 import { STORAGE_KEYS } from '../../core/constants.js';
 import { ICONS } from '../../assets/icons/codicons.js';
@@ -25,6 +25,7 @@ import { ICONS } from '../../assets/icons/codicons.js';
 let tabs = [];
 
 /** Currently active tab ID. */
+/** @type {string|null} */
 let activeTabId = null;
 
 /** @type {HTMLElement|null} */
@@ -53,7 +54,7 @@ function renderTabs() {
   }
 
   const fragment = document.createDocumentFragment();
-  tabs.forEach((tab, index) => {
+  tabs.forEach((/** @type {TabData} */ tab) => {
     const isActive = tab.id === activeTabId;
     const tabEl = createElement('div', {
       className: `tab${isActive ? ' tab--active' : ''}${tab.pinned ? ' tab--pinned' : ''}`,
@@ -67,20 +68,22 @@ function renderTabs() {
       },
       events: {
         click: () => activateTab(tab.id),
-        dragstart: (e) => {
-          e.dataTransfer.setData('text/plain', tab.id);
+        dragstart: (/** @type {DragEvent} */ e) => {
+          const dt = e.dataTransfer;
+          if (dt) dt.setData('text/plain', tab.id);
           tabEl.classList.add('tab--dragging');
         },
         dragend: () => tabEl.classList.remove('tab--dragging'),
-        dragover: (e) => { e.preventDefault(); },
-        drop: (e) => {
+        dragover: (/** @type {DragEvent} */ e) => { e.preventDefault(); },
+        drop: (/** @type {DragEvent} */ e) => {
           e.preventDefault();
-          const sourceId = e.dataTransfer.getData('text/plain');
+          const dt = e.dataTransfer;
+          const sourceId = dt ? dt.getData('text/plain') : '';
           if (sourceId && sourceId !== tab.id) {
             reorderTab(sourceId, tab.id);
           }
         },
-        contextmenu: (e) => {
+        contextmenu: (/** @type {MouseEvent} */ e) => {
           e.preventDefault();
           const items = [
             { label: 'Close', icon: ICONS.close, action: () => closeTab(tab.id) },
@@ -113,7 +116,7 @@ function renderTabs() {
       className: 'tab__close-btn',
       html: ICONS.close,
       attrs: { 'aria-label': `Close ${tab.name}`, title: 'Close' },
-      events: { click: (e) => { e.stopPropagation(); closeTab(tab.id); } },
+      events: { click: (/** @type {MouseEvent} */ e) => { e.stopPropagation(); closeTab(tab.id); } },
     });
     tabEl.appendChild(closeBtn);
 
@@ -258,7 +261,7 @@ export const Tabs = {
     renderTabs();
 
     // Listen for file opens (guard against re-emitted events)
-    eventBus.on(EVENTS.TAB_OPENED, (file) => {
+    eventBus.on(EVENTS.TAB_OPENED, (/** @type {{id?: string, name: string}} */ file) => {
       if (!file?.name) return;
       const id = file.id || file.name;
       if (tabs.some((t) => t.id === id)) return;
@@ -266,14 +269,14 @@ export const Tabs = {
     });
 
     // Listen for tab close keyboard shortcut
-    eventBus.on(EVENTS.TAB_CLOSED, (payload) => {
+    eventBus.on(EVENTS.TAB_CLOSED, (/** @type {string} */ payload) => {
       if (payload === 'close-active') {
         if (activeTabId) closeTab(activeTabId);
       }
     });
 
     // Listen for close-all-tabs command
-    eventBus.on(EVENTS.COMMAND_EXECUTED, (cmd) => {
+    eventBus.on(EVENTS.COMMAND_EXECUTED, (/** @type {string} */ cmd) => {
       if (cmd === 'close-all-tabs') {
         [...tabs].forEach((t) => closeTab(t.id));
       }

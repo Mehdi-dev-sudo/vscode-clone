@@ -9,7 +9,7 @@
 
 import { createElement, empty } from '../../utils/dom.js';
 import { getItem, setItem } from '../../storage/local-storage.js';
-import { STORAGE_KEYS, THEMES } from '../../core/constants.js';
+import { STORAGE_KEYS } from '../../core/constants.js';
 import { eventBus } from '../../events/event-bus.js';
 import { EVENTS } from '../../core/constants.js';
 import { Notifications } from '../notifications/notifications.js';
@@ -29,7 +29,7 @@ const DEFAULT_SETTINGS = {
 
 /**
  * Load settings from storage.
- * @returns {Object}
+ * @returns {{[key: string]: any}}
  */
 function loadSettings() {
   return { ...DEFAULT_SETTINGS, ...getItem(STORAGE_KEYS.SETTINGS, {}) };
@@ -37,7 +37,7 @@ function loadSettings() {
 
 /**
  * Save settings to storage.
- * @param {Object} settings
+ * @param {{[key: string]: any}} settings
  */
 function saveSettings(settings) {
   setItem(STORAGE_KEYS.SETTINGS, settings);
@@ -62,24 +62,24 @@ function render(container) {
 
   // Common Settings
   const commonSection = createSection('Common');
-  commonSection.appendChild(field('Font Size', 'fontSize', 'number', settings, (v) => ({ ...loadSettings(), fontSize: parseInt(v) || 14 })));
-  commonSection.appendChild(field('Tab Size', 'tabSize', 'number', settings, (v) => ({ ...loadSettings(), tabSize: parseInt(v) || 4 })));
-  commonSection.appendChild(field('Word Wrap', 'wordWrap', 'checkbox', settings, (v) => ({ ...loadSettings(), wordWrap: v })));
-  commonSection.appendChild(field('Line Numbers', 'lineNumbers', 'checkbox', settings, (v) => ({ ...loadSettings(), lineNumbers: v })));
+  commonSection.appendChild(field('Font Size', 'fontSize', 'number', settings, (/** @type {any} */ v) => ({ ...loadSettings(), fontSize: parseInt(v) || 14 })));
+  commonSection.appendChild(field('Tab Size', 'tabSize', 'number', settings, (/** @type {any} */ v) => ({ ...loadSettings(), tabSize: parseInt(v) || 4 })));
+  commonSection.appendChild(field('Word Wrap', 'wordWrap', 'checkbox', settings, (/** @type {any} */ v) => ({ ...loadSettings(), wordWrap: v })));
+  commonSection.appendChild(field('Line Numbers', 'lineNumbers', 'checkbox', settings, (/** @type {any} */ v) => ({ ...loadSettings(), lineNumbers: v })));
   editor.appendChild(commonSection);
 
   // Editor Settings
   const editorSection = createSection('Editor');
-  editorSection.appendChild(field('Minimap', 'minimap', 'checkbox', settings, (v) => ({ ...loadSettings(), minimap: v })));
-  editorSection.appendChild(field('Smooth Scrolling', 'smoothScrolling', 'checkbox', settings, (v) => ({ ...loadSettings(), smoothScrolling: v })));
-  editorSection.appendChild(field('Cursor Blinking', 'cursorBlinking', 'select', settings, (v) => ({ ...loadSettings(), cursorBlinking: v }), ['blink', 'smooth', 'phase', 'expand', 'solid']));
-  editorSection.appendChild(field('Bracket Pair Colorization', 'bracketPairColorization', 'checkbox', settings, (v) => ({ ...loadSettings(), bracketPairColorization: v })));
+  editorSection.appendChild(field('Minimap', 'minimap', 'checkbox', settings, (/** @type {any} */ v) => ({ ...loadSettings(), minimap: v })));
+  editorSection.appendChild(field('Smooth Scrolling', 'smoothScrolling', 'checkbox', settings, (/** @type {any} */ v) => ({ ...loadSettings(), smoothScrolling: v })));
+  editorSection.appendChild(field('Cursor Blinking', 'cursorBlinking', 'select', settings, (/** @type {any} */ v) => ({ ...loadSettings(), cursorBlinking: v }), ['blink', 'smooth', 'phase', 'expand', 'solid']));
+  editorSection.appendChild(field('Bracket Pair Colorization', 'bracketPairColorization', 'checkbox', settings, (/** @type {any} */ v) => ({ ...loadSettings(), bracketPairColorization: v })));
   editor.appendChild(editorSection);
 
   // Files
   const filesSection = createSection('Files');
-  filesSection.appendChild(field('Auto Save', 'autoSave', 'checkbox', settings, (v) => ({ ...loadSettings(), autoSave: v })));
-  filesSection.appendChild(field('Format On Save', 'formatOnSave', 'checkbox', settings, (v) => ({ ...loadSettings(), formatOnSave: v })));
+  filesSection.appendChild(field('Auto Save', 'autoSave', 'checkbox', settings, (/** @type {any} */ v) => ({ ...loadSettings(), autoSave: v })));
+  filesSection.appendChild(field('Format On Save', 'formatOnSave', 'checkbox', settings, (/** @type {any} */ v) => ({ ...loadSettings(), formatOnSave: v })));
   editor.appendChild(filesSection);
 }
 
@@ -99,8 +99,8 @@ function createSection(title) {
  * @param {string} label
  * @param {string} key
  * @param {'text'|'number'|'checkbox'|'select'} type
- * @param {Object} settings
- * @param {Function} onChange
+ * @param {{[key: string]: any}} settings
+ * @param {(value: any) => any} onChange
  * @param {Array<string>} [options]
  * @returns {HTMLElement}
  */
@@ -114,10 +114,10 @@ function field(label, key, type, settings, onChange, options) {
   if (type === 'checkbox') {
     const input = createElement('input', {
       className: 'settings-editor__checkbox',
-      attrs: { type: 'checkbox', checked: settings[key] ? '' : undefined, 'aria-label': label },
+      attrs: /** @type {{[key: string]: string}} */ (Object.assign({ type: 'checkbox', 'aria-label': label }, settings[key] ? { checked: 'checked' } : {})),
       events: {
-        change: (e) => {
-          const newSettings = onChange(e.target.checked);
+        change: (/** @type {Event} */ e) => {
+          const newSettings = onChange(/** @type {HTMLInputElement} */ (e.target).checked);
           saveSettings(newSettings);
           Notifications.info(`Setting updated: ${label}`);
         },
@@ -129,8 +129,8 @@ function field(label, key, type, settings, onChange, options) {
       className: 'settings-editor__select',
       attrs: { 'aria-label': label },
       events: {
-        change: (e) => {
-          const newSettings = onChange(e.target.value);
+        change: (/** @type {Event} */ e) => {
+          const newSettings = onChange(/** @type {HTMLSelectElement} */ (e.target).value);
           saveSettings(newSettings);
         },
       },
@@ -148,8 +148,8 @@ function field(label, key, type, settings, onChange, options) {
       className: 'settings-editor__input',
       attrs: { type, value: settings[key], 'aria-label': label },
       events: {
-        change: (e) => {
-          const newSettings = onChange(e.target.value);
+        change: (/** @type {Event} */ e) => {
+          const newSettings = onChange(/** @type {HTMLInputElement} */ (e.target).value);
           saveSettings(newSettings);
         },
       },

@@ -58,16 +58,18 @@ function render(container) {
         style: { width: '100%', padding: '4px 8px', background: 'var(--bg-input)', border: '1px solid var(--border-primary)', color: 'var(--text-primary)', fontSize: '12px', outline: 'none' },
         attrs: { type: 'text', placeholder: 'Search shortcuts...', 'aria-label': 'Search keyboard shortcuts', autocomplete: 'off' },
         events: {
-          input: (e) => {
-            const query = e.target.value.toLowerCase();
+          input: (/** @type {Event} */ e) => {
+            const query = /** @type {HTMLInputElement} */ (e.target).value.toLowerCase();
             container.querySelectorAll('.shortcut-group').forEach((group) => {
               let visible = false;
               group.querySelectorAll('.shortcut-item').forEach((item) => {
-                const matches = item.textContent.toLowerCase().includes(query);
-                item.style.display = matches ? 'flex' : 'none';
+                const el = /** @type {HTMLElement} */ (item);
+                const matches = el.textContent.toLowerCase().includes(query);
+                el.style.display = matches ? 'flex' : 'none';
                 if (matches) visible = true;
               });
-              group.querySelector('.shortcut-group-title').style.display = visible || !query ? 'block' : 'none';
+              const title = group.querySelector('.shortcut-group-title');
+              if (title) /** @type {HTMLElement} */ (title).style.display = visible || !query ? 'block' : 'none';
             });
           },
         },
@@ -105,8 +107,8 @@ function render(container) {
           padding: '4px 12px 4px 12px', fontSize: '13px', cursor: 'pointer',
         },
         events: {
-          mouseenter: (e) => { e.currentTarget.style.backgroundColor = 'var(--sidebar-item-hover)'; },
-          mouseleave: (e) => { e.currentTarget.style.backgroundColor = ''; },
+          mouseenter: (/** @type {MouseEvent} */ e) => { /** @type {HTMLElement} */ (e.currentTarget).style.backgroundColor = 'var(--sidebar-item-hover)'; },
+          mouseleave: (/** @type {MouseEvent} */ e) => { /** @type {HTMLElement} */ (e.currentTarget).style.backgroundColor = ''; },
         },
         children: [
           createElement('span', { text: s.description, style: { color: 'var(--text-primary)' } }),

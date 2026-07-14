@@ -53,7 +53,7 @@ export const ThemeManager = {
   /** Initialize theme system. */
   init() {
     // Listen for theme change events
-    eventBus.on(EVENTS.THEME_CHANGED, (themeId) => {
+    eventBus.on(EVENTS.THEME_CHANGED, (/** @type {string} */ themeId) => {
       if (Object.values(THEMES).includes(themeId)) {
         applyTheme(themeId);
         Notifications.info(`Theme changed to ${THEME_NAMES[themeId] || themeId}`);
@@ -61,9 +61,10 @@ export const ThemeManager = {
     });
 
     // Also listen for theme commands from command palette
-    eventBus.on(EVENTS.COMMAND_EXECUTED, (payload) => {
+    eventBus.on(EVENTS.COMMAND_EXECUTED, (/** @type {any} */ payload) => {
       if (typeof payload !== 'string') return;
       if (payload.startsWith('theme-')) {
+        /** @type {{[key: string]: string}} */
         const themeMap = {
           'theme-dark': THEMES.DARK,
           'theme-light': THEMES.LIGHT,

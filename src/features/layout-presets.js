@@ -12,6 +12,7 @@ import { eventBus } from '../events/event-bus.js';
 import { EVENTS } from '../core/constants.js';
 import { Notifications } from '../components/notifications/notifications.js';
 
+/** @type {{[key: string]: LayoutPreset}} */
 const PRESETS = {
   'Editor Focus': {
     sidebarWidth: '200px',
@@ -92,6 +93,7 @@ function applyPreset(name) {
 }
 
 // Direct layout command handler
+/** @type {{[key: string]: string}} */
 const LAYOUT_COMMANDS = {
   'layout-editor-focus': 'Editor Focus',
   'layout-terminal-max': 'Terminal Max',
@@ -111,7 +113,7 @@ function showDialog() {
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       backgroundColor: 'rgba(0,0,0,0.5)',
     },
-    events: { click: (e) => { if (e.target === overlay) close(); } },
+    events: { click: (/** @type {MouseEvent} */ e) => { if (e.target === overlay) close(); } },
   });
 
   const dialog = createElement('div', {
@@ -147,8 +149,8 @@ function showDialog() {
         display: 'flex', alignItems: 'center', gap: '12px',
       },
       events: {
-        mouseenter: (e) => { e.currentTarget.style.backgroundColor = 'var(--sidebar-item-hover)'; },
-        mouseleave: (e) => { e.currentTarget.style.backgroundColor = ''; },
+        mouseenter: (/** @type {MouseEvent} */ e) => { /** @type {HTMLElement} */ (e.currentTarget).style.backgroundColor = 'var(--sidebar-item-hover)'; },
+        mouseleave: (/** @type {MouseEvent} */ e) => { /** @type {HTMLElement} */ (e.currentTarget).style.backgroundColor = ''; },
         click: () => { applyPreset(name); close(); },
       },
       children: [
@@ -178,7 +180,7 @@ function close() {
 /** @namespace */
 export const LayoutPresets = {
   init() {
-    eventBus.on(EVENTS.COMMAND_EXECUTED, (cmd) => {
+    eventBus.on(EVENTS.COMMAND_EXECUTED, (/** @type {string} */ cmd) => {
       if (cmd === 'layout-presets') showDialog();
       if (LAYOUT_COMMANDS[cmd]) applyPreset(LAYOUT_COMMANDS[cmd]);
     });

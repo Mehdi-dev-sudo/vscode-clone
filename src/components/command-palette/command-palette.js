@@ -89,8 +89,8 @@ function filterCommands(query) {
  * @returns {void}
  */
 function executeCommand(id) {
-  // Theme commands
-  if (id.startsWith('theme-')) {
+  // Theme commands (theme-creator is NOT a theme switch)
+  if (id.startsWith('theme-') && id !== 'theme-creator') {
     eventBus.emit(EVENTS.THEME_CHANGED, id);
     hide();
     return;

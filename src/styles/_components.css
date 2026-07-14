@@ -5,8 +5,8 @@
  */
 
 /* Shared button defaults */
-button { cursor: pointer; }
-button:disabled { cursor: default; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; font-size: inherit; }
+button:disabled { cursor: default; opacity: 0.5; }
 
 /* ==================== Activity Bar ==================== */
 .activity-bar__btn {
@@ -1700,4 +1700,7 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 
 
 .quick-open__item:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: -2px; }
+
+
+button:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 1px; }
 

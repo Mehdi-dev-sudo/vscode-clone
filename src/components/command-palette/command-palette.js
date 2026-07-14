@@ -387,8 +387,9 @@ export const CommandPalette = {
     // Close on Escape globally
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
+        e.preventDefault();
         if (isPaletteOpen) hide();
-        if (isQuickOpenOpen) hideQuickOpen();
+        else if (isQuickOpenOpen) hideQuickOpen();
       }
     });
   },

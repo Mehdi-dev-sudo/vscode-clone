@@ -66,7 +66,6 @@ export function initMinimap() {
   canvasEl = document.createElement('canvas');
   canvasEl.className = 'minimap__content';
   canvasEl.style.width = '100%';
-  canvasEl.style.touchAction = 'none';
   minimapEl.appendChild(canvasEl);
 
   sliderEl = createElement('div', { className: 'minimap__slider' });
@@ -122,11 +121,9 @@ export function updateMinimap(content, editorScrollTop, editorHeight, editorScro
   const lineHeight = Math.max(1, Math.floor((minimapHeight / lines.length) * 2) / 2);
   const dpr = window.devicePixelRatio || 1;
   const logicalWidth = minimapEl.clientWidth;
-  const newHeight = Math.max(minimapHeight, lines.length * lineHeight);
 
-  // Avoid canvas clear/redraw if dimensions same
-  if (canvasEl.height !== newHeight) canvasEl.height = newHeight;
-  if (canvasEl.width !== logicalWidth * dpr) canvasEl.width = logicalWidth * dpr;
+  canvasEl.height = Math.max(minimapHeight, lines.length * lineHeight);
+  canvasEl.width = logicalWidth * dpr;
 
   const ctx = canvasEl.getContext('2d');
   if (!ctx) return;

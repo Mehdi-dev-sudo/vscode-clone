@@ -6,7 +6,7 @@
  * Supports live filtering, toggle options (case, whole word, regex).
  */
 
-import { createElement, empty, debounce, escapeHtml } from '../../utils/dom.js';
+import { createElement, empty, debounce } from '../../utils/dom.js';
 import { ICONS } from '../../assets/icons/codicons.js';
 import { eventBus } from '../../events/event-bus.js';
 import { EVENTS, DEBOUNCE_DELAY } from '../../core/constants.js';
@@ -111,6 +111,17 @@ function renderResults(results) {
     });
     container.appendChild(item);
   });
+}
+
+/**
+ * Escape HTML special characters.
+ * @param {string} str
+ * @returns {string}
+ */
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.appendChild(document.createTextNode(str));
+  return div.innerHTML;
 }
 
 /**

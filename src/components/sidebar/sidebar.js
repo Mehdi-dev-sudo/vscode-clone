@@ -22,6 +22,33 @@ let contentEl = null;
 let currentView = VIEWS.EXPLORER;
 
 /**
+ * Fade in the sidebar content element.
+ * @param {HTMLElement} el
+ */
+function fadeIn(el) {
+  el.style.opacity = '1';
+  el.style.transform = 'translateX(0)';
+}
+
+/**
+ * Safe dynamic import with error fallback.
+ * @param {string} path
+ * @param {HTMLElement} el
+ * @param {(mod: {[key:string]:*}) => void} onLoad
+ */
+function loadView(path, el, onLoad) {
+  import(path).then((mod) => { onLoad(mod); fadeIn(el); }).catch((err) => {
+    console.error('[Sidebar] Failed to load view:', err);
+    empty(el);
+    el.appendChild(createElement('div', { className: 'empty-state', children: [
+      createElement('span', { className: 'empty-state__title', text: 'Failed to load view' }),
+      createElement('span', { className: 'empty-state__desc', text: err.message || 'Unknown error' }),
+    ]}));
+    fadeIn(el);
+  });
+}
+
+/**
  * Render a view's content into the sidebar.
  * @param {string} viewId
  */
@@ -37,52 +64,45 @@ function showView(viewId) {
     sidebar.classList.remove('app__sidebar--hidden');
   }
 
-  empty(el);
+  // Fade transition between views
+  el.style.opacity = '0';
+  el.style.transform = 'translateX(-4px)';
+  el.style.transition = 'opacity 0.15s ease, transform 0.15s ease';
 
-  /**
-   * Safe dynamic import with error fallback.
-   * @param {string} path
-   * @param {(mod: {[key:string]:*}) => void} onLoad
-   */
-  function loadView(path, onLoad) {
-    import(path).then(onLoad).catch((err) => {
-      console.error(`[Sidebar] Failed to load view "${viewId}":`, err);
-      empty(el);
-      el.appendChild(createElement('div', { className: 'empty-state', children: [
-        createElement('span', { className: 'empty-state__title', text: 'Failed to load view' }),
-        createElement('span', { className: 'empty-state__desc', text: err.message || 'Unknown error' }),
-      ]}));
-    });
-  }
+  requestAnimationFrame(() => {
+    empty(el);
 
-  switch (viewId) {
-    case VIEWS.EXPLORER:
-      Explorer.render(el);
-      break;
-    case VIEWS.SEARCH:
-      loadView('../sidebar/search-view.js', (m) => m.SearchView.render(el));
-      break;
-    case VIEWS.SOURCE_CONTROL:
-      loadView('../sidebar/source-control-view.js', (m) => m.SourceControlView.render(el));
-      break;
-    case VIEWS.RUN_DEBUG:
-      loadView('../sidebar/run-debug-view.js', (m) => m.RunDebugView.render(el));
-      break;
-    case VIEWS.EXTENSIONS:
-      loadView('../sidebar/extensions-view.js', (m) => m.ExtensionsView.render(el));
-      break;
-    case 'settings':
-      loadView('../sidebar/settings-view.js', (m) => m.SettingsView.render(el));
-      break;
-    case 'keyboard-shortcuts':
-      loadView('../sidebar/keyboard-shortcuts-view.js', (m) => m.KeyboardShortcutsView.render(el));
-      break;
-    case 'git-history':
-      loadView('../sidebar/git-view.js', (m) => m.GitView.render(el));
-      break;
-    default:
-      break;
-  }
+    switch (viewId) {
+      case VIEWS.EXPLORER:
+        Explorer.render(el);
+        fadeIn(el);
+        break;
+      case VIEWS.SEARCH:
+        loadView('../sidebar/search-view.js', el, (m) => m.SearchView.render(el));
+        break;
+      case VIEWS.SOURCE_CONTROL:
+        loadView('../sidebar/source-control-view.js', el, (m) => m.SourceControlView.render(el));
+        break;
+      case VIEWS.RUN_DEBUG:
+        loadView('../sidebar/run-debug-view.js', el, (m) => m.RunDebugView.render(el));
+        break;
+      case VIEWS.EXTENSIONS:
+        loadView('../sidebar/extensions-view.js', el, (m) => m.ExtensionsView.render(el));
+        break;
+      case 'settings':
+        loadView('../sidebar/settings-view.js', el, (m) => m.SettingsView.render(el));
+        break;
+      case 'keyboard-shortcuts':
+        loadView('../sidebar/keyboard-shortcuts-view.js', el, (m) => m.KeyboardShortcutsView.render(el));
+        break;
+      case 'git-history':
+        loadView('../sidebar/git-view.js', el, (m) => m.GitView.render(el));
+        break;
+      default:
+        fadeIn(el);
+        break;
+    }
+  });
 }
 
 /**
@@ -98,9 +118,6 @@ function toggle() {
 
 /**
  * Sidebar component module.
- * @namespace
- */
-/**
  * @namespace
  */
 export const Sidebar = {

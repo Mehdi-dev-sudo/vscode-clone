@@ -42,11 +42,11 @@ button {
   border: none;
   cursor: pointer;
   outline: none;
+  transition: opacity var(--transition-fast), background var(--transition-fast);
 }
 
 button:focus-visible {
-  outline: 1px solid var(--border-focus);
-  outline-offset: -1px;
+  box-shadow: var(--focus-ring);
 }
 
 input, textarea, select {
@@ -56,10 +56,12 @@ input, textarea, select {
   border: 1px solid var(--border-primary);
   outline: none;
   padding: var(--space-xs) var(--space-sm);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 input:focus, textarea:focus, select:focus {
   border-color: var(--border-focus);
+  box-shadow: var(--shadow-focus);
 }
 
 a {

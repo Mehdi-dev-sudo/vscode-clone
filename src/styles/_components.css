@@ -1139,7 +1139,8 @@ button:disabled { cursor: default; opacity: 0.5; }
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
 }
 
 .command-palette__dialog,
@@ -1150,11 +1151,13 @@ button:disabled { cursor: default; opacity: 0.5; }
   max-height: 60vh;
   background-color: var(--bg-dropdown);
   border: 1px solid var(--border-dropdown);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  border-radius: var(--radius-lg);
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  animation: dialogIn 200ms var(--ease-spring);
+  transform-origin: top center;
 }
 
 .command-palette__header,
@@ -1264,12 +1267,12 @@ button:disabled { cursor: default; opacity: 0.5; }
   padding: var(--space-md) var(--space-lg);
   background-color: var(--notification-bg);
   border: 1px solid var(--border-primary);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-md);
   border-radius: var(--radius-md);
   min-width: 280px;
   max-width: 400px;
   pointer-events: auto;
-  animation: notification-slide-in var(--transition-slow) ease-out;
+  animation: notif-in var(--transition-spring);
 }
 
 .notification--removing {
@@ -1361,7 +1364,7 @@ button:disabled { cursor: default; opacity: 0.5; }
   background-color: var(--bg-dropdown);
   border: 1px solid var(--border-dropdown);
   border-radius: var(--radius-md);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-md);
   padding: var(--space-xs) 0;
   opacity: 0;
   transform: scale(0.95);
@@ -1696,19 +1699,20 @@ button:disabled { cursor: default; opacity: 0.5; }
   cursor: pointer;
 }
 
-body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-
-
-.tabs-bar__tab:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: -2px; }
-
-
-/* Notification fade-out animation */
-.notification--removing { animation: notif-slide-out 0.25s ease forwards; }
+/* Notification slide-out animation */
+.notification--removing { animation: notif-slide-out 0.25s var(--ease-in-out) forwards; }
 @keyframes notif-slide-out { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(100%); } }
 
+/* Overlay / dialog enter animations */
+@keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes dialogIn { from { opacity: 0; transform: translateY(-16px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
-.quick-open__item:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: -2px; }
+/* Context menu enter animation */
+@keyframes menuIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
+/* Toast notification enter animation */
+@keyframes notif-in { from { opacity: 0; transform: translateX(100%) scale(0.9); } to { opacity: 1; transform: translateX(0) scale(1); } }
 
-button:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 1px; }
+/* Tab badge pulse */
+@keyframes badgePulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.2); } }
 

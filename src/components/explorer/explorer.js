@@ -60,12 +60,11 @@ let selectedId = null;
 /** @type {string|null} */
 let renamingId = null;
 
-/** @type {{ sourceId: string|null, targetId: string|null, position: 'before'|'after'|'inside'|null }} */
+/** @type {{ sourceId: string|null, targetId: string|null, position: 'before'|'after'|'inside'|null, lastHighlighted: HTMLElement|null }} */
 const dragState = {
   sourceId: null,
   targetId: null,
   position: null,
-  /** @type {HTMLElement|null} */
   lastHighlighted: null,
 };
 
@@ -281,7 +280,7 @@ function onDragOver(e, id) {
       : position === 'before' ? 'file-tree__item--drag-over'
       : 'file-tree__item--drag-over-bottom';
     targetEl.classList.add(cls);
-    dragState.lastHighlighted = targetEl;
+    dragState.lastHighlighted = /** @type {HTMLElement} */ (targetEl);
   } else {
     dragState.lastHighlighted = null;
   }

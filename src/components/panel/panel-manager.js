@@ -105,8 +105,11 @@ function renderProblems() {
     const color = p.type === 'error' ? 'var(--notification-error)' : p.type === 'warning' ? 'var(--notification-warning)' : 'var(--notification-info)';
 
     const item = createElement('div', {
-      className: 'problems__item',
       style: { display: 'flex', gap: '8px', padding: '3px 16px', cursor: 'pointer' },
+      events: {
+        mouseenter: (/** @type {MouseEvent} */ e) => { /** @type {HTMLElement} */ (e.currentTarget).style.backgroundColor = 'var(--sidebar-item-hover)'; },
+        mouseleave: (/** @type {MouseEvent} */ e) => { /** @type {HTMLElement} */ (e.currentTarget).style.backgroundColor = ''; },
+      },
       children: [
         createElement('span', { style: { color, width: '16px', textAlign: 'center' }, text: icon }),
         createElement('div', { style: { flex: '1' },

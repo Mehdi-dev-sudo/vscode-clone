@@ -432,10 +432,10 @@ export const Editor = {
       const content = MOCK_FILES[baseName] || MOCK_FILES[name] || `// ${name}\n// No content available.\n`;
       renderEditorContent(name, content);
       // Auto-focus the editor content
-      requestAnimationFrame(() => {
+      setTimeout(() => {
         const editorLines = document.querySelector('.editor__lines');
         if (editorLines) /** @type {HTMLElement} */ (editorLines).focus();
-      });
+      }, 50);
     });
 
     // Listen for save-file command

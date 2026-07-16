@@ -8,8 +8,42 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect x='2' y='2' width='12' height='12' rx='2' fill='%2300796d'/><path d='M6 11l-3-3 1-1 2 2 4-4 1 1z' fill='%23fff'/></svg>">
   <title>VS Code Clone</title>
   <link rel="stylesheet" href="src/styles/main.css">
+  <style>
+    /* Skeleton loading screen — shown before JS boots, removed by app.js */
+    .skeleton { position:fixed; inset:0; z-index:9999; display:flex; flex-direction:column; background:#1e1e1e; transition:opacity .4s; }
+    .skeleton--hidden { opacity:0; pointer-events:none; }
+    .skeleton__bar { height:30px; background:#252526; display:flex; align-items:center; padding:0 12px; }
+    .skeleton__dots { display:flex; gap:6px; }
+    .skeleton__dot { width:10px; height:10px; border-radius:50%; background:#3c3c3c; animation:skeletonPulse 1.2s ease-in-out infinite; }
+    .skeleton__dot:nth-child(2) { animation-delay:.2s; }
+    .skeleton__dot:nth-child(3) { animation-delay:.4s; }
+    .skeleton__body { display:flex; flex:1; }
+    .skeleton__activity { width:48px; background:#333; display:flex; flex-direction:column; align-items:center; padding-top:8px; gap:8px; }
+    .skeleton__icon { width:24px; height:24px; border-radius:4px; background:#3c3c3c; animation:skeletonPulse 1.5s ease-in-out infinite; }
+    .skeleton__sidebar { width:260px; background:#252526; padding:12px; display:flex; flex-direction:column; gap:10px; }
+    .skeleton__line { height:10px; border-radius:4px; background:#3c3c3c; animation:skeletonPulse 1.5s ease-in-out infinite; }
+    .skeleton__line--short { width:40%; }
+    .skeleton__line--med { width:65%; }
+    .skeleton__content { flex:1; background:#1e1e1e; display:flex; flex-direction:column; padding:32px 48px; gap:16px; }
+    .skeleton__logo { width:64px; height:64px; border-radius:8px; background:#3c3c3c; margin:0 auto; animation:skeletonPulse 1.5s ease-in-out infinite; }
+    .skeleton__title { width:200px; height:16px; background:#3c3c3c; border-radius:4px; margin:0 auto; animation:skeletonPulse 1.5s ease-in-out infinite; }
+    .skeleton__subtitle { width:280px; height:12px; background:#3c3c3c; border-radius:4px; margin:0 auto; animation:skeletonPulse 1.5s ease-in-out infinite; }
+    .skeleton__status { height:22px; background:#007acc; margin-top:auto; }
+    @keyframes skeletonPulse { 0%,100% { opacity:.3; } 50% { opacity:.7; } }
+  </style>
 </head>
 <body>
+  <!-- Skeleton Loading Screen -->
+  <div class="skeleton" id="skeleton">
+    <div class="skeleton__bar"><div class="skeleton__dots"><div class="skeleton__dot"></div><div class="skeleton__dot"></div><div class="skeleton__dot"></div></div></div>
+    <div class="skeleton__body">
+      <div class="skeleton__activity"><div class="skeleton__icon"></div><div class="skeleton__icon"></div><div class="skeleton__icon"></div><div class="skeleton__icon"></div></div>
+      <div class="skeleton__sidebar"><div class="skeleton__line skeleton__line--short"></div><div class="skeleton__line skeleton__line--med"></div><div class="skeleton__line"></div><div class="skeleton__line skeleton__line--short"></div><div class="skeleton__line skeleton__line--med"></div></div>
+      <div class="skeleton__content"><div class="skeleton__logo"></div><div class="skeleton__title"></div><div class="skeleton__subtitle"></div></div>
+    </div>
+    <div class="skeleton__status"></div>
+  </div>
+
   <div class="app" id="app" role="application" aria-label="VS Code Clone">
 
     <!-- Title Bar -->

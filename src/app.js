@@ -96,6 +96,13 @@ function boot() {
   const savedView = getItem(STORAGE_KEYS.ACTIVE_VIEW, 'explorer');
   eventBus.emit(EVENTS.VIEW_CHANGED, savedView);
 
+  // Remove skeleton loading screen
+  const skeleton = document.getElementById('skeleton');
+  if (skeleton) {
+    skeleton.classList.add('skeleton--hidden');
+    setTimeout(() => skeleton.remove(), 400);
+  }
+
   console.log(`%c VS Code Clone v1.0.0 `, 'background:#007acc;color:#fff;font-size:14px;padding:4px;border-radius:2px;');
 }
 

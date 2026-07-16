@@ -328,6 +328,10 @@ button:disabled { cursor: default; opacity: 0.5; }
   border-radius: 2px;
 }
 
+.search__toggle-btn--active {
+  color: var(--text-accent);
+}
+
 .search__results {
   flex: 1;
   overflow-y: auto;
@@ -1077,18 +1081,21 @@ button:disabled { cursor: default; opacity: 0.5; }
   color: var(--status-bar-text);
   font-size: var(--font-size-sm);
   padding: 0 var(--space-md);
+  gap: 0;
   overflow: hidden;
 }
 
 .status-bar__left {
   display: flex;
   align-items: center;
+  gap: 0;
   height: 100%;
 }
 
 .status-bar__right {
   display: flex;
   align-items: center;
+  gap: 0;
   margin-left: auto;
   height: 100%;
 }
@@ -1301,6 +1308,17 @@ button:disabled { cursor: default; opacity: 0.5; }
 
 .notification--removing {
   animation: notification-slide-out var(--transition-normal) ease-in forwards;
+}
+
+@keyframes notification-slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 @keyframes notification-slide-out {
@@ -1632,10 +1650,10 @@ button:disabled { cursor: default; opacity: 0.5; }
   width: 2px;
   height: 1.2em;
   background-color: var(--text-primary);
-  animation: multi-cursor-blink 1s step-end infinite;
+  animation: cursor-blink 1s step-end infinite;
 }
 
-@keyframes multi-cursor-blink {
+@keyframes cursor-blink {
   0%, 50% { opacity: 1; }
   51%, 100% { opacity: 0; }
 }
@@ -1720,7 +1738,12 @@ button:disabled { cursor: default; opacity: 0.5; }
 @keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes dialogIn { from { opacity: 0; transform: translateY(-16px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
+/* Context menu enter animation */
+@keyframes menuIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
 /* Toast notification enter animation */
 @keyframes notif-in { from { opacity: 0; transform: translateX(100%) scale(0.9); } to { opacity: 1; transform: translateX(0) scale(1); } }
 
+/* Tab badge pulse */
+@keyframes badgePulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.2); } }
 

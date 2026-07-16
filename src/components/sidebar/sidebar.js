@@ -9,7 +9,7 @@
 
 import { eventBus } from '../../events/event-bus.js';
 import { VIEWS, EVENTS } from '../../core/constants.js';
-import { empty } from '../../utils/dom.js';
+import { createElement, empty } from '../../utils/dom.js';
 import { Explorer } from '../explorer/explorer.js';
 
 /** @type {HTMLElement|null} */
@@ -39,30 +39,46 @@ function showView(viewId) {
 
   empty(el);
 
+  /**
+   * Safe dynamic import with error fallback.
+   * @param {string} path
+   * @param {(mod: {[key:string]:*}) => void} onLoad
+   */
+  function loadView(path, onLoad) {
+    import(path).then(onLoad).catch((err) => {
+      console.error(`[Sidebar] Failed to load view "${viewId}":`, err);
+      empty(el);
+      el.appendChild(createElement('div', { className: 'empty-state', children: [
+        createElement('span', { className: 'empty-state__title', text: 'Failed to load view' }),
+        createElement('span', { className: 'empty-state__desc', text: err.message || 'Unknown error' }),
+      ]}));
+    });
+  }
+
   switch (viewId) {
     case VIEWS.EXPLORER:
       Explorer.render(el);
       break;
     case VIEWS.SEARCH:
-      import('../sidebar/search-view.js').then((m) => m.SearchView.render(el));
+      loadView('../sidebar/search-view.js', (m) => m.SearchView.render(el));
       break;
     case VIEWS.SOURCE_CONTROL:
-      import('../sidebar/source-control-view.js').then((m) => m.SourceControlView.render(el));
+      loadView('../sidebar/source-control-view.js', (m) => m.SourceControlView.render(el));
       break;
     case VIEWS.RUN_DEBUG:
-      import('../sidebar/run-debug-view.js').then((m) => m.RunDebugView.render(el));
+      loadView('../sidebar/run-debug-view.js', (m) => m.RunDebugView.render(el));
       break;
     case VIEWS.EXTENSIONS:
-      import('../sidebar/extensions-view.js').then((m) => m.ExtensionsView.render(el));
+      loadView('../sidebar/extensions-view.js', (m) => m.ExtensionsView.render(el));
       break;
     case 'settings':
-      import('../sidebar/settings-view.js').then((m) => m.SettingsView.render(el));
+      loadView('../sidebar/settings-view.js', (m) => m.SettingsView.render(el));
       break;
     case 'keyboard-shortcuts':
-      import('../sidebar/keyboard-shortcuts-view.js').then((m) => m.KeyboardShortcutsView.render(el));
+      loadView('../sidebar/keyboard-shortcuts-view.js', (m) => m.KeyboardShortcutsView.render(el));
       break;
     case 'git-history':
-      import('../sidebar/git-view.js').then((m) => m.GitView.render(el));
+      loadView('../sidebar/git-view.js', (m) => m.GitView.render(el));
       break;
     default:
       break;

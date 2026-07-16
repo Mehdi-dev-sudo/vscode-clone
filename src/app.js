@@ -106,4 +106,22 @@ function boot() {
   console.log(`%c VS Code Clone v1.0.0 `, 'background:#007acc;color:#fff;font-size:14px;padding:4px;border-radius:2px;');
 }
 
+// Global error boundary — catch unhandled errors and display in-app
+window.addEventListener('error', (/** @type {ErrorEvent} */ e) => {
+  console.error('[App] Uncaught error:', e.error || e.message);
+  // Show in-app notification for runtime errors
+  import('./components/notifications/notifications.js').then(({ Notifications }) => {
+    Notifications.error(`Runtime error: ${(e.error && e.error.message) || e.message || 'Unknown error'}`);
+  }).catch(() => {});
+  e.preventDefault();
+});
+
+window.addEventListener('unhandledrejection', (/** @type {PromiseRejectionEvent} */ e) => {
+  console.error('[App] Unhandled rejection:', e.reason);
+  import('./components/notifications/notifications.js').then(({ Notifications }) => {
+    Notifications.error(`Promise error: ${(e.reason && e.reason.message) || 'Unknown'}`);
+  }).catch(() => {});
+  e.preventDefault();
+});
+
 document.addEventListener('DOMContentLoaded', boot);

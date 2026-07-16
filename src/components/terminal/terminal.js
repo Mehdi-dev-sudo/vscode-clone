@@ -303,14 +303,16 @@ function renderTerminal() {
     },
   });
 
-  // Render history with ANSI support
+  // Render history with ANSI support (batch via DocumentFragment)
+  const fragment = document.createDocumentFragment();
   terminal.history.forEach((line) => {
     const lineEl = createElement('div', {
       className: 'terminal__line',
       html: parseAnsi(line),
     });
-    body.appendChild(lineEl);
+    fragment.appendChild(lineEl);
   });
+  body.appendChild(fragment);
 
   // Input line
   const inputLine = createElement('div', { className: 'terminal__input-line' });

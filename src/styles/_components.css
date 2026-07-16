@@ -4,8 +4,7 @@
  * Each component's styles are scoped under its block class.
  */
 
-/* Shared button defaults */
-button { cursor: pointer; border: none; background: none; font-family: inherit; font-size: inherit; }
+/* Shared button defaults (base in _reset.css) */
 button:disabled { cursor: default; opacity: 0.5; }
 
 /* ==================== Activity Bar ==================== */
@@ -25,6 +24,10 @@ button:disabled { cursor: default; opacity: 0.5; }
   color: var(--activity-bar-active);
   cursor: pointer;
   transform: scale(1.05);
+}
+
+.activity-bar__btn:active {
+  transform: scale(0.95);
 }
 
 .activity-bar__btn--active {
@@ -69,6 +72,12 @@ button:disabled { cursor: default; opacity: 0.5; }
 }
 
 /* ==================== Sidebar ==================== */
+.sidebar__content {
+  flex: 1;
+  overflow-y: auto;
+  contain: layout style;
+}
+
 .sidebar__header {
   display: flex;
   align-items: center;
@@ -319,10 +328,6 @@ button:disabled { cursor: default; opacity: 0.5; }
   border-radius: 2px;
 }
 
-.search__toggle-btn--active {
-  color: var(--text-accent);
-}
-
 .search__results {
   flex: 1;
   overflow-y: auto;
@@ -560,6 +565,11 @@ button:disabled { cursor: default; opacity: 0.5; }
   min-width: 0;
   position: relative;
   transition: background-color var(--transition-fast);
+}
+
+.tab:active {
+  background-color: var(--tab-hover-bg);
+  transform: scaleY(0.97);
 }
 
 .tab:hover {
@@ -880,6 +890,11 @@ button:disabled { cursor: default; opacity: 0.5; }
 }
 
 /* ==================== Terminal / Panel ==================== */
+.problems__item:hover {
+  background-color: var(--sidebar-item-hover);
+}
+
+
 .panel__header {
   display: flex;
   align-items: center;
@@ -1067,21 +1082,18 @@ button:disabled { cursor: default; opacity: 0.5; }
   color: var(--status-bar-text);
   font-size: var(--font-size-sm);
   padding: 0 var(--space-md);
-  gap: 0;
   overflow: hidden;
 }
 
 .status-bar__left {
   display: flex;
   align-items: center;
-  gap: 0;
   height: 100%;
 }
 
 .status-bar__right {
   display: flex;
   align-items: center;
-  gap: 0;
   margin-left: auto;
   height: 100%;
 }
@@ -1099,6 +1111,11 @@ button:disabled { cursor: default; opacity: 0.5; }
 
 .status-bar__item:hover {
   background-color: var(--status-bar-hover);
+}
+
+.status-bar__item:active {
+  background-color: var(--status-bar-hover);
+  filter: brightness(0.9);
 }
 
 .status-bar__item .icon {
@@ -1194,6 +1211,7 @@ button:disabled { cursor: default; opacity: 0.5; }
 .quick-open__results {
   flex: 1;
   overflow-y: auto;
+  scroll-behavior: smooth;
   padding: var(--space-xs) 0;
 }
 
@@ -1211,6 +1229,17 @@ button:disabled { cursor: default; opacity: 0.5; }
 .command-palette__item:hover,
 .quick-open__item:hover {
   background-color: var(--bg-hover);
+}
+
+.command-palette__item:active,
+.quick-open__item:active {
+  background-color: rgba(0, 122, 204, 0.15);
+}
+
+.command-palette__item:focus-visible,
+.quick-open__item:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: -2px;
 }
 
 .command-palette__item--active,
@@ -1277,17 +1306,6 @@ button:disabled { cursor: default; opacity: 0.5; }
 
 .notification--removing {
   animation: notification-slide-out var(--transition-normal) ease-in forwards;
-}
-
-@keyframes notification-slide-in {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
 }
 
 @keyframes notification-slide-out {
@@ -1619,10 +1637,10 @@ button:disabled { cursor: default; opacity: 0.5; }
   width: 2px;
   height: 1.2em;
   background-color: var(--text-primary);
-  animation: cursor-blink 1s step-end infinite;
+  animation: multi-cursor-blink 1s step-end infinite;
 }
 
-@keyframes cursor-blink {
+@keyframes multi-cursor-blink {
   0%, 50% { opacity: 1; }
   51%, 100% { opacity: 0; }
 }
@@ -1707,12 +1725,7 @@ button:disabled { cursor: default; opacity: 0.5; }
 @keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes dialogIn { from { opacity: 0; transform: translateY(-16px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
-/* Context menu enter animation */
-@keyframes menuIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-
 /* Toast notification enter animation */
 @keyframes notif-in { from { opacity: 0; transform: translateX(100%) scale(0.9); } to { opacity: 1; transform: translateX(0) scale(1); } }
 
-/* Tab badge pulse */
-@keyframes badgePulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.2); } }
 

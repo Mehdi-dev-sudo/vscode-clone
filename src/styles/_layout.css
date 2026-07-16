@@ -71,6 +71,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  contain: layout style;
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease, border-color 0.3s ease;
 }
 
@@ -91,6 +92,7 @@
   flex-direction: column;
   overflow: hidden;
   min-width: 0;
+  contain: layout style;
 }
 
 /* --- Panel (bottom) --- */
@@ -103,6 +105,7 @@
   flex-direction: column;
   min-height: var(--panel-min-height);
   max-height: var(--panel-max-height);
+  contain: layout style;
   transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease, border-color 0.3s ease, padding 0.3s ease;
 }
 

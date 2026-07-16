@@ -297,13 +297,12 @@ function renderEditorContent(fileName, content) {
   // Update breadcrumb
   updateBreadcrumb(fileName);
 
-  // Update minimap
-  renderMinimap(content);
-
   // Focus editor
   linesContainer.focus();
 
-  // Update minimap
+  // Show and update minimap
+  if (minimapEl) minimapEl.style.display = '';
+  // Update minimap (single unified implementation in minimap.js)
   requestAnimationFrame(() => {
     const editorScroll = editorContentEl;
     if (!editorScroll) return;
@@ -323,7 +322,7 @@ function showWelcome() {
   if (welcomeEl) welcomeEl.style.display = 'flex';
   if (gutterEl) empty(gutterEl);
   if (breadcrumbEl) empty(breadcrumbEl);
-  if (minimapEl) empty(minimapEl);
+  if (minimapEl) minimapEl.style.display = 'none';
 
   const existingLines = editorContentEl?.querySelector('.editor__lines');
   if (existingLines) existingLines.remove();
@@ -362,45 +361,6 @@ function updateBreadcrumb(fileName) {
   });
   breadcrumbEl.appendChild(fileItem);
 }
-
-/**
- * Render the minimap (simplified thumbnail of code).
- * @param {string} content
- * @returns {void}
- */
-function renderMinimap(content) {
-  if (!minimapEl) return;
-  empty(minimapEl);
-
-  const lines = content.split('\n');
-  const scale = Math.min(1, 300 / lines.length);
-  const charWidth = 3;
-  const lineHeight = 2;
-
-  const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return;
-  canvas.width = 60;
-  canvas.height = Math.max(100, lines.length * lineHeight * scale);
-
-  ctx.fillStyle = getComputedStyle(minimapEl).backgroundColor || '#1e1e1e';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  ctx.fillStyle = getComputedStyle(minimapEl.parentElement || document.body).color || '#cccccc';
-  ctx.font = `${8 * scale}px monospace`;
-
-  lines.forEach((line, i) => {
-    const y = (i + 1) * lineHeight * scale;
-    const truncated = line.slice(0, Math.floor(canvas.width / charWidth));
-    // Draw as colored dots instead of text for performance
-    if (line.trim()) {
-      ctx.fillRect(0, y - lineHeight * scale + 1, Math.min(truncated.length * charWidth, canvas.width), lineHeight * scale);
-    }
-  });
-
-  minimapEl.appendChild(canvas);
-}
-
 /**
  * Editor component module.
  * @namespace
@@ -432,10 +392,10 @@ export const Editor = {
       const content = MOCK_FILES[baseName] || MOCK_FILES[name] || `// ${name}\n// No content available.\n`;
       renderEditorContent(name, content);
       // Auto-focus the editor content
-      setTimeout(() => {
+      requestAnimationFrame(() => {
         const editorLines = document.querySelector('.editor__lines');
         if (editorLines) /** @type {HTMLElement} */ (editorLines).focus();
-      }, 50);
+      });
     });
 
     // Listen for save-file command

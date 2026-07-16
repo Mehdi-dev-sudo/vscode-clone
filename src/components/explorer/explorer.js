@@ -60,11 +60,12 @@ let selectedId = null;
 /** @type {string|null} */
 let renamingId = null;
 
-/** @type {{ sourceId: string|null, targetId: string|null, position: 'before'|'after'|'inside'|null }} */
+/** @type {{ sourceId: string|null, targetId: string|null, position: 'before'|'after'|'inside'|null, lastHighlighted: HTMLElement|null }} */
 const dragState = {
   sourceId: null,
   targetId: null,
   position: null,
+  lastHighlighted: null,
 };
 
 /**
@@ -267,9 +268,10 @@ function onDragOver(e, id) {
   dragState.targetId = id;
   dragState.position = position;
 
-  // Visual feedback: remove all drag-over classes first
-  treeEl?.querySelectorAll('.file-tree__item--drag-over, .file-tree__item--drag-over-bottom, .file-tree__item--drag-over-inside')
-    .forEach((el) => el.classList.remove('file-tree__item--drag-over', 'file-tree__item--drag-over-bottom', 'file-tree__item--drag-over-inside'));
+  // Visual feedback: remove class from previous target only
+  if (dragState.lastHighlighted) {
+    dragState.lastHighlighted.classList.remove('file-tree__item--drag-over', 'file-tree__item--drag-over-bottom', 'file-tree__item--drag-over-inside');
+  }
 
   // Apply class to the specific target
   const targetEl = treeEl?.querySelector(`[data-id="${id}"]`);
@@ -278,13 +280,18 @@ function onDragOver(e, id) {
       : position === 'before' ? 'file-tree__item--drag-over'
       : 'file-tree__item--drag-over-bottom';
     targetEl.classList.add(cls);
+    dragState.lastHighlighted = /** @type {HTMLElement} */ (targetEl);
+  } else {
+    dragState.lastHighlighted = null;
   }
 }
 
 /** Clear all drag-over visual indicators. */
 function clearDragOver() {
-  treeEl?.querySelectorAll('.file-tree__item--drag-over, .file-tree__item--drag-over-bottom, .file-tree__item--drag-over-inside')
-    .forEach((el) => el.classList.remove('file-tree__item--drag-over', 'file-tree__item--drag-over-bottom', 'file-tree__item--drag-over-inside'));
+  if (dragState.lastHighlighted) {
+    dragState.lastHighlighted.classList.remove('file-tree__item--drag-over', 'file-tree__item--drag-over-bottom', 'file-tree__item--drag-over-inside');
+    dragState.lastHighlighted = null;
+  }
 }
 
 /**
@@ -380,9 +387,12 @@ function renderNode(node, depth = 0) {
       click: (/** @type {MouseEvent} */ e) => {
         e.stopPropagation();
         selectedId = node.id;
-        renderTree();
-        if (isFolder) toggleCollapse(node.id);
-        else openFile(node);
+        if (isFolder) {
+          toggleCollapse(node.id);
+        } else {
+          renderTree();
+          openFile(node);
+        }
       },
       dblclick: () => {
         if (isFolder) startRename(node.id);

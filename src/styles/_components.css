@@ -4,7 +4,8 @@
  * Each component's styles are scoped under its block class.
  */
 
-/* Shared button defaults (base in _reset.css) */
+/* Shared button defaults */
+button { cursor: pointer; border: none; background: none; font-family: inherit; font-size: inherit; }
 button:disabled { cursor: default; opacity: 0.5; }
 
 /* ==================== Activity Bar ==================== */
@@ -1231,17 +1232,6 @@ button:disabled { cursor: default; opacity: 0.5; }
 .command-palette__item:hover,
 .quick-open__item:hover {
   background-color: var(--bg-hover);
-}
-
-.command-palette__item:active,
-.quick-open__item:active {
-  background-color: rgba(0, 122, 204, 0.15);
-}
-
-.command-palette__item:focus-visible,
-.quick-open__item:focus-visible {
-  outline: 2px solid var(--border-focus);
-  outline-offset: -2px;
 }
 
 .command-palette__item--active,

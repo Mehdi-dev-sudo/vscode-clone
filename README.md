@@ -28,6 +28,10 @@
 
 ---
 
+> **Live Demo:** [https://mehdi-dev-sudo.github.io/vscode-clone/](https://mehdi-dev-sudo.github.io/vscode-clone/)
+
+---
+
 ## Overview
 
 **VS Code Clone** is a fully functional web-based code editor that replicates the core experience of Visual Studio Code. Built with **pure HTML, CSS, and Vanilla JavaScript (ES Modules)** — no frameworks, no build tools, no dependencies.

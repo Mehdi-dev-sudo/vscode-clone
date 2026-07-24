@@ -3,7 +3,7 @@
   <img src="https://img.shields.io/badge/status-active-success" alt="Status" />
   <img src="https://img.shields.io/badge/license-MIT-blue" alt="License" />
   <img src="https://img.shields.io/badge/stack-vanilla-orange" alt="Stack" />
-  <img src="https://img.shields.io/badge/commits-260+-brightgreen" alt="Commits" />
+  <img src="https://img.shields.io/badge/commits-300+-brightgreen" alt="Commits" />
   <img src="https://img.shields.io/badge/lines-~13K-ff69b4" alt="Lines of Code" />
   <img src="https://img.shields.io/badge/PRs-63-ff69b4" alt="Pull Requests" />
   <img src="https://img.shields.io/badge/JS%20modules-101-ff69b4" alt="JavaScript Modules" />
@@ -35,7 +35,7 @@
 > ⚠️ **Important:** ES Modules require an HTTP server. Opening `index.html` directly from disk will NOT work. Use `npm run dev` (see below).
 
 - **~13,000 lines of code** across **101 JavaScript modules**
-- **260+ commits** with ITCSS + BEM architecture
+- **300+ commits** with ITCSS + BEM architecture
 - **Zero runtime dependencies** — not even a bundler
 - **100% type-safe** — `// @ts-check` + JSDoc on every file (zero `tsc` errors)
 - **Persistent state** via localStorage

@@ -22,6 +22,8 @@ html, body {
   background-color: var(--bg-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
 }
 
 body {
@@ -45,8 +47,15 @@ button {
   transition: opacity var(--transition-fast), background var(--transition-fast);
 }
 
+:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: -1px;
+  border-radius: var(--radius-sm);
+}
+
 button:focus-visible {
   box-shadow: var(--focus-ring);
+  outline: none;
 }
 
 input, textarea, select {

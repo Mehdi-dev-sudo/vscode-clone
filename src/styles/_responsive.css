@@ -70,7 +70,21 @@
 
 @media (max-width: 600px) {
   .app__sidebar {
-    display: none !important;
+    left: 0;
+    top: var(--title-bar-height);
+    bottom: var(--status-bar-height);
+    width: 85vw !important;
+    max-width: 320px;
+    border-right: none;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .app__sidebar--hidden {
+    transform: translateX(-100%);
+  }
+
+  .app__sidebar .resize-handle--sidebar {
+    display: none;
   }
 
   .app__activity-bar {
@@ -80,6 +94,10 @@
   .activity-bar__btn {
     width: 40px;
     height: 40px;
+  }
+
+  .activity-bar__bottom {
+    padding-bottom: var(--space-xs);
   }
 
   .app__main {
@@ -92,7 +110,12 @@
   }
 
   .tab__label {
-    max-width: 80px;
+    max-width: 60px;
+  }
+
+  .tab__close-btn {
+    width: 16px;
+    height: 16px;
   }
 
   .status-bar__right .status-bar__item:nth-child(n+2) {
@@ -101,6 +124,10 @@
 
   .status-bar__left .status-bar__item:nth-child(n+3) {
     display: none;
+  }
+
+  .status-bar__item {
+    padding: 0 var(--space-xs);
   }
 
   .panel__tab {
@@ -114,5 +141,95 @@
 
   .welcome__shortcuts {
     display: none;
+  }
+
+  .editor__welcome {
+    padding: var(--space-xl) var(--space-lg);
+  }
+
+  .welcome__content {
+    max-width: 100%;
+  }
+
+  .welcome__logo svg {
+    width: 48px;
+    height: 48px;
+  }
+
+  .welcome__title {
+    font-size: 16px;
+  }
+
+  .welcome__subtitle {
+    font-size: var(--font-size-md);
+    margin-bottom: var(--space-xl);
+  }
+
+  .command-palette__dialog,
+  .quick-open__dialog {
+    width: 95vw;
+    max-height: 50vh;
+    margin-top: 15vh;
+  }
+
+  .command-palette__input,
+  .quick-open__input {
+    font-size: var(--font-size-lg);
+  }
+}
+
+/* --- Very Small Mobile (≤400px) --- */
+@media (max-width: 400px) {
+  .app__activity-bar {
+    width: 36px;
+  }
+
+  .activity-bar__btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .activity-bar__btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .app__main {
+    grid-template-columns: 36px 1fr;
+  }
+
+  .tab {
+    padding: 0 var(--space-sm);
+    font-size: var(--font-size-xs);
+  }
+
+  .tab__label {
+    max-width: 40px;
+  }
+
+  .status-bar__left .status-bar__item:nth-child(n+2) {
+    display: none;
+  }
+
+  .status-bar__item {
+    font-size: var(--font-size-xs);
+  }
+
+  .welcome__actions {
+    gap: var(--space-xs);
+  }
+
+  .welcome__btn {
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--font-size-md);
+  }
+
+  .welcome__btn .icon svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .panel__tabs {
+    overflow-x: auto;
   }
 }

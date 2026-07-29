@@ -72,6 +72,7 @@
   display: flex;
   flex-direction: column;
   contain: layout style;
+  will-change: width, opacity;
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease, border-color 0.3s ease;
 }
 

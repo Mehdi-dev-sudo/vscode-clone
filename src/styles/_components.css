@@ -774,25 +774,52 @@ button:disabled { cursor: default; opacity: 0.5; }
   justify-content: center;
   height: 100%;
   padding: var(--space-3xl);
+  position: relative;
+  overflow-y: auto;
+}
+
+.editor__welcome::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% -20%, color-mix(in srgb, var(--accent-primary) 6%, transparent) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 80%, color-mix(in srgb, var(--accent-primary) 3%, transparent) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+  animation: welcomeBg 12s ease-in-out infinite alternate;
+  will-change: background-position;
+}
+
+@keyframes welcomeBg {
+  0% { background-position: 0% 0%, 0% 0%; }
+  100% { background-position: 5% 3%, -3% -2%; }
 }
 
 .welcome__content {
+  position: relative;
+  z-index: 1;
   text-align: center;
-  max-width: 420px;
+  max-width: 460px;
 }
 
 .welcome__logo {
   display: inline-flex;
   margin-bottom: var(--space-2xl);
   color: var(--accent-primary);
-  opacity: 0.4;
+  opacity: 0.35;
+  transition: opacity var(--transition-slow), transform var(--transition-slow);
+}
+
+.welcome__logo:hover {
+  opacity: 0.6;
+  transform: scale(1.05);
 }
 
 .welcome__title {
   font-size: var(--font-size-xxl);
   font-weight: var(--font-weight-bold);
   color: var(--text-primary);
-  margin-bottom: var(--space-sm);
+  margin-bottom: var(--space-xs);
 }
 
 .welcome__subtitle {
@@ -812,26 +839,104 @@ button:disabled { cursor: default; opacity: 0.5; }
   display: flex;
   align-items: center;
   gap: var(--space-md);
+  width: 100%;
   padding: var(--space-md) var(--space-xl);
   background-color: var(--bg-tertiary);
   border: 1px solid var(--border-primary);
+  border-left: 3px solid transparent;
   color: var(--text-primary);
   font-size: var(--font-size-lg);
   cursor: pointer;
   border-radius: var(--radius-sm);
   text-align: left;
-  transition: background-color var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), border-left-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.welcome__btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent-primary) 4%, transparent));
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  pointer-events: none;
 }
 
 .welcome__btn:hover {
   background-color: var(--bg-hover);
   border-color: var(--border-secondary);
+  border-left-color: var(--accent-primary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.welcome__btn:hover::after {
+  opacity: 1;
+}
+
+.welcome__btn:active {
+  transform: translateY(0);
+  box-shadow: none;
 }
 
 .welcome__btn .icon {
   color: var(--text-secondary);
+  flex-shrink: 0;
+  transition: color var(--transition-fast);
 }
 
+.welcome__btn:hover .icon {
+  color: var(--accent-primary);
+}
+
+/* Recent files section */
+.welcome__recent-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--space-sm);
+  text-align: left;
+}
+
+.welcome__recent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-bottom: var(--space-2xl);
+  text-align: left;
+}
+
+.welcome__recent-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  cursor: pointer;
+  font-size: var(--font-size-lg);
+  color: var(--text-primary);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast);
+}
+
+.welcome__recent-item:hover {
+  background-color: var(--bg-hover);
+}
+
+.welcome__recent-item:active {
+  background-color: var(--bg-active);
+}
+
+.welcome__recent-item .icon {
+  color: var(--text-secondary);
+  display: flex;
+  flex-shrink: 0;
+}
+
+/* Keyboard shortcuts */
 .welcome__shortcuts {
   display: flex;
   flex-direction: column;
@@ -840,21 +945,25 @@ button:disabled { cursor: default; opacity: 0.5; }
 }
 
 .welcome__shortcut {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
   font-size: var(--font-size-sm);
   color: var(--text-tertiary);
 }
 
 .welcome__shortcut kbd {
   display: inline-block;
-  padding: 1px var(--space-xs);
+  padding: 1px var(--space-sm);
+  min-width: 24px;
+  text-align: center;
   background-color: var(--bg-tertiary);
   border: 1px solid var(--border-primary);
   border-radius: var(--radius-sm);
   font-family: inherit;
   font-size: var(--font-size-xs);
-  margin-right: var(--space-sm);
-  min-width: 20px;
-  text-align: center;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
 }
 
 /* Minimap */

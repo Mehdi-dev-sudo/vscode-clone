@@ -8,12 +8,32 @@
   .editor__minimap {
     display: none;
   }
+
+  .welcome__content {
+    max-width: 380px;
+  }
 }
 
 @media (max-width: 768px) {
   .app__sidebar {
-    width: 220px !important;
-    min-width: 150px !important;
+    position: fixed;
+    top: var(--title-bar-height);
+    left: var(--activity-bar-width);
+    bottom: var(--status-bar-height);
+    width: 260px !important;
+    min-width: 0 !important;
+    max-width: 80vw;
+    z-index: var(--z-dropdown);
+    box-shadow: var(--shadow-lg);
+    transition: transform var(--transition-normal), opacity var(--transition-normal);
+  }
+
+  .app__sidebar--hidden {
+    transform: translateX(-100%);
+    opacity: 0;
+    width: 260px !important;
+    min-width: 0 !important;
+    pointer-events: none;
   }
 
   .app__title-bar {
@@ -29,12 +49,22 @@
   }
 
   .editor__gutter {
-    width: 35px;
+    width: 32px;
   }
 
   .command-palette__dialog,
   .quick-open__dialog {
     width: 90vw;
+    max-width: 420px;
+    margin-top: 5vh;
+  }
+
+  .breadcrumb {
+    display: none;
+  }
+
+  .welcome__content {
+    max-width: 340px;
   }
 }
 
